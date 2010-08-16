@@ -6,6 +6,8 @@
   <title>Github File Finder</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" src="javascripts/prototype.js" charset="utf-8"></script>  
+  <script type="text/javascript" src="javascripts/vendors/difflib.js"></script> 
+  <script type="text/javascript" src="javascripts/vendors/diffview.js"></script>   
   <script type="text/javascript" src="javascripts/gh.js"></script>
   <script type="text/javascript" src="javascripts/f.js"></script>
   <script type="text/javascript" src="data.js"></script>
@@ -19,11 +21,25 @@
     </div><!-- #browser_wrapper -->
     
     <div id="info_wrapper">
-      this is the info panel
+      <div id="info" class="padding"></div><!-- .padding -->
     </div><!-- #info_wrapper -->
     
     <div class="clear"></div>
-    
   </div>
+  
+  <div id="file_wrapper">
+    <div id="file"></div><!-- #file -->
+  </div>
+  
+  <div id="diffoutput"></div><!-- #diffoutput -->
+  
+  <div id="test">
+    <textarea id="file1"></textarea>
+    <textarea id="file2"></textarea>  
+    <textarea id="diff"></textarea>
+  </div><!-- #test -->
+  
+  
+  
 </body>
 </html>

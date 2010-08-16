@@ -1,18 +1,32 @@
 body { font-size: 12px; font-family: Arial; }
 #finder { width: 100%; }
-#browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 500px; float: left;}
+#browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
   #panels_wrapper { width: 10000px; }
     #panels_wrapper .panel { 
       float: left; width: 200px; border-right: 1px solid #DCDCDC; overflow: hidden; overflow-y: auto;
-      min-height: 500px }
+      height: 300px }
 
       #panels_wrapper .panel ul { padding: 0; margin: 0; }
       #panels_wrapper .panel li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding-top: 3px; padding-bottom: 3px; }
-#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 500px; }
+#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 300px; }
+  #info_wrapper .padding { padding: 5px; }
+  #info_wrapper .commits { height: 200px; overflow: auto}
 
 .folder { background-color: #E8FFFF; font-weight: bold; }
-.current { background-color: #3D8CFF; color: white; }
+.current { background-color: #3D8CFF !important; color: white; }
+
+/* lift from Github.com */
+pre, code, .meta {
+font:11px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+}
+#file { overflow: auto;}
+#file .meta span { margin-left: 5px; padding-left: 9px;}
+
+#file .ln { text-align: right; }
+
 
 .hover { background-color: #FFFFC7; }
 
 .clear { clear:both }
+
+textarea { width: 400px; height: 500px}
