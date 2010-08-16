@@ -53,10 +53,10 @@ o.onload=function() {
   t=c.getContext("2d");
   t.drawImage(o,0,0);
   var d=t.getImageData(0,0,s,s).data;
-  debugger
-  for(var i=0;i<d.length;i+=4){ 
-    if(d[i]>0) r+=String.fromCharCode(d[i]);
-    
+  for(var i=0, len = d.length;i< 10;i+=4){ 
+    debugger
+    if(d[i] > 0 )
+      r += String.fromCharCode(d[i]);
   }
   
   console.log( r );

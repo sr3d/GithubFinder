@@ -27,17 +27,65 @@ js = `#{cmd}`
 File.open( min_temp_file , "w") {|f| f.write(js) }
 
 
-size  = Math.sqrt(js.length).ceil
-image = Magick::Image.new(size,size)
-size.times do |x|
-  size.times do |y|
-    c = js[x * size + y]
-    next if c.nil? 
-    pixel = Magick::Pixel.new c, 0,0
-    # pixel = Magick::Pixel.new rand(256), rand(256), rand(256)
-    image.pixel_color x, y, pixel
-  end 
+js = "Alex Le"
+
+size  = (js.length/3.0).ceil
+
+puts size
+
+image = Magick::Image.new(1,size)
+for i in 0...js.length do
+  # c = [ js[i], js[i+1] || 0 , js[i+2] || 0 ]
+  r = js[i]
+  g = js[i + 1] || 
+  b = js[i + 2] || 0
+  
+  color = '#' + '%02X' % (r*10_000) + '%02X' % (g * 1000) + '%02X' % b
+  puts color
+  
+  y = i / 3
+  puts y
+  # r = ('%2X' % c)
+  # pixel = Magick::Pixel.new r * 1_0000, g * 100, b
+  pixel = Magick::Pixel.from_color color
+  image.pixel_color 0, y, pixel
+  i+=3
+  
+  puts "pixel: #{pixel}"
 end
 
-image.compression = ZipCompression
+# size.times do |x|
+#   size.times do |y|
+# 
+#     c = js[x * size * 3 + y ]
+# 
+#     next unless c
+# 
+#     c1 = js[x * size * 3 + y + 1 ] || 0
+#     c2 = js[x * size * 3 + y + 2 ] || 0
+#     # r = ('%2X' % c)
+#     pixel = Magick::Pixel.new c*1_000, c1 * 100, c2
+#     image.pixel_color x, y, pixel
+#     
+#     puts [c, c1, c2]
+#   end 
+# end
+
+# image.compression = ZipCompression
+# image.write("png8:"+ image_file)
 image.write("png8:"+ image_file)
+
+File.open( temp_file , "r" )
+pic = (Image.read(image_file)).first
+
+
+pixel = image.pixel_color 0, 0
+puts pixel
+
+puts "Validates Output"
+s = ''
+pic.each_pixel do |px, x, y|
+  s += ((px.red)/1000).chr
+  s += ((px.green)/100).chr if px.green
+  s += (px.blue).chr if px.blue  
+end
