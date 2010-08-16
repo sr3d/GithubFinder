@@ -5,10 +5,35 @@ var AR = Ajax.Request;
 // GH.tree('sr3d', 'githubfinder','master')
 
 var F = Class.create({
-  initialize: function(){
+  initialize: function(options){
+    options = Object.extend( { 
+      user_id:      'rails'
+      ,repository:  'rails'
+      ,branch:      'master'
+    }, options || {} );
+    
     this.panels   = [];
     this.panelsWrapper  = $('panels_wrapper');
+    this.shas     = {};
+    
+    this.user_id    = options.user_id;
+    this.repository = options.repository;
+    this.branch     = options.branch;
+    
+    GH.Commits.listBranch( this.user_id, this.repository, this.branch, { 
+      onData: function(commits) { 
+        var tree_sha = commits.commits[0].tree;
+        this.open( tree_sha );
+      }.bind(this)
+    });
+    
+    document.on('click','a[data-sha]', function( event, element ){ 
+      var sha = element.readAttribute('data-sha');
+      this.click( sha, element );
+      Event.stop(event);
+    }.bind(this) );
   }
+  
   
   ,toHTML: function() {
     var html = [
@@ -16,31 +41,63 @@ var F = Class.create({
     ];
   }
   
-  ,renderPanel: function( level, html ) { 
-    for( var i = level; i < this.panels.length; i++ ) {
-      (this.panels[i].pop()).dispose();
+  ,renderPanel: function( sha, index ) { 
+    console.log("index:" + index );
+    for( var i = this.panels.length - 1; i > index; i-- ) {
+      (this.panels.pop()).dispose();
     }
-    
-    // this.panels
+    this.open( sha );
   }
   
-  ,open: function( tree ) {
-    var html = ['<ul>'];
-    var item;
+  
+  ,open: function( tree_sha ) {
+    GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
+      onData: function(tree) { // tree is already sorted 
+        /* add all items to cache */
+        for( var i = 0, len = tree.length; i < len; i++ ) {
+          this.shas[ tree[i].sha ] = tree[i];
+        }
 
-    for( var i = 0, len = tree.length; i < len; i++ ) {
-      item = tree[i];
-      var css = item.type == 'tree' ? 'folder' : 'file';
-      html.push( '<li class=' + css +'><a href=# sha='+ item.sha + '>' + item.name + ' ' + item.size + '</a></li>');
-    }
-    html.push('</ul>');
-
-    this.panelsWrapper.insert({
-      bottom: '<div id=p' + this.panels.length + ' class=panel>' + html.join('') + '</div>'
+        var p = new P( { tree: tree, index: this.panels.length } );
+        this.panels.push( p );
+      }.bind(this)
     });
+  }
+  
+  ,click: function(sha, element) {
+    // debugger
+    var item = this.shas[ sha ];
+    if( item.type == 'tree' ) {
+      var index = +(element.up('.panel')).readAttribute('data-index');
+      this.renderPanel( sha, index );
+    } else {
+      // open the file;
+    }
+  }
+  
+});
+
+/* Panel */
+var P = Class.create({
+  initialize: function(options) { 
+    options = Object.extend( {
+      tree: []
+      ,index: 0
+    }, options, {});
     
-    $('p0').select('li').each( function(item) { 
-      // console.log("item %o",item);
+    this.tree     = options.tree;
+    this.index    = options.index;
+    
+    this.render();
+  }
+  
+  ,dispose: function() {
+    $('p' + this.index ).remove();
+  }
+  
+  ,render: function() {
+    $('panels_wrapper').insert({ bottom: this.toHTML() });
+    $('p' + this.index ).select('li').each( function(item) { 
       item.observe('mouseover', function() { 
         item.addClassName('hover');
       }).observe('mouseout', function() {
@@ -49,68 +106,26 @@ var F = Class.create({
     })
   }
   
-});
-
-/* Panel */
-var P = Class.create({
-  initialize: function(options) { 
-    ;
-  }
-  
-  ,dispose: function() {
-    
-  }
   ,toHTML: function() { 
-    var html = [
-      '<div class="panel">',
-        this.renderEntries( this.options.entries ),
-      '</div>'
-    ]
+    var html = ['<ul>'];
+    var item;
+    for( var i = 0, len = this.tree.length; i < len; i++ ) {
+      item = this.tree[i];
+      var css = item.type == 'tree' ? 'folder' : 'file';
+      html.push( '<li class=' + css +'><a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a></li>');
+    }
+    html.push('</ul>');
+
+    return '<div id=p' + this.index + ' data-index=' + this.index +' class=panel>' + html.join('') + '</div>';
   }
-  
-  ,renderEntries: function(entries){
-    
-  }
-  
-  ,renderEntry: function() { 
-    
-  }
+
 });
 
 
 document.on('dom:loaded', function() { 
-  window.f = new F();
-// f.open(window.tree.tree);  
-  
-  // var user_id     = 'sr3d',
-  //     repository  = 'githubfinder',
-  //     branch      = 'master';
-
-  var user_id     = 'rails',
-      repository  = 'rails',
-      branch      = 'master';
-  
-  
-  GH.Commits.listBranch( user_id, repository, branch, { 
-    onData: function(commits) { 
-      var tree_sha = commits.commits[0].tree;      
-      console.log("commits %o", commits);
-      
-      GH.Tree.show( user_id, repository, branch, tree_sha, {
-        onData: function(tree) {
-          tree = tree.sort(function(a,b){
-            // blob always lose to tree
-            if( a.type == 'blob' && b.type == 'tree' ) 
-              return 1; 
-            if( a.type == 'tree' && b.type == 'blob' )
-              return -1;
-              
-            return a.name > b.name ? 1 : ( a.name < b.name ? - 1 : 0 );
-          });
-          
-          f.open(tree);
-        }
-      });
-    }
+  window.f = new F( { 
+    user_id: 'rails'
+    ,repository: 'rails'
+    ,branch: 'master'
   });
 });

@@ -28,10 +28,14 @@ var GH = {
           console.log("response %o",response);
           var tree = (eval('(' + response.responseText + ')')).tree;
           
-          /* add all items to cache */
-          for( var i = 0, len = tree.length; i < len; i++ ) {
-            GH.hash[ tree[i].sha ] = tree[i];
-          }
+          tree = tree.sort(function(a,b){
+            // blobs always lose to tree
+            if( a.type == 'blob' && b.type == 'tree' ) 
+              return 1; 
+            if( a.type == 'tree' && b.type == 'blob' )
+              return -1;
+            return a.name > b.name ? 1 : ( a.name < b.name ? - 1 : 0 );
+          });          
           
           onData(tree);
         }
