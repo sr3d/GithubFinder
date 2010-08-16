@@ -46,25 +46,28 @@
 <div id="game" tabindex=0 style="border:1px solid black;position:absolute;overflow:hidden;"></div> 
 
 <script type="text/javascript">
-var o=new Image();
-o.onload=function() {
-  var r="",s=127,c=document.createElement("canvas");
-  c.width=c.height=c.style.width=c.style.height=s,
-  t=c.getContext("2d");
-  t.drawImage(o,0,0);
-  var d=t.getImageData(0,0,s,s).data;
-  for(var i=0, len = d.length; i < len;i++){ 
-    r += d[i]   > 0 ? String.fromCharCode(d[i]) : '';
-    r += d[++i] > 0 ? String.fromCharCode(d[i]) : '';
-    r += d[++i] > 0 ? String.fromCharCode(d[i]) : '';
-    i++; // skip alpha
+var img =new Image();
+img.onload=function() {
+  var js        = "", 
+      canvas    = document.createElement("canvas"),
+      context   = canvas.getContext("2d"),
+      width     = img.width,
+      height    = img.height
+      
+  canvas.width  = canvas.style.width  = width;
+  canvas.height = canvas.style.height = height; 
+  context.drawImage(img, 0, 0);
+  var data = context.getImageData( 0, 0, width, height ).data;
+  for(var i= 0, len = data.length; i < len; i += 4){
+    if( data[i] > 0 )
+     js += String.fromCharCode(data[i]);
   }
   
-  console.log( r );
+  console.log( js );
   
-  eval(r)
+// /  eval(r)
 };
-o.src="code.png";  
+img.src = "code.png";
 </script>
   
 

@@ -41,7 +41,7 @@ File.open( min_temp_file, "r") { |f|
 # js = "1" * 1073
 
 # js = js[0,880]
-puts js
+# puts js
 
 # size  = (js.length/3.0).ceil
 
@@ -50,36 +50,17 @@ puts js
 image = Magick::Image.new(1,js.length)
 i = 0
 while i < js.length do 
-  r = js[i]
   # color is in format #RRGGBB
-  color = '#' + '%02X' % r + '%02X' % 0 + '%02X' % 0
+  color = '#%02X0000' % js[i]
 
   x, y = 0, i
   pixel = Magick::Pixel.from_color color
   image.pixel_color x, y, pixel
-  
   i += 1
 end
 
-# size.times do |x|
-#   size.times do |y|
-# 
-#     c = js[x * size * 3 + y ]
-# 
-#     next unless c
-# 
-#     c1 = js[x * size * 3 + y + 1 ] || 0
-#     c2 = js[x * size * 3 + y + 2 ] || 0
-#     # r = ('%2X' % c)
-#     pixel = Magick::Pixel.new c*1_000, c1 * 100, c2
-#     image.pixel_color x, y, pixel
-#     
-#     puts [c, c1, c2]
-#   end 
-# end
 
 image.compression = ZipCompression
-# image.write("png8:"+ image_file)
 image.write("png8:"+ image_file)
 
 File.open( temp_file , "r" )
@@ -89,13 +70,12 @@ pic = (Image.read(image_file)).first
 puts "Validates Output"
 s = ''
 pic.each_pixel do |px, x, y|
-  # s1 = (px.red % 256 ).chr + (px.green % 256).chr + (px.blue % 256 ).chr
   s += (px.red   % 256).chr
-  # s += (px.green % 256).chr
-  # s += (px.blue  % 256).chr
 end
 
-puts s
+# puts s
+
+puts "Script Length:  #{js.length}"
 
 puts "-------------Unique Characters:"
 unique_chars = {}
@@ -107,9 +87,10 @@ end
 puts unique_chars.keys.sort.join(' ')
 puts unique_chars.length
 
-cmd = "pngcrush -reduce -l 9 #{image_file} #{crushed_image_file}"
-`cmd`
 
-[ image_file, crushed_image_file ].each do |file|
+temp_file           = 'merge.js'
+min_temp_file       = 'merge.min.js'
+image_file          = "code.png"
+[ temp_file, min_temp_file, image_file ].each do |file|
   puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
 end
