@@ -14,7 +14,7 @@ var F = Class.create({
       ,branch:      'master'
     }, options || {} );
     
-    this.panels   = [];
+    this.panels   = []; 
     this.panelsWrapper  = $('panels_wrapper');
     this.browserWrapper = $('browser_wrapper');
     this.shas     = {};
@@ -65,6 +65,7 @@ var F = Class.create({
     /* scroll to the last panel */    
     this.browserWrapper.scrollLeft = w;
   }
+
   
   ,open: function( tree_sha, item ) {
     GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
