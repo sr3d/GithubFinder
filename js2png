@@ -5,11 +5,11 @@ require 'RMagick'
 include Magick
 
 files = [ 
-          #'javascripts/f.js', 
-          #'javascripts/gh.js', 
-          # 'javascripts/vendors/difflib.js',
-          # 'javascripts/vendors/diffview.js'
-           'javascripts/prototype.js'
+          'javascripts/f.js', 
+          'javascripts/gh.js', 
+          'javascripts/vendors/difflib.js',
+          'javascripts/vendors/diffview.js'
+           # 'javascripts/prototype.js'
         ]
 
 temp_file           = 'merge.js'
@@ -43,29 +43,22 @@ File.open( min_temp_file, "r") { |f|
 # js = js[0,880]
 puts js
 
-size  = (js.length/3.0).ceil
+# size  = (js.length/3.0).ceil
 
-puts size
+# puts size
 
-image = Magick::Image.new(1,size)
+image = Magick::Image.new(1,js.length)
 i = 0
 while i < js.length do 
-  # c = [ js[i], js[i+1] || 0 , js[i+2] || 0 ]
   r = js[i]
-  g = js[i + 1]
-  b = js[i + 2]
-  
-  g ||= 0
-  b ||= 0
-  
   # color is in format #RRGGBB
-  color = '#' + '%02X' % r + '%02X' % g + '%02X' % b
-  
-  y = i / 3
-  pixel = Magick::Pixel.from_color color
-  image.pixel_color 0, y, pixel
-  i += 3
+  color = '#' + '%02X' % r + '%02X' % 0 + '%02X' % 0
 
+  x, y = 0, i
+  pixel = Magick::Pixel.from_color color
+  image.pixel_color x, y, pixel
+  
+  i += 1
 end
 
 # size.times do |x|
@@ -96,10 +89,10 @@ pic = (Image.read(image_file)).first
 puts "Validates Output"
 s = ''
 pic.each_pixel do |px, x, y|
-  s1 = (px.red % 256 ).chr + (px.green % 256).chr + (px.blue % 256 ).chr
+  # s1 = (px.red % 256 ).chr + (px.green % 256).chr + (px.blue % 256 ).chr
   s += (px.red   % 256).chr
-  s += (px.green % 256).chr
-  s += (px.blue  % 256).chr
+  # s += (px.green % 256).chr
+  # s += (px.blue  % 256).chr
 end
 
 puts s
