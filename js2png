@@ -27,31 +27,39 @@ js = `#{cmd}`
 File.open( min_temp_file , "w") {|f| f.write(js) }
 
 
-js = "Alex Le"
+# js = 'var AR=Ajax.Request;var F=Class.create({initialize:function(a){a=Object.extend({user_id:"rails",repository:"rails",branch:"master"},a||{});this.panels=[];this.panelsWrapper=$("panels_wrapper");this.browserWrapper=$("browser_wrapper");this.shas={};this.user_id=a.user_id;this.repository=a.repository;this.branch=a.branch;GH.Commits.listBranch(this.user_id,this.repository,this.branch,{onData:function(c){var b=c.commits[0].tree;this.renderPanel(b)}.bind(this)});document.on("click","a[data-sha]"'
+
+js = js[0,1072]
 
 size  = (js.length/3.0).ceil
 
 puts size
 
 image = Magick::Image.new(1,size)
-for i in 0...js.length do
+i = 0
+while i < js.length do 
   # c = [ js[i], js[i+1] || 0 , js[i+2] || 0 ]
   r = js[i]
-  g = js[i + 1] || 
-  b = js[i + 2] || 0
+  g = js[i + 1]
+  b = js[i + 2]
   
-  color = '#' + '%02X' % (r*10_000) + '%02X' % (g * 1000) + '%02X' % b
-  puts color
+  g ||= 0
+  b ||= 0
+  
+  
+  color = '#' + '%02X' % r + '%02X' % g + '%02X' % b
+  # color = "rgb(%d,%d,%d)" % [r, g, b] # + r + '%02x' % g + '%02x' % g + ')'
+  # puts color
   
   y = i / 3
-  puts y
+  # puts y
   # r = ('%2X' % c)
   # pixel = Magick::Pixel.new r * 1_0000, g * 100, b
   pixel = Magick::Pixel.from_color color
   image.pixel_color 0, y, pixel
-  i+=3
+  i += 3
   
-  puts "pixel: #{pixel}"
+  # puts "pixel: #{pixel}"
 end
 
 # size.times do |x|
@@ -71,7 +79,7 @@ end
 #   end 
 # end
 
-# image.compression = ZipCompression
+image.compression = ZipCompression
 # image.write("png8:"+ image_file)
 image.write("png8:"+ image_file)
 
@@ -79,13 +87,17 @@ File.open( temp_file , "r" )
 pic = (Image.read(image_file)).first
 
 
-pixel = image.pixel_color 0, 0
-puts pixel
-
 puts "Validates Output"
 s = ''
 pic.each_pixel do |px, x, y|
-  s += ((px.red)/1000).chr
-  s += ((px.green)/100).chr if px.green
-  s += (px.blue).chr if px.blue  
+  s1 = (px.red % 256 ).chr + (px.green % 256).chr + (px.blue % 256 ).chr
+  
+  s += (px.red % 256 ).chr
+  s += (px.green % 256).chr
+  s += (px.blue % 256 ).chr
+  
+  
+  # puts s1
 end
+
+puts s

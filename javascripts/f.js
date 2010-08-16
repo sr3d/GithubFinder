@@ -44,7 +44,7 @@ var F = Class.create({
     var html = [
       '<div>'
     ];
-  }
+  } 
   
   ,renderPanel: function( tree_sha, index, item ) { 
     index = (typeof index == 'undefined' ) ? 0 : index;
@@ -70,9 +70,8 @@ var F = Class.create({
     GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
       onData: function(tree) { // tree is already sorted 
         /* add all items to cache */
-        for( var i = 0, len = tree.length; i < len; i++ ) {
+        for( var i = 0, len = tree.length; i < len; i++ )
           this.shas[ tree[i].sha ] = tree[i];
-        }
 
         var name = item ? item.name : '' ;
         
