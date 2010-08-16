@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+require 'ftools'
+require 'rubygems'
+require 'RMagick'
+include Magick
+
+files = [ 'javascripts/f.js', 'javascripts/gh.js', 'javascripts/vendors/difflib.js', 'javascripts/vendors/diffview.js' ]
+
+temp_file = 'merge.js'
+min_temp_file = 'merge.min.js'
+
+image_file = "code.png"
+
+merged_file = ""
+files.each {|file| 
+  File.open( file, "r") { |f| 
+    merged_file += f.read + "\n" 
+  }
+}
+File.open( temp_file , "w") {|f| f.write(merged_file) }
+
+cmd = "java -jar bin/yuicompressor-2.4.2.jar #{temp_file}"
+
+
+js = `#{cmd}`
+
+File.open( min_temp_file , "w") {|f| f.write(js) }
+
+
+size  = Math.sqrt(js.length).ceil
+image = Magick::Image.new(size,size)
+size.times do |x|
+  size.times do |y|
+    c = js[x * size + y]
+    next if c.nil? 
+    pixel = Magick::Pixel.new c, 0,0
+    # pixel = Magick::Pixel.new rand(256), rand(256), rand(256)
+    image.pixel_color x, y, pixel
+  end 
+end
+
+image.compression = ZipCompression
+image.write("png8:"+ image_file)
