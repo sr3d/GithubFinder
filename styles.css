@@ -1,0 +1,9 @@
+#finder { width: 100%; }
+#browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 500px; float: left;}
+  #panels_wrapper { width: 1000px; }
+    #panels_wrapper .panel { 
+      float: left; width: 200px; border-right: 1px solid #DCDCDC; overflow: hidden; overflow-y: auto;
+      min-height: 500px }
+#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 500px; }
+
+.clear { clear:both }

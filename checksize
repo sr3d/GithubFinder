@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require 'ftools'
+
+files = [ 'index.html', 'styles.css', 'javascripts/f.js', ]
+
+total_size = 0
+files.each do |file|
+  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
+  total_size += File.stat( file ).size
+end
+
+puts "Total size: \t\t#{total_size}"
+
+full_size = total_size
+
+puts "--------------------------"
+
+# Optimize
+total_size = 0
+files.each do |file|
+  
+  # minify the size 
+  if ['.css', '.js'].include? File.extname(file)
+    
+    minified_file = "./min/#{File.basename(file)}"
+    cmd = "java -jar bin/yuicompressor-2.4.2.jar #{file} -o #{minified_file}"
+
+    `#{cmd}`
+
+    puts "#{"%-20.20s" % minified_file} #{"%30s" % File.stat( minified_file ).size}"
+    total_size += File.stat( minified_file ).size
+    
+  else
+    puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
+    total_size += File.stat( file ).size
+  end
+  
+end
+
+puts "Total size: #{total_size}"
+
+puts "Optimization Ratio:  #{"%.2f" % ((1 - total_size * 1.0 /full_size) * 100)}%"
