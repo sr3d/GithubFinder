@@ -6,4 +6,6 @@
       min-height: 500px }
 #info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 500px; }
 
+.hover { background-color: #FFFFC7; }
+
 .clear { clear:both }

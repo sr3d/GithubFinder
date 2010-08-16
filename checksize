@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'ftools'
 
-files = [ 'index.html', 'styles.css', 'javascripts/f.js', ]
+files = [ 'index.html', 'styles.css', 'javascripts/f.js', 'javascripts/gh.js' ]
 
 total_size = 0
 files.each do |file|
