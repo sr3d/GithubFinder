@@ -191,19 +191,15 @@ diffview = {
 		tdata.push(node = document.createElement("tbody"));
 		
 		
-		debugger
-		
 		for( var i = 0; i < rows.length; i++ ) {
 		  node.appendChild(rows[i]);
 		}
 		
 		node = celt("table", "diff" + (inline ? " inlinediff" : ""));
 		
-		for( var i = 0; i < tdata.lenth; i++ ){
+		for( var i = 0; i < tdata.length; i++ ){
 		  node.appendChild(tdata[i]);
 		}
-		
-		
 		
 		return node;
 	}

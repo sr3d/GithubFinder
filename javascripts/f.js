@@ -124,7 +124,16 @@ var F = Class.create({
       var c = commits[0];
       var commitsHTML = ['<div>'];
       for( var i = 0; i < commits.length; i++ ) {
-        commitsHTML.push('<div>Commit: ' + commits[i].id + ' - tree: (' + commits[i].tree + ')</div>' );
+        
+        commitsHTML.push(
+          '<div>Commit: ' + 
+            '<a href=javascript:void(0) onclick=f.diff(' + 
+              [ '"', c.id, '","',  c.tree, '","', commits[i].id, '","',commits[i].tree, '","',item.name, '"' ].join('')+')>' +
+              commits[i].id +
+            '</a>' + 
+            '(tree: ' + commits[i].tree + ')' +
+          '</div>' 
+        );
       }
       commitsHTML.push('</div>');
     
@@ -202,15 +211,93 @@ var F = Class.create({
         '</tr>'
     ]
     
-    $('file').update( html.join('') );
+    $('file').update( html.join('') ).show();
     
     // 1.  get current file
     // 2.  get a different
     // 3.  diff any differences? 
   }
   
-  ,diff: function( sha ) {
+  ,diff: function( sha1, tree1, sha2, tree2, filename ) {
+    $('file').hide();
+    var file1, file2, file1Sha, file2Sah, diff;
     
+    var flag = 0;
+    var process = function() { 
+      if( flag < 2 ) {
+        console.log("pending requests");
+        return;
+      }
+      // console.log("file1 %o",file1);
+      // console.log("file2 %o",file2);
+      
+      // $('file1').value = file1;
+      // $('file2').value = file2;
+      // $('diff').value = diff;
+      /* */
+      // debugger
+        
+      file1 = difflib.stringAsLines(file1);
+      file2 = difflib.stringAsLines(file2)
+      var sm = new difflib.SequenceMatcher( file1, file2 );
+      var opcodes = sm.get_opcodes();
+      // debugger
+      var diffoutputdiv = $("diffoutput");
+      while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+      var contextSize = null; // or a number 
+      var showInline = false;
+      try{
+          
+        var node = diffview.buildView({ 
+    	    baseTextLines:    file1,
+			    newTextLines:     file2,
+			    opcodes:          opcodes,
+			    baseTextName:     'Tree: ' + tree1 + '<br/>(' + file1Sha +')',
+			    newTextName:      'Tree: ' + tree2 + '<br/>(' + file2Sha +')',
+			    contextSize:      contextSize,
+			    viewType:         showInline 
+		    });
+    	  diffoutputdiv.appendChild( node );
+		    
+        // console.log("node %o",node);
+        console.log("done");
+      } catch(ex) {
+        alert(ex.message);
+        console.log("ex %o",ex);
+      }
+    }
+    
+    GH.Tree.show( this.user_id, this.repository, this.branch, tree1, { onData: function(tree) {
+      for( var i = 0; i < tree.length; i++ ) {
+        if( tree[i].name == filename ){
+          // now request
+          GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
+            file1 = response.responseText;
+            file1Sha = tree[i].sha;
+            flag++;
+            process();
+          }.bind(this)});
+          break;
+        }
+          
+      }
+    }.bind(this)});
+    
+
+    GH.Tree.show( this.user_id, this.repository, this.branch, tree2, { onData: function(tree) {
+      for( var i = 0; i < tree.length; i++ ) {
+        if( tree[i].name == filename ){
+          // now request
+          GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
+            file2 = response.responseText;
+            file2Sha = tree[i].sha;
+            flag++;
+            process();
+          }.bind(this)});
+          break;
+        }
+      }
+    }.bind(this)});
     
   }
   
@@ -228,7 +315,8 @@ var F = Class.create({
     var tree1 = '27e7a9c4210ab4fa49e20afffdf723dda4366a15';
     var tree2 = '1b3f6a3e49be0ebacb251de0c0fc12bf64e2e596';
     
-    var file1, file2, diff;
+    
+    var file1, file2, file1Sha, file2Sah, diff;
     
     var flag = 0;
     var process = function() { 
@@ -249,7 +337,7 @@ var F = Class.create({
       file2 = difflib.stringAsLines(file2)
       var sm = new difflib.SequenceMatcher( file1, file2 );
       var opcodes = sm.get_opcodes();
-      debugger
+      // debugger
       var diffoutputdiv = $("diffoutput");
       while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
       var contextSize = null; // or a number 
@@ -260,8 +348,8 @@ var F = Class.create({
     	    baseTextLines:    file1,
 			    newTextLines:     file2,
 			    opcodes:          opcodes,
-			    baseTextName:     "Base Text",
-			    newTextName:      "New Text",
+			    baseTextName:     'Tree: ' + tree1 + '<br/>(' + file1Sha +')',
+			    newTextName:      'Tree: ' + tree2 + '<br/>(' + file2Sha +')',
 			    contextSize:      contextSize,
 			    viewType:         showInline 
 		    });
@@ -281,6 +369,7 @@ var F = Class.create({
           // now request
           GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
             file1 = response.responseText;
+            file1Sha = tree[i].sha;
             flag++;
             process();
           }.bind(this)});
@@ -297,6 +386,7 @@ var F = Class.create({
           // now request
           GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
             file2 = response.responseText;
+            file2Sha = tree[i].sha;
             flag++;
             process();
           }.bind(this)});
@@ -383,7 +473,7 @@ document.on('dom:loaded', function() {
   }); 
   
   
-  window.f.test();
+  // window.f.test();
 });
 
 
