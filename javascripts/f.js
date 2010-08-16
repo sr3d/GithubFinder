@@ -14,6 +14,7 @@ var F = Class.create({
     
     this.panels   = [];
     this.panelsWrapper  = $('panels_wrapper');
+    this.browserWrapper = $('browser_wrapper');
     this.shas     = {};
     
     this.user_id    = options.user_id;
@@ -23,7 +24,8 @@ var F = Class.create({
     GH.Commits.listBranch( this.user_id, this.repository, this.branch, { 
       onData: function(commits) { 
         var tree_sha = commits.commits[0].tree;
-        this.open( tree_sha );
+        // this.open( tree_sha );
+        this.renderPanel(tree_sha);
       }.bind(this)
     });
     
@@ -41,16 +43,27 @@ var F = Class.create({
     ];
   }
   
-  ,renderPanel: function( sha, index ) { 
-    console.log("index:" + index );
+  ,renderPanel: function( tree_sha, index, item ) { 
+    index = (typeof index == 'undefined' ) ? 0 : index;
+
+    /* clear previously opened panels */
     for( var i = this.panels.length - 1; i > index; i-- ) {
       (this.panels.pop()).dispose();
     }
-    this.open( sha );
+
+    this.open( tree_sha, item );
   }
   
+  ,_resizePanelsWrapper: function() {
+    var panelWidth = 201;
+    var w = (this.panels.length * panelWidth  );
+    this.panelsWrapper.style.width = w + 'px';
+
+    /* scroll to the last panel */    
+    this.browserWrapper.scrollLeft = w;
+  }
   
-  ,open: function( tree_sha ) {
+  ,open: function( tree_sha, item ) {
     GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
       onData: function(tree) { // tree is already sorted 
         /* add all items to cache */
@@ -58,8 +71,14 @@ var F = Class.create({
           this.shas[ tree[i].sha ] = tree[i];
         }
 
-        var p = new P( { tree: tree, index: this.panels.length } );
+        // debugger
+        var name = item ? item.name : '' ;
+        
+        var p = new P( { tree: tree, index: this.panels.length, name: name } );
         this.panels.push( p );
+        
+        this._resizePanelsWrapper();
+        
       }.bind(this)
     });
   }
@@ -67,13 +86,32 @@ var F = Class.create({
   ,click: function(sha, element) {
     // debugger
     var item = this.shas[ sha ];
+    var index = +(element.up('.panel')).readAttribute('data-index');  
+
     if( item.type == 'tree' ) {
-      var index = +(element.up('.panel')).readAttribute('data-index');
-      this.renderPanel( sha, index );
+      this.renderPanel( item.sha, index, item );
+      
+      /* set selection cursor */
+      var selection = element.up('ul').down('li.current');
+      selection ? selection.removeClassName('current') : '';
+      
+      element.up('li').addClassName('current');
     } else {
       // open the file;
     }
+    
+    /* display file info */
+    var path = [];
+    for( var i = 0; i <= index; i++ ) {
+      path.push(this.panels[i].name);
+    }
+    path.push( item.name );
+    
+    path = path.join("/");
+    
+    // console.log("path %o", path);
   }
+
   
 });
 
@@ -83,10 +121,13 @@ var P = Class.create({
     options = Object.extend( {
       tree: []
       ,index: 0
+      ,name: ''
+      
     }, options, {});
     
     this.tree     = options.tree;
     this.index    = options.index;
+    this.name     = options.name;
     
     this.render();
   }
@@ -121,6 +162,12 @@ var P = Class.create({
 
 });
 
+var I = Class.create( { 
+  initialize: function() {
+    document.on('tree:show')
+  }
+});
+
 
 document.on('dom:loaded', function() { 
   window.f = new F( { 
@@ -128,4 +175,16 @@ document.on('dom:loaded', function() {
     ,repository: 'rails'
     ,branch: 'master'
   });
+  
+  // setTimeout( function() { 
+  //   f.renderPanel('b59883907274dce4a97fd6607abb2f6e0370fc2d', 0);
+  //   
+  //   setTimeout( function() { 
+  //     f.renderPanel('a4e00d607ee23925073aae0e70eb57ef8f8f9a74', 1);
+  //   }, 400 );
+  //       
+  // }, 500 );
+  
+ 
 });
+

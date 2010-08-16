@@ -11,6 +11,7 @@ body { font-size: 12px; font-family: Arial; }
 #info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 500px; }
 
 .folder { background-color: #E8FFFF; font-weight: bold; }
+.current { background-color: #3D8CFF; color: white; }
 
 .hover { background-color: #FFFFC7; }
 
