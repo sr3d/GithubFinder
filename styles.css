@@ -1,10 +1,16 @@
+body { font-size: 12px; font-family: Arial; }
 #finder { width: 100%; }
 #browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 500px; float: left;}
   #panels_wrapper { width: 1000px; }
     #panels_wrapper .panel { 
       float: left; width: 200px; border-right: 1px solid #DCDCDC; overflow: hidden; overflow-y: auto;
       min-height: 500px }
+
+      #panels_wrapper .panel ul { padding: 0; margin: 0; }
+      #panels_wrapper .panel li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding-top: 3px; padding-bottom: 3px; }
 #info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 500px; }
+
+.folder { background-color: #E8FFFF; font-weight: bold; }
 
 .hover { background-color: #FFFFC7; }
 

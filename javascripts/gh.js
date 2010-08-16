@@ -1,5 +1,6 @@
 var GH = {
-  proxy: './proxy.php?url='
+  hash: {}
+  ,proxy: './proxy.php?url='
   ,api: 'http://github.com/api/v2/json'
   
   ,Commits: {
@@ -26,6 +27,12 @@ var GH = {
         onSuccess: function(response) {
           console.log("response %o",response);
           var tree = (eval('(' + response.responseText + ')')).tree;
+          
+          /* add all items to cache */
+          for( var i = 0, len = tree.length; i < len; i++ ) {
+            GH.hash[ tree[i].sha ] = tree[i];
+          }
+          
           onData(tree);
         }
       }, options || {});
