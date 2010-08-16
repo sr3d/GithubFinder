@@ -10,6 +10,12 @@
 // Get the url of to be proxied
 // Is it a POST or a GET?
 $url = ($_POST['url']) ? $_POST['url'] : $_GET['url'];
+
+$allowed_domain = 'http://github.com';
+// echo strpos( $url, $allowed_domain );
+if( strpos( $url, $allowed_domain ) === false )
+  die();
+
 $headers = ($_POST['headers']) ? $_POST['headers'] : $_GET['headers'];
 $mimeType =($_POST['mimeType']) ? $_POST['mimeType'] : $_GET['mimeType'];
 

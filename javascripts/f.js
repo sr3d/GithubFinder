@@ -1,12 +1,12 @@
 /* alias */
-var AR = Ajax.Request;
+window.AR = Ajax.Request;
 // var PAR = function() {  // paralelle Ajax Request
 //   
 // }
 // GH.branch('sr3d', 'githubfinder','master');
 // GH.tree('sr3d', 'githubfinder','master')
 
-var F = Class.create({
+window.F = Class.create({
   initialize: function(options){
     options = Object.extend( { 
       user_id:      'rails'
@@ -412,7 +412,7 @@ var F = Class.create({
 });
 
 /* Panel */
-var P = Class.create({
+window.P = Class.create({
   initialize: function(options) { 
     options = Object.extend( {
       tree: []
@@ -457,26 +457,3 @@ var P = Class.create({
   }
 
 });
-
-// var I = Class.create( { 
-//   initialize: function() {
-//     document.on('tree:show')
-//   }
-// });
-
-
-document.on('dom:loaded', function() { 
-  window.f = new F( { 
-    user_id: 'rails'
-    ,repository: 'rails'
-    ,branch: 'master'
-  }); 
-  
-  
-  // window.f.test();
-});
-
-
-//GH.Blob.showByCommit('rails','rails','ee9c950f2fe0c7953f0a9ad6a53439da7a4e89bc','/Gemfile')
-
-

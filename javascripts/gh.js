@@ -1,4 +1,4 @@
-var GH = {
+window.GH = {
   hash: {}
   ,proxy: './proxy.php?url='
   ,api: 'http://github.com/api/v2/json'

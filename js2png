@@ -5,7 +5,7 @@ require 'RMagick'
 include Magick
 
 files = [ 
-          'javascripts/f.js', 
+          'javascripts/f.js',
           'javascripts/gh.js', 
           'javascripts/vendors/difflib.js',
           'javascripts/vendors/diffview.js'
@@ -38,14 +38,6 @@ File.open( min_temp_file, "r") { |f|
 }
 
 
-# js = "1" * 1073
-
-# js = js[0,880]
-# puts js
-
-# size  = (js.length/3.0).ceil
-
-# puts size
 
 image = Magick::Image.new(1,js.length)
 i = 0
@@ -67,26 +59,15 @@ File.open( temp_file , "r" )
 pic = (Image.read(image_file)).first
 
 
-puts "Validates Output"
-s = ''
-pic.each_pixel do |px, x, y|
-  s += (px.red   % 256).chr
-end
+# puts "Validates Output"
+# s = ''
+# pic.each_pixel do |px, x, y|
+#   s += (px.red   % 256).chr
+# end
+# puts s == js
 
-# puts s
 
 puts "Script Length:  #{js.length}"
-
-puts "-------------Unique Characters:"
-unique_chars = {}
-s.each_char do |c|
-  unique_chars[c] ||= 0
-  unique_chars[c] += 1
-end
-
-puts unique_chars.keys.sort.join(' ')
-puts unique_chars.length
-
 
 temp_file           = 'merge.js'
 min_temp_file       = 'merge.min.js'
