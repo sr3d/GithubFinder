@@ -30,6 +30,8 @@ Ajax.JSONRequest = Class.create(Ajax.Base, (function() {
       if (this.options.invokeImmediately) {
         this.request();
       }
+      
+      Ajax.Responders.dispatch('onCreate', this);
     },
     
     /**
@@ -67,17 +69,25 @@ Ajax.JSONRequest = Class.create(Ajax.Base, (function() {
         this._cleanup(); // Garbage collection
         window[name] = undefined;
         
+        
         if( typeof(response) == 'Object' )
           this.responseJSON = response;
         else
           this.responseText = response;
         
-        if (Object.isFunction(this.options.onComplete)) {
-          this.options.onComplete.call(this, this);
-        }
+        try {
+          Ajax.Responders.dispatch('onComplete', this, response);
+          
+          if (Object.isFunction(this.options.onComplete)) {
+            this.options.onComplete.call(this, this);
+          }
 
-        if (Object.isFunction(this.options.onSuccess)) {
-          this.options.onSuccess.call(this,this);
+          if (Object.isFunction(this.options.onSuccess)) {
+            this.options.onSuccess.call(this,this);
+          }
+        } catch( ex ) { 
+          Ajax.Responders.dispatch('onException', this, ex);
+          throw ex;
         }
 
       }.bind(this);
@@ -87,6 +97,7 @@ Ajax.JSONRequest = Class.create(Ajax.Base, (function() {
       if (Object.isFunction(this.options.onCreate)) {
         this.options.onCreate.call(this, this);
       }
+      
       
       head.appendChild(this.script);
 
