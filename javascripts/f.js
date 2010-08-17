@@ -16,13 +16,16 @@ window.F = Class.create({
     }, options || {} );
     
     this.panels   = []; 
-    this.panelsWrapper  = $('panels_wrapper');
-    this.browserWrapper = $('browser_wrapper');
     this.shas     = {};
     
     this.user_id    = options.user_id;
     this.repository = options.repository;
     this.branch     = options.branch;
+    
+    this.defaultRepo = 'sr3d/GithubFinder';
+    
+    
+    this.render();
     
     GH.Commits.listBranch( this.user_id, this.repository, this.branch, { 
       onData: function(commits) { 
@@ -40,11 +43,46 @@ window.F = Class.create({
     
   }
   
+  ,render: function() { 
+    $('content').update( this.toHTML() );
+    this.panelsWrapper  = $('panels_wrapper');
+    this.browserWrapper = $('browser_wrapper');
+  }
+  
   
   ,toHTML: function() {
     var html = [
-      '<div>'
+      '<div id="finder">' +
+        '<div id="r_w">' +
+          '<div id="url_w">' +
+            '<span class="big">Github Finder</span>' +
+            '<span>' +
+              'Repo: http://github.com/<input type="text" name="" placeholder="' + this.defaultRepo + '"/>' +
+              '<input type="button" id="go" value="Go"/>' +
+            '</span>' +
+          '</div>' +
+        '</div>' +
+      
+        '<div id="browser_wrapper">' +
+          '<div id="panels_wrapper" style="width:200px"></div>' +
+        '</div>' +
+
+        '<div id="info_wrapper">' +
+          '<div class="big">Info</div>' +
+          '<div id="info" class="padding"></div>' +
+        '</div>' +
+
+        '<div class="clear"></div>' +
+      '</div>' +
+      
+      
+      '<div id="file_wrapper">' +
+        '<div id="file"></div>' +
+      '</div>' +
+      '<div id="diffoutput"></div>'
     ];
+    
+    return html.join(' ');
   } 
   
   ,renderPanel: function( tree_sha, index, item ) { 
@@ -438,9 +476,14 @@ window.P = Class.create({
       css  = item.type == 'tree' ? 'folder' : 'file';
       icon = item.type == 'tree' ? 'dir' : 'txt';
       
-      html.push( '<li class=' + css +'>' + 
-        '<img src=img/' + icon + '.png />' +
-        '<a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a></li>');
+      html.push( 
+        '<li class=' + css +'>' + 
+          // '<img src=img/' + icon + '.png />' +
+          '<span class=ico>' +
+            '<a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a>' +
+          '</span>' +
+        '</li>'
+      );
     }
     html.push('</ul>');
 

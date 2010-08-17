@@ -7,30 +7,34 @@ a:active { outline: none; }
 textarea { width: 400px; height: 500px}
 
 
-#finder { width: 100%; }
-  #r_w { width: 100%; background-color: #EAEAEA; border-bottom: 1px solid #D8D8D8; padding: 10px;}
-  /* logo */
-  .big { font-size: 14px; font-weight: bold} 
-  #r_w span { border-right: 1px solid white; padding-right: 10px; }
+
+#finder { width: 100%; border-bottom: 3px solid #DCDCDC }
+
+#r_w { width: 100%; background-color: #EAEAEA; border-bottom: 3px solid #D8D8D8; padding: 10px;}
+/* logo */
+.big { font-size: 14px; font-weight: bold} 
+#r_w span { border-right: 1px solid white; padding-right: 10px; }
+
+
 #browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
-  #panels_wrapper { width: 10000px; }
+  #panels_wrapper {}
     #panels_wrapper .panel { 
       float: left; width: 200px; border-right: 1px solid #DCDCDC; overflow: hidden; overflow-y: auto;
       height: 300px }
 
       .files { padding: 0; margin: 0; }
-      .files li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding: 3px 6px; background-color: #F8F8F8; }
-#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; min-height: 300px; }
-  #info_wrapper .padding { padding: 5px; }
-  #info_wrapper .commits { height: 200px; overflow: auto}
+      .files li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding: 6px; background-color: #F8F8F8; }
+#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: left; height: 300px; overflow-y: auto;}
+#info_wrapper .padding { padding: 5px; }
+#info_wrapper .commits { height: 200px; overflow: auto}
 
 .folder { background: #E8FFFF url('./img/la.png') no-repeat 95% 50%; font-weight: bold; }
-  .ico { margin: 2px; background:url('./img/txt.png') no-repeat top left; width: 16px; height: 16px;display: inline-block; }
+  .ico { margin: 2px; background:url('./img/txt.png') no-repeat top left; padding: 3px 6px; }
   .folder .ico { background: url('./img/dir.png') no-repeat top left; }
 .current { background: #3D8CFF url('./img/la_h.png') no-repeat 95% 50% !important;}
 .current a { color: white;}
 
-.files a { padding-left: 5px }
+.files a { padding: 3px 15px }
 
 
 /* lift from Github.com */
