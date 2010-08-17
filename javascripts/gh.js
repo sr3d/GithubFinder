@@ -1,3 +1,7 @@
+/* switch to the correct AR */
+if( window.proxy )
+  window.AR = window.proxy.indexOf('./') == 0 ? Ajax.Request : Ajax.JSONRequest;
+
 window.GH = {
   hash: {}
   // ,proxy: 'http://hoavui.com/github_jsonp.php?url='
@@ -6,7 +10,9 @@ window.GH = {
   ,api: 'http://github.com/api/v2/json'
   
   ,Commits: {
-    listBranch: function(user_id, repository, branch, options ) {
+    _cache: []
+
+    ,listBranch: function(user_id, repository, branch, options ) {
       options = Object.extend({ 
         onSuccess: function(response) {
           var commits = eval('(' + response.responseText +')');
@@ -23,26 +29,43 @@ window.GH = {
     }
     
     ,list: function( user_id, repository, branch, path, options ) {
+      var self = this,
+          url = GH.api + '/commits/list/' + user_id + '/' + repository + '/' + branch + path;
+          
       options = Object.extend({ 
         onSuccess: function(response) {
           var commits = eval('(' + response.responseText +')').commits;
+          
+          /* cache the commits */
+          self._cache[ url ] = commits;
+                    
           onData( commits ); // get rid of root namespace
         }
         ,onData: Prototype.K
       }, options || {});
 
       var onData = options.onData; 
-      // debugger
 
-      var url = GH.api + '/commits/list/' + user_id + '/' + repository + '/' + branch + path;
+      /* hit the cache first */
+      if( this._cache[ url ] ) {
+        onData( this._cache[ url ] );
+        return;
+      }
 
       new AR( GH.proxy + url, options );
     }
     
     ,show: function( user_id, repository, sha, options ) {
+      var self = this,
+          url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
+          
       options = Object.extend({ 
         onSuccess: function(response) {
           var commit = eval('(' + response.responseText +')').commit;
+
+          /* cache */
+          self._cache[ sha ] = commit;
+
           onData( commit );
         }
         ,onData: Prototype.K
@@ -50,17 +73,25 @@ window.GH = {
 
       var onData = options.onData; 
 
-      var url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
+      /* hit the cache first */
+      if( this._cache[ tree_sha ] ) {
+        onData( this._cache[ tree_sha ] );
+        return;
+      }
+      
 
       new AR( GH.proxy + url, options );
     }
   }
   
   ,Tree: {
-    show: function( user_id, repository, branch, tree_sha, options  ) {
+    _cache: {}
+    ,show: function( user_id, repository, branch, tree_sha, options  ) {
+      var self = this,
+          url = GH.api + '/tree/show/' + user_id +'/' + repository +'/' + tree_sha;
+          
       options = Object.extend({ 
         onSuccess: function(response) {
-          // console.log("response %o",response);
           var tree = (eval('(' + response.responseText + ')')).tree;
           
           tree = tree.sort(function(a,b){
@@ -72,13 +103,21 @@ window.GH = {
             return a.name > b.name ? 1 : ( a.name < b.name ? - 1 : 0 );
           });          
           
+          
+          /* cache the tree so that we don't have to re-request every time */
+          self._cache[ tree_sha ] = tree;
+          
           onData(tree);
         }
       }, options || {});
 
       var onData = options.onData;
       
-      var url = GH.api + '/tree/show/' + user_id +'/' + repository +'/' + tree_sha;
+      /* hit the cache first */
+      if( this._cache[ tree_sha ] ) {
+        onData( this._cache[ tree_sha ] );
+        return;
+      }
 
       new AR( GH.proxy + url, options);
     }
@@ -99,6 +138,5 @@ window.GH = {
   }
 };
 
-/* switch to the correct AR */
 window.AR = GH.proxy.indexOf('./') == 0 ? Ajax.Request :
               Ajax.JSONRequest;
