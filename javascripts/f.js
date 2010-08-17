@@ -137,7 +137,7 @@ window.F = Class.create({
         );
       }
       commitsHTML.push('</div>');
-    
+      
       var html = [
         '<div>Name: ',
           '<a href=',
@@ -163,8 +163,6 @@ window.F = Class.create({
       ];
       $('info').update( html.join(' '));
     }.bind(this)});
-    
-    // console.log("path %o", path);
   }
   
 
@@ -181,7 +179,7 @@ window.F = Class.create({
       
       lines.push( [ 
         '<div class=l>',
-          text[i] ? text[i] : '<br/>',
+          text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '<br/>',
         '</div>'
       ].join(''));
 

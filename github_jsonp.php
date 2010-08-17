@@ -10,12 +10,7 @@
 // Get the url of to be proxied
 // Is it a POST or a GET?
 
-# Lifted from Symfony
-function escape_javascript($javascript = '') { 
-  $javascript = preg_replace('/\r\n|\n|\r/', "\\n", $javascript);
-  $javascript = preg_replace('/(["\'])/', '\\\\\1', $javascript);
-  return $javascript;
-}
+# This script requires PHP5.2 (for the json_encode method);
 
 $url = ($_POST['url']) ? $_POST['url'] : $_GET['url'];
 

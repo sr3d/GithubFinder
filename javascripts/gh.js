@@ -1,13 +1,14 @@
+window.AR = Ajax.JSONRequest;
+
 window.GH = {
   hash: {}
-  ,proxy: 'http://marrilydev.com/misc/githubfinder/github_jsonp.php?url='
+  ,proxy: 'http://hoavui.com/github_jsonp.php?url='
   ,api: 'http://github.com/api/v2/json'
   
   ,Commits: {
     listBranch: function(user_id, repository, branch, options ) {
       options = Object.extend({ 
         onSuccess: function(response) {
-          debugger
           var commits = eval('(' + response.responseText +')');
           onData( commits );
         }
