@@ -1,12 +1,3 @@
-/* alias */
-// window.AR = Ajax.Request;
-// window.AR = Ajax.JSONRequest
-// var PAR = function() {  // paralelle Ajax Request
-//   
-// }
-// GH.branch('sr3d', 'githubfinder','master');
-// GH.tree('sr3d', 'githubfinder','master')
-
 window.F = Class.create({
   initialize: function(options){
     options = Object.extend( { 
@@ -41,6 +32,19 @@ window.F = Class.create({
       Event.stop(event);
     }.bind(this) );
     
+    
+    var i = $('indicator');
+    var s = function() { i.show(); };
+    var h = function() { i.hide(); };
+    
+    Ajax.Responders.register( { 
+      onException: function( ex ) { 
+        s();
+        console.log("AJax exception %o",ex);
+      }
+      ,onComplete: function() { if( Ajax.activeRequestCount == 0 ) h(); }
+      ,onCreate: s
+    });
   }
   
   ,render: function() { 
@@ -60,6 +64,8 @@ window.F = Class.create({
               'Repo: http://github.com/<input type="text" name="" placeholder="' + this.defaultRepo + '"/>' +
               '<input type="button" id="go" value="Go"/>' +
             '</span>' +
+            
+            '<span id=indicator>Loading...</span>' +
           '</div>' +
         '</div>' +
       
