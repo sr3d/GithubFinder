@@ -1,5 +1,3 @@
-/* load the image and grab the code */
-// var f;
 document.on('dom:loaded', function() { 
   var img =new Image();
   img.onload=function() {

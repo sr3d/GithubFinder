@@ -12,25 +12,7 @@
   <link href="diffview.css" media="all" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div id="finder">
-    <div id="browser_wrapper">
-      <div id="panels_wrapper">
-      </div><!-- #panels_wrapper -->
-    </div><!-- #browser_wrapper -->
-    
-    <div id="info_wrapper">
-      <div id="info" class="padding"></div><!-- .padding -->
-    </div><!-- #info_wrapper -->
-    
-    <div class="clear"></div>
-  </div>
-  
-  <div id="file_wrapper">
-    <div id="file"></div><!-- #file -->
-  </div>
-  
-  <div id="diffoutput"></div><!-- #diffoutput -->
-  
+  <div id="content"></div>
   
 <script type="text/javascript">
 var f;
@@ -41,15 +23,6 @@ var run = function() {
     ,branch: 'master'
   });
 };
-
-document.on('dom:loaded', function() { 
-  // f = new F( { 
-  //    user_id: 'rails'
-  //    ,repository: 'rails'
-  //    ,branch: 'master'
-  //  });
-  
-});
 </script>
   
 </body>

@@ -5,7 +5,12 @@ files = [
     'index.min.html', 
     'styles.css', 
     'javascripts/bootstrap.js',
-    'code.png'
+    'code.png',
+    
+    'img/dir.png',
+    'img/la.png',
+    'img/la_h.png',
+    'img/txt.png'
     # 'javascripts/f.js',
     # 'javascripts/gh.js', 
     # 'javascripts/vendors/jsdiff.js' 
@@ -17,7 +22,7 @@ files.each do |file|
   total_size += File.stat( file ).size
 end
 
-puts "Total size: \t\t#{total_size}"
+puts "#{"%-20.20s" % "Total Size"} #{"%30s" % total_size}"
 
 full_size = total_size
 
