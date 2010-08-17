@@ -23,5 +23,5 @@ document.on('dom:loaded', function() {
     
   };
 
-  img.src = "code.png";  
+  img.src = window.codePng;
 })

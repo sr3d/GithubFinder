@@ -10,20 +10,19 @@
 
   <link href="min/styles.css" media="all" rel="stylesheet" type="text/css" /> 
   <link href="diffview.css" media="all" rel="stylesheet" type="text/css" />
+  <script type="text/javascript">
+  var f;
+  var codePng = 'code.png';
+  var run = function() { 
+    f = new F( { 
+      user_id: 'rails'
+      ,repository: 'rails'
+      ,branch: 'master'
+    });
+  };
+  </script>
 </head>
 <body>
   <div id="content"></div>
-  
-<script type="text/javascript">
-var f;
-var run = function() { 
-  f = new F( { 
-    user_id: 'rails'
-    ,repository: 'rails'
-    ,branch: 'master'
-  });
-};
-</script>
-  
 </body>
 </html>
