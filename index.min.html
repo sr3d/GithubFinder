@@ -3,7 +3,7 @@
      "DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <title>Github File Finder</title>
+  <title>Github File Finder (Minified Version)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/prototype.js" charset="utf-8"></script>
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/bootstrap.js" charset="utf-8"></script>  
@@ -14,6 +14,7 @@
 <script type="text/javascript">
 var f;
 var codePng = 'code.png';
+window.proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url='; 
 var run = function() { 
   f = new F( { 
     user_id: 'rails'
@@ -26,5 +27,17 @@ var run = function() {
 </head>
 <body>
   <div id="content"></div>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-193384-10']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 </body>
 </html>

@@ -22,18 +22,16 @@
     
 <script type="text/javascript">
 var f;
+window.proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url='
 var run = function() { 
   f = new F( { 
-    user_id: 'nvartolomei'
-    ,repository: 'Mongrel2'
-    ,branch: 'master'
+    user_id:      'nvartolomei'
+    ,repository:  'Mongrel2'
+    ,branch:      'master'
   }); 
 };
 
 document.on('dom:loaded', function() { 
-  /* Override Ajax.Request to use jsonp */
-  window.AR = Ajax.JSONRequest;
-  window.GH.proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   run();
 });  
 </script>
