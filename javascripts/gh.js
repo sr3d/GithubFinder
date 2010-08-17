@@ -4,7 +4,7 @@ if( window.proxy )
 
 window.GH = {
   hash: {}
-  // ,proxy: 'http://hoavui.com/github_jsonp.php?url='
+  // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   ,proxy: window.proxy ? window.proxy : './proxy.php?url='
   
   ,api: 'http://github.com/api/v2/json'
@@ -103,6 +103,10 @@ window.GH = {
             return a.name > b.name ? 1 : ( a.name < b.name ? - 1 : 0 );
           });          
           
+          /* add the index to the item */
+          for( var i = 0, len = tree.length; i < len; i++ ) {
+            tree[i].index = i;
+          }
           
           /* cache the tree so that we don't have to re-request every time */
           self._cache[ tree_sha ] = tree;
@@ -133,6 +137,22 @@ window.GH = {
 
       var url = GH.api + '/blob/show/' + user_id + '/' + repository + '/' + sha;
 
+      new AR( GH.proxy + url, options );
+    }
+  }
+  
+  ,Repo: {
+    show: function( user_id, repository, options ) {
+      options = Object.extend({ 
+        onSuccess: function(response) {
+          var repo = (eval('(' + response.responseText + ')')).repository;
+          onData(repo);
+        }
+        ,onData: Prototype.K
+      }, options || {});
+
+      var onData = options.onData; 
+      var url = GH.api + '/repos/show/' + user_id + '/' + repository;
       new AR( GH.proxy + url, options );
     }
   }

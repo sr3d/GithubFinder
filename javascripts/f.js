@@ -1,3 +1,12 @@
+if( typeof console == 'undefined' ) 
+  console = { log: function(){} };
+
+/* Util stuff */
+/* return a truncated s */
+var s = function(h) { return h.substr(0,6);};
+
+window.FP = [];  // finder plugins
+
 window.F = Class.create({
   initialize: function(options){
     options = Object.extend( { 
@@ -17,6 +26,12 @@ window.F = Class.create({
     
     
     this.render();
+    
+    this.repo = null;
+
+
+    this.cI = -1;
+    this.pI = 0;
     
     GH.Commits.listBranch( this.user_id, this.repository, this.branch, { 
       onData: function(commits) { 
@@ -45,51 +60,82 @@ window.F = Class.create({
       ,onComplete: function() { if( Ajax.activeRequestCount == 0 ) h(); }
       ,onCreate: s
     });
+    
+    /* if we have pluggins */
+    if( FP ) {
+      for( var i = 0; i < FP.length; i++ ) {
+        new FP[i](this);
+      }
+    }
+      
   }
   
   ,render: function() { 
     $('content').update( this.toHTML() );
     this.panelsWrapper  = $('panels_wrapper');
     this.browserWrapper = $('browser_wrapper');
+    
+
+    GH.Repo.show( this.user_id, this.repository, { 
+      onData: function(repo) {
+        this.repo = repo;
+        this.renderRepoInfo();
+      }.bind(this)
+    });
   }
-  
-  
+    
   ,toHTML: function() {
     var html = [
-      '<div id="finder">' +
-        '<div id="r_w">' +
-          '<div id="url_w">' +
-            '<span class="big">Github Finder</span>' +
-            '<span>' +
-              'Repo: http://github.com/<input type="text" name="" placeholder="' + this.defaultRepo + '"/>' +
-              '<input type="button" id="go" value="Go"/>' +
-            '</span>' +
-            
-            '<span id=indicator>Loading...</span>' +
-          '</div>' +
-        '</div>' +
+      '<div id=finder>',
+        '<div id=r_w>',
+          '<div class=p>',
+            '<div id=url_w>',
+              '<span class=big>Github Finder</span>',
+              '<span>',
+                'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + '/>',
+                '<input type="button" id="go" value="Go"/>',
+              '</span>',
+              '<span id=indicator>Loading...</span>',
+            '</div>',
+          '</div>',  // .p
+        '</div>',   // #r_w
       
-        '<div id="browser_wrapper">' +
-          '<div id="panels_wrapper" style="width:200px"></div>' +
-        '</div>' +
+        '<div id=r_i_w>', // #repo info
+          '<div class=p><span id=r_i></span></div>',
+        '</div>',
+      
+        '<div id="browser_wrapper">',
+          '<div id="panels_wrapper" style="width:200px"></div>',
+        '</div>',
 
-        '<div id="info_wrapper">' +
-          '<div class="big">Info</div>' +
-          '<div id="info" class="padding"></div>' +
-        '</div>' +
+        '<div id="info_wrapper">',
+          '<div class="big">Info</div>',
+          '<div id="info" class="padding"></div>',
+        '</div>',
 
-        '<div class="clear"></div>' +
-      '</div>' +
-      
-      
-      '<div id="file_wrapper">' +
-        '<div id="file"></div>' +
-      '</div>' +
-      '<div id="diffoutput"></div>'
+        '<div class="clear"></div>',
+      '</div>', // #finder 
+
+      '<div id="file_wrapper">',
+        '<div id="file"></div>',
+      '</div>',
+      '<div id="diffoutput"></div>'  
     ];
     
     return html.join(' ');
   } 
+  
+  ,renderRepoInfo: function() {
+    $('r_i').innerHTML = this.repo.description;
+    // var html = [
+    //   '<div>',
+    //     '<span class=big>',
+    //       
+    //     '</span>',
+    //   '</div>'
+    // ];
+  }
+  
   
   ,renderPanel: function( tree_sha, index, item ) { 
     index = (typeof index == 'undefined' ) ? 0 : index;
@@ -130,83 +176,106 @@ window.F = Class.create({
     });
   }
   
-  ,click: function(sha, element) {
+  ,click: function(sha, e) {
     // debugger
     var item = this.shas[ sha ];
-    var index = +(element.up('.panel')).readAttribute('data-index');  
+    var index = +(e.up('.panel')).readAttribute('data-index');
 
-    // console.log("item %o",item);
+
+    /* set selection cursor */
+    var c = e.up('ul').down('li.current');
+    c ? c.removeClassName('current') : '';    
+    e.up('li').addClassName('current');
+    /* scroll viewport if needed*/
+    // if()
+
+    /* current index */
+    this.cI = item.index;
+    this.pI = index; // current panel index;
+
+    /* remember the current selected item */
+    this.panels[ index ].cI = item.index;
     
-    if( item.type == 'tree' ) {
-      this.renderPanel( item.sha, index, item );
+    
+    if(this._ptm) clearTimeout( this._ptm );
+
+    /* set a small delay here incase user switches really fast (e.g. keyboard navigation ) */
+    this._ptm = setTimeout( function(){
       
-      /* set selection cursor */
-      var selection = element.up('ul').down('li.current');
-      selection ? selection.removeClassName('current') : '';
-      
-      element.up('li').addClassName('current');
-    } else {
-      // open the file;
-      if( /text/.test(item.mime_type) ) {
-        // show preview here
-        GH.Blob.show( this.user_id, this.repository, item.sha, { onSuccess: function(response) {
-          this.previewTextFile(response.responseText, item);
-        }.bind(this)});
+      if( item.type == 'tree' ) {
+        this.renderPanel( item.sha, index, item );
+      } else {
+        // open the file;
+        if( /text/.test(item.mime_type) ) {
+          GH.Blob.show( this.user_id, this.repository, item.sha, { onSuccess: function(response) {
+            this.previewTextFile(response.responseText, item);  
+          }.bind(this)} );
+        }
       }
-      
-    }
-    
-    /* display file info */
-    var path = [];
-    for( var i = 0; i <= index; i++ ) {
-      path.push(this.panels[i].name);
-    }
-    path.push( item.name );
-    
-    path = path.join("/");
-    
-    GH.Commits.list( this.user_id, this.repository, this.branch, path, { onData: function(commits) {
-      var c = commits[0];
-      var commitsHTML = ['<div>'];
-      for( var i = 0; i < commits.length; i++ ) {
-        
-        commitsHTML.push(
-          '<div>Commit: ' + 
-            '<a href=javascript:void(0) onclick=f.diff(' + 
-              [ '"', c.id, '","',  c.tree, '","', commits[i].id, '","',commits[i].tree, '","',item.name, '"' ].join('')+')>' +
-              commits[i].id +
-            '</a>' + 
-            '(tree: ' + commits[i].tree + ')' +
-          '</div>' 
-        );
+
+
+      /* display file info */
+      var path = [];
+      for( var i = 0; i <= index; i++ ) {
+        path.push(this.panels[i].name);
       }
-      commitsHTML.push('</div>');
-      
-      var html = [
-        '<div>Name: ',
-          '<a href=',
-            'http://github.com/' + this.user_id + '/' + this.repository + '/' + item.type + '/' + this.branch + path,
-            'target=_blank>',
-            item.name,
-          '</a>',
-         '</div>',
-        '<div>Path: ' + path + '</div>',
-        '<div>Committed Date: ' + (new Date(c.committed_date)).toString() + '</div>',
-        '<div>',
-          'Author: <a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
-          '(' + c.author.email +')',
-        '</div>',
-        '<div>',
-          'Message:<br/>',
-          c.message,
-        '</div>',
-        
-        '<div class=commits>',
-          commitsHTML.join(''),
-        '</div>'
-      ];
-      $('info').update( html.join(' '));
-    }.bind(this)});
+      path.push( item.name );
+
+      path = path.join("/");
+
+      GH.Commits.list( this.user_id, this.repository, this.branch, path, { onData: function(commits) {
+        var c = commits[0];
+        var commitsHTML = ['<div>'];
+        for( var i = 0; i < commits.length; i++ ) {
+
+          commitsHTML.push(
+            '<div>Commit: ' + 
+              '<a href=javascript:void(0) onclick=f.diff(' + 
+                [ '"', c.id, '","',  c.tree, '","', commits[i].id, '","',commits[i].tree, '","',item.name, '"' ].join('')+')>' +
+                commits[i].id +
+              '</a>' + 
+              '(tree: ' + commits[i].tree + ')' +
+            '</div>' 
+          );
+        }
+        commitsHTML.push('</div>');
+        // debugger
+        var html = [
+          '<div><b>Name</b><br/>',
+            '<a href=',
+              'http://github.com/' + this.user_id + '/' + this.repository + '/' + item.type + '/' + this.branch + path,
+              ' target=_blank>',
+              item.name,
+            '</a>',
+          '</div>',
+          '<br/>',
+          '<div><b>Path</b><br/> ' + path + '</div>',
+
+          '<br/>',        
+          '<div><b>Last Committed</b><br/> ' + 
+            s( c.id ) + ' on ' +
+            (new Date(c.committed_date)).toString() + 
+          '</div>',
+          '<br/>',
+
+          '<div>',
+            '<b>Author</b><br/>',
+            '<a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
+            '(' + c.author.email +')',
+          '</div>',
+          '<br/>',
+          '<div>',
+            '<b>Commit Message</b><br/>',
+            c.message,
+          '</div>'
+        ];
+        $('info').update( html.join(''));
+      }.bind(this)});      
+    
+    
+    }.bind(this), 200); // time out
+    
+    
   }
   
 
@@ -268,7 +337,7 @@ window.F = Class.create({
     var flag = 0;
     var process = function() { 
       if( flag < 2 ) {
-        console.log("pending requests");
+        //console.log("pending requests");
         return;
       }
       // console.log("file1 %o",file1);
@@ -303,7 +372,7 @@ window.F = Class.create({
     	  diffoutputdiv.appendChild( node );
 		    
         // console.log("node %o",node);
-        console.log("done");
+        // console.log("done");
       } catch(ex) {
         alert(ex.message);
         console.log("ex %o",ex);
@@ -343,102 +412,101 @@ window.F = Class.create({
     }.bind(this)});
     
   }
-  
-  ,test: function() { 
-    /* commit contains tree data
-      to load the file in the commit, have to go thru the tree, grab the sha of the file
-      then request the file itself;
-    */
-    
-    var sha1  = '1607a8b08ce355043220f035b6d56a6e5a5d782c'; // commit sha
-    var sha2  = 'ee9c950f2fe0c7953f0a9ad6a53439da7a4e89bc';
-    
-    var filename  = 'Gemfile';
-    
-    var tree1 = '27e7a9c4210ab4fa49e20afffdf723dda4366a15';
-    var tree2 = '1b3f6a3e49be0ebacb251de0c0fc12bf64e2e596';
-    
-    
-    var file1, file2, file1Sha, file2Sah, diff;
-    
-    var flag = 0;
-    var process = function() { 
-      if( flag < 2 ) {
-        console.log("pending requests");
-        return;
-      }
-      console.log("file1 %o",file1);
-      console.log("file2 %o",file2);
-      
-      $('file1').value = file1;
-      $('file2').value = file2;
-      // $('diff').value = diff;
-      /* */
-      // debugger
-        
-      file1 = difflib.stringAsLines(file1);
-      file2 = difflib.stringAsLines(file2)
-      var sm = new difflib.SequenceMatcher( file1, file2 );
-      var opcodes = sm.get_opcodes();
-      // debugger
-      var diffoutputdiv = $("diffoutput");
-      while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-      var contextSize = null; // or a number 
-      var showInline = false;
-      try{
-          
-        var node = diffview.buildView({ 
-    	    baseTextLines:    file1,
-			    newTextLines:     file2,
-			    opcodes:          opcodes,
-			    baseTextName:     'Tree: ' + tree1 + '<br/>(' + file1Sha +')',
-			    newTextName:      'Tree: ' + tree2 + '<br/>(' + file2Sha +')',
-			    contextSize:      contextSize,
-			    viewType:         showInline 
-		    });
-    	  diffoutputdiv.appendChild( node );
-		    
-        // console.log("node %o",node);
-        console.log("done");
-      } catch(ex) {
-        alert(ex.message);
-        console.log("ex %o",ex);
-      }
-    }
-    
-    GH.Tree.show( this.user_id, this.repository, this.branch, tree1, { onData: function(tree) {
-      for( var i = 0; i < tree.length; i++ ) {
-        if( tree[i].name == filename ){
-          // now request
-          GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
-            file1 = response.responseText;
-            file1Sha = tree[i].sha;
-            flag++;
-            process();
-          }.bind(this)});
-          break;
-        }
-          
-      }
-    }.bind(this)});
-    
-
-    GH.Tree.show( this.user_id, this.repository, this.branch, tree2, { onData: function(tree) {
-      for( var i = 0; i < tree.length; i++ ) {
-        if( tree[i].name == filename ){
-          // now request
-          GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
-            file2 = response.responseText;
-            file2Sha = tree[i].sha;
-            flag++;
-            process();
-          }.bind(this)});
-          break;
-        }
-      }
-    }.bind(this)});
-    
-  }
+    // 
+    // ,test: function() { 
+    //   /* commit contains tree data
+    //     to load the file in the commit, have to go thru the tree, grab the sha of the file
+    //     then request the file itself;
+    //   */
+    //   
+    //   var sha1  = '1607a8b08ce355043220f035b6d56a6e5a5d782c'; // commit sha
+    //   var sha2  = 'ee9c950f2fe0c7953f0a9ad6a53439da7a4e89bc';
+    //   
+    //   var filename  = 'Gemfile';
+    //   
+    //   var tree1 = '27e7a9c4210ab4fa49e20afffdf723dda4366a15';
+    //   var tree2 = '1b3f6a3e49be0ebacb251de0c0fc12bf64e2e596';
+    //   
+    //   
+    //   var file1, file2, file1Sha, file2Sah, diff;
+    //   
+    //   var flag = 0;
+    //   var process = function() { 
+    //     if( flag < 2 ) {
+    //       console.log("pending requests");
+    //       return;
+    //     }
+    //     console.log("file1 %o",file1);
+    //     console.log("file2 %o",file2);
+    //     
+    //     $('file1').value = file1;
+    //     $('file2').value = file2;
+    //     // $('diff').value = diff;
+    //     // debugger
+    //       
+    //     file1 = difflib.stringAsLines(file1);
+    //     file2 = difflib.stringAsLines(file2)
+    //     var sm = new difflib.SequenceMatcher( file1, file2 );
+    //     var opcodes = sm.get_opcodes();
+    //     // debugger
+    //     var diffoutputdiv = $("diffoutput");
+    //     while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+    //     var contextSize = null; // or a number 
+    //     var showInline = false;
+    //     try{
+    //         
+    //       var node = diffview.buildView({ 
+    //        baseTextLines:    file1,
+    //          newTextLines:     file2,
+    //          opcodes:          opcodes,
+    //          baseTextName:     'Tree: ' + tree1 + '<br/>(' + file1Sha +')',
+    //          newTextName:      'Tree: ' + tree2 + '<br/>(' + file2Sha +')',
+    //          contextSize:      contextSize,
+    //          viewType:         showInline 
+    //        });
+    //      diffoutputdiv.appendChild( node );
+    //        
+    //       // console.log("node %o",node);
+    //       console.log("done");
+    //     } catch(ex) {
+    //       alert(ex.message);
+    //       console.log("ex %o",ex);
+    //     }
+    //   }
+    //   
+    //   GH.Tree.show( this.user_id, this.repository, this.branch, tree1, { onData: function(tree) {
+    //     for( var i = 0; i < tree.length; i++ ) {
+    //       if( tree[i].name == filename ){
+    //         // now request
+    //         GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
+    //           file1 = response.responseText;
+    //           file1Sha = tree[i].sha;
+    //           flag++;
+    //           process();
+    //         }.bind(this)});
+    //         break;
+    //       }
+    //         
+    //     }
+    //   }.bind(this)});
+    //   
+    // 
+    //   GH.Tree.show( this.user_id, this.repository, this.branch, tree2, { onData: function(tree) {
+    //     for( var i = 0; i < tree.length; i++ ) {
+    //       if( tree[i].name == filename ){
+    //         // now request
+    //         GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
+    //           file2 = response.responseText;
+    //           file2Sha = tree[i].sha;
+    //           flag++;
+    //           process();
+    //         }.bind(this)});
+    //         break;
+    //       }
+    //     }
+    //   }.bind(this)});
+    //   
+    // }
   
 });
 
