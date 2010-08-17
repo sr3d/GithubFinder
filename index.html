@@ -6,8 +6,11 @@
   <title>Github File Finder</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" src="javascripts/prototype.js" charset="utf-8"></script> 
+  
   <script type="text/javascript" src="javascripts/vendors/difflib.js"></script> 
   <script type="text/javascript" src="javascripts/vendors/diffview.js"></script>   
+  <script type="text/javascript" src="javascripts/vendors/jsonp.js"></script> 
+  
   <script type="text/javascript" src="javascripts/gh.js"></script>
   <script type="text/javascript" src="javascripts/f.js"></script>
   <script type="text/javascript" src="data.js"></script>
@@ -44,14 +47,38 @@
 var f;
 var run = function() { 
   f = new F( { 
-    user_id: 'rails'
-    ,repository: 'rails'
+    // user_id: 'rails'
+    // ,repository: 'rails'
+    // ,branch: 'master'
+    user_id: 'sr3d'
+    ,repository: 'githubfinder'
     ,branch: 'master'
   });
 };
 
 document.on('dom:loaded', function() { 
-  run()
+  run();
+  
+  // // Should succeed
+  //  new Ajax.JSONRequest('http://api.flickr.com/services/feeds/photos_public.gne', {
+  //    onCreate: function(instance) {
+  //      console.log("create", this);
+  //    },
+  //    onComplete: function(instance) {
+  //      console.log("complete", this);
+  //    },
+  //    onFailure: function(instance) {
+  //      console.log("fail", this);
+  //    },
+  //    callbackParamName: "jsoncallback",
+  //    parameters: {
+  //      tags: 'cat',
+  //      tagmode: 'any',
+  //      format: 'json'
+  //    }
+  //  });
+  
+  
 });  
 </script>    
 </body>
