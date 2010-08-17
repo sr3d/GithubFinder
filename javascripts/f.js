@@ -91,7 +91,7 @@ window.F = Class.create({
     var item = this.shas[ sha ];
     var index = +(element.up('.panel')).readAttribute('data-index');  
 
-    console.log("item %o",item);
+    // console.log("item %o",item);
     
     if( item.type == 'tree' ) {
       this.renderPanel( item.sha, index, item );
@@ -394,18 +394,6 @@ window.F = Class.create({
       }
     }.bind(this)});
     
-    
-    // GH.Commits.show( this.user_id, this.repository, sha1, { onData: function(commit) {
-    //   console.log("commit %o",commit);
-    //   var modified = commit.modified;
-    //   for( var i = 0; i < modified.length; i++ ) {
-    //     if( modified[i].filename == filename )
-    //       diff = modified[i].diff;
-    //   }
-    //   flag++;
-    //   process();
-    // }.bind(this)});
-    
   }
   
 });
@@ -443,12 +431,16 @@ window.P = Class.create({
   }
   
   ,toHTML: function() { 
-    var html = ['<ul>'];
-    var item;
+    var item, icon, css, 
+        html = ['<ul class=files>'];
     for( var i = 0, len = this.tree.length; i < len; i++ ) {
       item = this.tree[i];
-      var css = item.type == 'tree' ? 'folder' : 'file';
-      html.push( '<li class=' + css +'><a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a></li>');
+      css  = item.type == 'tree' ? 'folder' : 'file';
+      icon = item.type == 'tree' ? 'dir' : 'txt';
+      
+      html.push( '<li class=' + css +'>' + 
+        '<img src=img/' + icon + '.png />' +
+        '<a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a></li>');
     }
     html.push('</ul>');
 
