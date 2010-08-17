@@ -18,30 +18,7 @@
   <link href="http://github.com/sr3d/GithubFinder/raw/master/diffview.css" media="all" rel="stylesheet" type="text/css" />   
 </head>
 <body>
-  <div id="finder">
-    <div id="browser_wrapper">
-      <div id="panels_wrapper">
-      </div><!-- #panels_wrapper -->
-    </div><!-- #browser_wrapper -->
-    
-    <div id="info_wrapper">
-      <div id="info" class="padding"></div><!-- .padding -->
-    </div><!-- #info_wrapper -->
-    
-    <div class="clear"></div>
-  </div>
-  
-  <div id="file_wrapper">
-    <div id="file"></div><!-- #file -->
-  </div>
-  
-  <div id="diffoutput"></div><!-- #diffoutput -->
-  
-  <!-- <div id="test">
-      <textarea id="file1"></textarea>
-      <textarea id="file2"></textarea>  
-      <textarea id="diff"></textarea>
-    </div> --><!-- #test -->
+  <div id="content"></div>
     
 <script type="text/javascript">
 var f;
@@ -54,7 +31,7 @@ var run = function() {
 };
 
 document.on('dom:loaded', function() { 
-  /* force remote */
+  /* Override Ajax.Request to use jsonp */
   window.AR = Ajax.JSONRequest;
   window.GH.proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   run();
