@@ -1,9 +1,7 @@
-
-
 window.GH = {
   hash: {}
   // ,proxy: 'http://hoavui.com/github_jsonp.php?url='
-  ,proxy: './proxy.php?url='
+  ,proxy: window.proxy ? window.proxy : './proxy.php?url='
   
   ,api: 'http://github.com/api/v2/json'
   
