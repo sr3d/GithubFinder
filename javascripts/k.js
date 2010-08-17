@@ -10,7 +10,7 @@ var KB = Class.create( {
       var p = f.panels[pI]; // panel
       var t = p.tree;       // the panel's tree
       
-      e.stop();
+      // e.stop();
       
       // console.log("k %o",k);
       var d = function() { 
@@ -48,11 +48,14 @@ var KB = Class.create( {
       
       
       var r = function() {
-        // p = f.panels[pI];
-        if( f.panels[++pI] ) {
+        if( f.panels[++pI] && 
+            (f.panels[pI-1].tree[cI].type) == 'tree'   // only tree can go right
+          ) {
           t = f.panels[pI].tree;
-          cI = -1;
-          d(); // down!
+          if( t[cI].type == 'tree' ) {
+            cI = -1;
+            d(); // down!
+          }
         } else {
           pI--; // undo 
         }        

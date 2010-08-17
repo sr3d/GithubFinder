@@ -176,6 +176,10 @@ window.F = Class.create({
     });
   }
   
+  /**
+   * @sha: the sha of the object
+   * @e:  the source element
+   */
   ,click: function(sha, e) {
     // debugger
     var item = this.shas[ sha ];
@@ -183,11 +187,16 @@ window.F = Class.create({
 
 
     /* set selection cursor */
-    var c = e.up('ul').down('li.current');
-    c ? c.removeClassName('current') : '';    
-    e.up('li').addClassName('current');
+    e.up('ul').select('li.current').invoke('removeClassName','current');
+    var p = e.up('div.panel'),
+        li = e.up('li').addClassName('current'),
+        posTop = li.positionedOffset().top + li.offsetHeight - p.offsetHeight;
     /* scroll viewport if needed*/
-    // if()
+    // debugger
+    if( posTop > p.scrollTop) {
+      p.scrollTop = posTop ;
+    }
+      
 
     /* current index */
     this.cI = item.index;
