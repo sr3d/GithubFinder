@@ -1,5 +1,5 @@
 document.on('dom:loaded', function() { 
-  var img =new Image();
+  var img = new Image();
   img.onload=function() {
     var js        = "", 
         canvas    = document.createElement("canvas"),
