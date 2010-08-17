@@ -7,8 +7,9 @@ include Magick
 files = [ 
           'javascripts/f.js',
           'javascripts/gh.js', 
-          'javascripts/vendors/difflib.js',
-          'javascripts/vendors/diffview.js'
+          'javascripts/k.js'         
+          # 'javascripts/vendors/difflib.js',
+          # 'javascripts/vendors/diffview.js'
            # 'javascripts/prototype.js'
         ]
 

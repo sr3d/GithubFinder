@@ -48,14 +48,18 @@ var KB = Class.create( {
       
       
       var r = function() {
-        if( f.panels[++pI] && 
-            (f.panels[pI-1].tree[cI].type) == 'tree'   // only tree can go right
+        if( t[cI].type != 'tree' ) {
+          console.log("not tree");
+          return;
+        }
+        //if(f.panels[pI].tree[cI].type != 'tree') return;
+        if( f.panels[++pI] //&& 
+            //f.panels[pI].tree[ f.panels[pI-1].cI ].type == 'tree'     // only tree can go right
           ) {
           t = f.panels[pI].tree;
-          if( t[cI].type == 'tree' ) {
-            cI = -1;
-            d(); // down!
-          }
+          cI = -1;
+          d(); // down!
+
         } else {
           pI--; // undo 
         }        

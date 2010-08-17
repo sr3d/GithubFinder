@@ -186,11 +186,13 @@ window.F = Class.create({
     var index = +(e.up('.panel')).readAttribute('data-index');
 
 
-    /* set selection cursor */
+    /* set selection cursor && focus the item */
     e.up('ul').select('li.current').invoke('removeClassName','current');
     var p = e.up('div.panel'),
         li = e.up('li').addClassName('current'),
         posTop = li.positionedOffset().top + li.offsetHeight - p.offsetHeight;
+        
+        console.log("posTop %o",posTop);
     /* scroll viewport if needed*/
     // debugger
     if( posTop > p.scrollTop) {
