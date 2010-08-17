@@ -1,8 +1,10 @@
-window.AR = Ajax.JSONRequest;
+
 
 window.GH = {
   hash: {}
-  ,proxy: 'http://hoavui.com/github_jsonp.php?url='
+  // ,proxy: 'http://hoavui.com/github_jsonp.php?url='
+  ,proxy: './proxy.php?url='
+  
   ,api: 'http://github.com/api/v2/json'
   
   ,Commits: {
@@ -96,20 +98,9 @@ window.GH = {
 
       new AR( GH.proxy + url, options );
     }
-    
-    /* 
-      Show a blob at a specific 
-    */
-    ,showByCommit: function( user_id, repository, commit_sha, path, options ) {
-      options = Object.extend({ 
-        onSuccess: Prototype.K
-      }, options || {});
-
-      var onData = options.onData; 
-
-      var url = GH.api + '/blob/' + user_id + '/' + repository + '/' + commit_sha + path;
-
-      new AR( GH.proxy + url, options );
-    }
   }
 };
+
+/* switch to the correct AR */
+window.AR = GH.proxy.indexOf('./') == 0 ? Ajax.Request :
+              Ajax.JSONRequest;

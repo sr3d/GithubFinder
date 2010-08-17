@@ -10,6 +10,7 @@
 // Get the url of to be proxied
 // Is it a POST or a GET?
 $url = ($_POST['url']) ? $_POST['url'] : $_GET['url'];
+$jsoncallback = ($_POST['callback']) ? $_POST['callback'] : $_GET['callback'];
 
 $allowed_domain = 'http://github.com';
 // echo strpos( $url, $allowed_domain );
@@ -49,7 +50,10 @@ if ($mimeType != "")
 header("Content-Type: ".$mimeType);
 }
 
-echo $response;
+if( $jsoncallback )
+  echo $jsoncallback . "(" . json_encode($response) . ")";
+else
+  echo $response;
 
 curl_close($session);
 

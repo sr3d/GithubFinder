@@ -1,6 +1,6 @@
 /* alias */
 // window.AR = Ajax.Request;
-window.AR = Ajax.JSONRequest
+// window.AR = Ajax.JSONRequest
 // var PAR = function() {  // paralelle Ajax Request
 //   
 // }

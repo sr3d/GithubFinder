@@ -33,11 +33,7 @@ js = `#{cmd}`
 # debug out put
 # File.open( min_temp_file , "w") {|f| f.write(js) }
 js = ''
-File.open( min_temp_file, "r") { |f| 
-  js += f.read + "\n" 
-}
-
-
+File.open( min_temp_file, "r") { |f| js += f.read + "\n" }
 
 image = Magick::Image.new(1,js.length)
 i = 0
