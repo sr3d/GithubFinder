@@ -83,7 +83,7 @@ var KB = Class.create( {
           r();
           break;
         default:
-          return;
+          return true;
           break;
       }
       

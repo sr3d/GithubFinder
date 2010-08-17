@@ -48,26 +48,22 @@ window.F = Class.create({
     }.bind(this) );
     
     
-    var i = $('indicator');
-    var s = function() { i.show(); };
-    var h = function() { i.hide(); };
-    
+    var idc = $('indicator'),
+        s = function() { idc.show() },
+        h = function() { if( Ajax.activeRequestCount == 0 ) idc.hide() };
     Ajax.Responders.register( { 
-      onException: function( ex ) { 
-        s();
-        console.log("AJax exception %o",ex);
-      }
-      ,onComplete: function() { if( Ajax.activeRequestCount == 0 ) h(); }
+      onException: s
+      ,onComplete: h
       ,onCreate: s
     });
     
-    /* if we have pluggins */
+    /* if we have plugins */
     if( FP ) {
       for( var i = 0; i < FP.length; i++ ) {
         new FP[i](this);
       }
     }
-      
+    
   }
   
   ,render: function() { 
@@ -95,7 +91,7 @@ window.F = Class.create({
                 'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + '/>',
                 '<input type="button" id="go" value="Go"/>',
               '</span>',
-              '<span id=indicator>Loading...</span>',
+              '<span id=indicator style=display:none>Loading...</span>',
             '</div>',
           '</div>',  // .p
         '</div>',   // #r_w
