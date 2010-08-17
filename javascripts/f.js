@@ -30,16 +30,6 @@ window.F = Class.create({
     this.repo = null;
 
 
-    this.cI = -1;
-    this.pI = 0;
-    
-    GH.Commits.listBranch( this.user_id, this.repository, this.branch, { 
-      onData: function(commits) { 
-        var tree_sha = commits.commits[0].tree;
-        // this.open( tree_sha );
-        this.renderPanel(tree_sha);
-      }.bind(this)
-    });
     
     document.on('click','a[data-sha]', function( event, element ){ 
       var sha = element.readAttribute('data-sha');
@@ -64,20 +54,14 @@ window.F = Class.create({
       }
     }
     
+    /* now let's finder begin! */
+    this.openRepo();
   }
   
   ,render: function() { 
     $('content').update( this.toHTML() );
     this.panelsWrapper  = $('panels_wrapper');
     this.browserWrapper = $('browser_wrapper');
-    
-
-    GH.Repo.show( this.user_id, this.repository, { 
-      onData: function(repo) {
-        this.repo = repo;
-        this.renderRepoInfo();
-      }.bind(this)
-    });
   }
     
   ,toHTML: function() {
@@ -88,8 +72,8 @@ window.F = Class.create({
             '<div id=url_w>',
               '<span class=big>Github Finder</span>',
               '<span>',
-                'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + '/>',
-                '<input type="button" id="go" value="Go"/>',
+                'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + ' id=r />',
+                '<input type=button id=go value=Go onclick=f.browse() />',
               '</span>',
               '<span id=indicator style=display:none>Loading...</span>',
             '</div>',
@@ -119,8 +103,49 @@ window.F = Class.create({
     ];
     
     return html.join(' ');
-  } 
+  }
+
+  ,openRepo: function(repo) {
+    this.cI = -1;
+    this.pI = 0;
+    
+    var u,r,b = 'master';
+    if( !repo ) {
+      u = this.user_id;
+      r = this.repository;
+      b = this.branch;
+    } else {
+      repo = repo.split('/');
+      if( repo.length < 2 ) { alert('invalid repository'); return }
+      u = this.user_id    = repo[0];
+      r = this.repository = repo[1];
+    }
+    
+    for( var i = this.panels.length - 1; i >= 0; i-- )
+      (this.panels.pop()).dispose();
+
+    
+    GH.Commits.listBranch( u, r, b, { 
+      onData: function(commits) { 
+        var tree_sha = commits.commits[0].tree;
+        this.renderPanel(tree_sha);
+      }.bind(this)
+    });
+    
+    
+    GH.Repo.show( u, r, { 
+      onData: function(repo) {
+        this.repo = repo;
+        this.renderRepoInfo();
+      }.bind(this)
+    });    
+    
+  }
   
+  ,browse: function() {
+    this.openRepo( $F('r') || $('r').readAttribute('placeholder') );
+  }
+  /* render the status bar */
   ,renderRepoInfo: function() {
     $('r_i').innerHTML = this.repo.description;
     // var html = [
