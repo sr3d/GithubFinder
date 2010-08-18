@@ -41,25 +41,6 @@ var run = function() {
 document.on('dom:loaded', function() { 
   run();
   
-  // // Should succeed
-  //  new Ajax.JSONRequest('http://api.flickr.com/services/feeds/photos_public.gne', {
-  //    onCreate: function(instance) {
-  //      console.log("create", this);
-  //    },
-  //    onComplete: function(instance) {
-  //      console.log("complete", this);
-  //    },
-  //    onFailure: function(instance) {
-  //      console.log("fail", this);
-  //    },
-  //    callbackParamName: "jsoncallback",
-  //    parameters: {
-  //      tags: 'cat',
-  //      tagmode: 'any',
-  //      format: 'json'
-  //    }
-  //  });
-  
   var enablePlaceHolder = function() { 
     if( 'placeholder' in (document.createElement('input') ) )
       return;

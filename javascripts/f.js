@@ -116,10 +116,8 @@ window.F = Class.create({
             '<div id="f_w">',             // file wrapper
               '<div id="f"></div>',       // file 
             '</div>',
+            '<div id=diffoutput></div>',
           '</div>', // padding
-          
-          
-          '<div id=diffoutput></div>',
         '</div>',
         
         '<div id=c_w>',                 // commit wrapper
@@ -127,7 +125,10 @@ window.F = Class.create({
             '<div class=big>Commits Log</div>',
             '<div class=padding id=c_l_w>Commits Log</div>', // commits log wrapper
           '</div>',
+          '<div class=clear></div>',
         '</div>', // #c_w
+
+        '<div class=clear></div>',
       '</div>'  // #f_c_w
     ];
     
@@ -280,7 +281,7 @@ window.F = Class.create({
     this.panels[ index ].cI = item.index;
     
 
-    /* don't be trigger happy */
+    /* don't be trigger happy: ptm = preview timer  */
     if(this._ptm) clearTimeout( this._ptm );
 
     /* set a small delay here incase user switches really fast (e.g. keyboard navigation ) */
@@ -288,13 +289,13 @@ window.F = Class.create({
       
       if( item.type == 'tree' ) {
         this.renderPanel( item.sha, index, item );
-
         // don't show file preview panel 
         $('f_c_w').hide();
       } else {
         
         $('f_c_w').show();
         if( /text/.test(item.mime_type) ) {
+          $('f').innerHTML = '';
           GH.Blob.show( this.user_id, this.repository, item.sha, { onSuccess: function(response) {
             this.previewTextFile(response.responseText, item);  
           }.bind(this)} );
@@ -370,8 +371,8 @@ window.F = Class.create({
           
           diffPrevious = commits[i+1] ? 
             ' <a href=javascript:void(0) onclick=f.diff(' + 
-              [ '"', commit.id, '","',  
-                commit.tree, '","', 
+              [ '"', commits[i].id, '","',  
+                commits[i].tree, '","', 
                 commits[i+1].id, '","',
                 commits[i+1].tree, '","',
                 item.name, '"' 
@@ -382,7 +383,7 @@ window.F = Class.create({
           commitsHTML.push(
             '<div class=commit_entry>' +
               '<b>' + s(commits[i].id) +'</b>' + ' by ' + commits[i].author.name +
-              diffWith + diffHead + diffPrevious +
+              diffWith + diffHead + (diffHead && diffPrevious ? ' - ' : '') + diffPrevious +
               // '(tree: ' + s(commits[i].tree) + ')' +
             '</div>'
           );
@@ -459,10 +460,6 @@ window.F = Class.create({
     
     $('diffoutput').hide();
     $('f').update( html.join('') ).show();
-    
-    // 1.  get current file
-    // 2.  get a different
-    // 3.  diff any differences? 
   }
   
   

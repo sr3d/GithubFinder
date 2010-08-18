@@ -55,12 +55,23 @@ textarea { width: 400px; height: 500px}
 
 .commit_entry { padding: 10px 0; border-bottom: 1px solid #DCDCDC; }
 /* lift from Github.com */
-pre, .meta { font:10px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace; margin: 0; }
+pre, .meta, .diff { font:10px Monaco,"Courier New",monospace; margin: 0; }
 #file { overflow: auto;}
-.meta { background-color: #EEEEEE; color:#333333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCCCCC}
+.meta, .diff thead th { background-color: #EEEEEE; color:#333333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCCCCC}
 .meta span { margin-left: 5px; padding-left: 9px;}
 
-.ln { background-color:#ECECEC; border-right:1px solid #DDDDDD; color:#AAAAAA; text-align: right; padding: 5px 5px }
+.ln, .diff th { background-color:#ECECEC; border-right:1px solid #DDDDDD; color:#AAAAAA; text-align: right; padding: 5px 5px }
 .code { padding: 5px; border: medium none}
 .hover { background-color: #FFFFC7; }
 
+.diffoutput { border: 1px solid #CCCCCC}
+.diff { width: 100%; border-collapse:collapse; border-right:1px solid #DDDDDD }
+.diff th{ border: 1px solid #BBC; border-bottom: 0px; font-weight: normal;}
+  .empty { background-color:#DDD; }
+  .replace { background-color:#FD8; }
+  .delete { background-color:#B8FFE9; }
+  .skip { background-color:#EFEFEF; border:1px solid #AAA; border-right:1px solid #BBC;
+}
+  .insert { background-color:#9E9 }
+
+#diffoutput { border-bottom: 1px solid #CCCCCC}
