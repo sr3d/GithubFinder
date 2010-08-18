@@ -5,9 +5,8 @@ var Diff = Class.create( PluginBase, {
   mixin: {
     diff: function( sha1, tree1, sha2, tree2, filename ) {
       $('f').hide();
-      var file1, file2, file1Sha, file2Sah, diff;
-
-      var flag = 0;
+      var file1, file2, file1Sha, file2Sah, diff, flag = 0;
+      
       var process = function(file, mainFile) { 
         flag++;
 
@@ -25,11 +24,10 @@ var Diff = Class.create( PluginBase, {
         try{
           
           file1 = difflib.stringAsLines(file1);
-          file2 = difflib.stringAsLines(file2)
-          var sm = new difflib.SequenceMatcher( file1, file2 );
-          var opc = sm.get_opcodes();
-          
-          var dO = $("diffoutput").update('').show();
+          file2 = difflib.stringAsLines(file2);
+          var sm  = new difflib.SequenceMatcher( file1, file2 ),
+              opc = sm.get_opcodes(),
+              dO  = $("diffoutput").update('').show();
           // while (diffOutput.firstChild) diffOutput.removeChild(diffOutput.firstChild);
           // var showInline = false;          
           var node = diffview.buildView({ 
@@ -58,9 +56,8 @@ var Diff = Class.create( PluginBase, {
               GH.Blob.show( u, r, tree[i].sha, { onSuccess: function(res) {
                 try{ 
                   process(res.responseText, mainFile);
-                } catch( ex) {
-                  alert(ex);
-                  // console.log(ex);
+                } catch(x) {
+                  alert(x);
                 }
                 
               }.bind(this)});
@@ -69,8 +66,8 @@ var Diff = Class.create( PluginBase, {
           }
           
           
-          } catch(ex) {
-            alert(ex);
+          } catch(x) {
+            alert(x);
             // console.log(ex);
           }
         }.bind(this)});

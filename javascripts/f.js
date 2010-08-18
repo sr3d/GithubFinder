@@ -179,9 +179,9 @@ window.F = Class.create({
     
     /* Show branches info */
     GH.Repo.listBranches( u, r, { 
-      onData: function(branches) {
-        this.bes = $H(branches);
-        this.renderBranches();
+      onData: function(bes) {
+        this.bes = $H(bes);
+        this.rBs();
       }.bind(this)
     });
     
@@ -198,24 +198,24 @@ window.F = Class.create({
   
   ,browse: function() {
     $('i').innerHTML = '';
-    this.openRepo( $F('r') || $('r').readAttribute('placeholder') );
+    this.oR( $F('r') || $('r').readAttribute('placeholder') );
   }
   /* render the status bar */
   ,renderRepoInfo: function() {
     $('r_i').innerHTML = this.repo.description;
   }
   
-  ,renderBranches: function() {
-    var html = ['Branch: <select id=brs>'];
+  /* render branches */
+  ,rBs: function() {
+    var h = '<select id=brs>';
     this.bes.each(function(b) { 
-      html.push( 
+      h += 
         '<option ' + (this.b == b.key ? ' selected=""' : ' ' ) + '>' +
           b.key +
-        '</option>'
-      );
+        '</option>';
     }.bind(this));
-    html.push('</select>');
-    $('brs_w').innerHTML = html.join();
+    // html.push('</select>');
+    $('brs_w').innerHTML = h + '</select>';
   }
   
   ,renderPanel: function( sh, ix, it ) { 
@@ -401,48 +401,48 @@ window.F = Class.create({
   }
   
 
-  ,previewTextFile: function( text, item ) {
+  ,previewTextFile: function( text, it ) {
     // debugger
     text = text.replace(/\r\n/, "\n").split(/\n/);
     /* render line numbers */
-    
-    var lineNumbers = [],
-        lines = []
+
+    var ln = [],
+        l = [],
         sloc = 0;
     for( var i = 0, len = text.length; i < len; i++ ) {
-      lineNumbers.push( '<span>' + (i + 1) + "</span>\n");
-      
-      lines.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '' );
+      ln.push( '<span>' + (i + 1) + "</span>\n");
+
+      l.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '' );
 
       // count actual loc
       sloc += text[i] ? 1 : 0;
     }
-    
+
     var html = [
       '<div class=meta>',
-        '<span>' + item.mode + '</span>',
+        '<span>' + it.mode + '</span>',
         '<span>' + text.length + ' lines (' + sloc +' sloc)</span>',
-        '<span>' + item.size + ' bytes</span>',
+        '<span>' + it.size + ' bytes</span>',
       '</div>',
-    
+
       '<div id=f_c_s>',  // file content scroll
         '<table cellspacing=0 cellpadding=0>',
           '<tr>',
             '<td>',
               '<pre class=ln>',
-                lineNumbers.join(''),
+                ln.join(''),
               '</pre>',
             '</td>',
-          
+
             '<td width=100% valign=top>',
               '<pre class=code>',
-                lines.join("\n"),
+                l.join("\n"),
               '</pre>',
             '</td>',
           '</tr>',
         '</div>'
     ];
-    
+
     $('diffoutput').hide();
     $('f').update( html.join('') ).show();
   }
