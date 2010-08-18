@@ -23,5 +23,5 @@ Github Finder is possible by leveraging these tools:
 - Dandean JSONP implementation for Prototype.  Code is patched to support onSuccess() event, and to also hook into Ajax.Responders live-cycle (useful for indicator).  http://github.com/dandean/Ajax.JSONRequest
 - Github API.
 
-== Self-plug
-- I'm a single founder bootstrapping www.marrily.com, an online wedding planner.  Come check it out!  My blog is http://alexle.net
+== About
+- My name is Alex Le.  I'm an entrepreneur and I build web applications.  I'm a single founder bootstrapping Marrily (http://marrily.com), an online wedding planner.  Come check it out!  My blog is at http://alexle.net.
