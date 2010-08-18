@@ -4,6 +4,20 @@ if( typeof console == 'undefined' )
 /* Util stuff */
 /* return a truncated s */
 var s = function(h) { return h.substr(0,6);};
+/* grab URL Params */
+var uP = function() { 
+  var url = window.location.href.split('?');
+  var ps = [];
+  if( url.length == 1 ) return ps;
+
+  var pairs = url[1].split('&');
+  var pair;
+  for( var i = 0; i < pairs.length; i++ ) {
+    pair = pairs[i].split('=');
+    ps[ pair[0].toLowerCase() ] = pair[1];
+  }
+  return ps;
+}
 
 /* PluginBase that allows for mixins into an object */
 var PluginBase = Class.create( { 
@@ -61,8 +75,19 @@ window.F = Class.create({
       }
     }
     
+    /* if user assigns user_id, repo, branch */
+    this.extractUrl();
     /* now let's finder begin! */
     this.openRepo();
+  }
+  
+  
+  ,extractUrl: function() {
+    var ps = uP();
+    this.user_id      = ps["user_id"];
+    this.repository   = ps["repo"];
+    this.branch       = ps["branch"] || 'master';
+    
   }
   
   ,render: function() { 
@@ -138,7 +163,6 @@ window.F = Class.create({
   ,openRepo: function(repo) {
     this.cI = -1;
     this.pI = 0;
-    
     var u,r,b = 'master';
     if( !repo ) {
       u = this.user_id;
@@ -151,6 +175,8 @@ window.F = Class.create({
       r = this.repository = repo[1];
       b = this.branch     = $('brs') ? $F('brs') : b;
     }
+    
+    $('r').value = u + '/' + r;
     
     for( var i = this.panels.length - 1; i >= 0; i-- )
       (this.panels.pop()).dispose();
@@ -461,6 +487,4 @@ window.F = Class.create({
     $('diffoutput').hide();
     $('f').update( html.join('') ).show();
   }
-  
-  
 });
