@@ -174,6 +174,3 @@ window.GH = {
     }
   }
 };
-
-// window.AR = GH.proxy.indexOf('./') == 0 ? Ajax.Request :
-//               Ajax.JSONRequest;

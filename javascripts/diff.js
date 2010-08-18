@@ -8,83 +8,67 @@ var Diff = Class.create( PluginBase, {
       var file1, file2, file1Sha, file2Sah, diff;
 
       var flag = 0;
-      var process = function() { 
+      var process = function(file, mainFile) { 
+        flag++;
+
+        if( mainFile ) 
+          file1 = file;
+        else 
+          file2 = file;
+
         if( flag < 2 ) {
-          //console.log("pending requests");
           return;
         }
-        // console.log("file1 %o",file1);
-        // console.log("file2 %o",file2);
-
-        // $('file1').value = file1;
-        // $('file2').value = file2;
-        // $('diff').value = diff;
-        /* */
-        // debugger
-
+      
         file1 = difflib.stringAsLines(file1);
         file2 = difflib.stringAsLines(file2)
         var sm = new difflib.SequenceMatcher( file1, file2 );
-        var opcodes = sm.get_opcodes();
+        var opc = sm.get_opcodes();
         // debugger
-        var diffoutputdiv = $("diffoutput").show();
-        while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-        var contextSize = null; // or a number 
-        var showInline = false;
+        var diffOutput = $("diffoutput").update('').show();
+        // while (diffOutput.firstChild) diffOutput.removeChild(diffOutput.firstChild);
+        // var showInline = false;
         try{
-
           var node = diffview.buildView({ 
-      	    baseTextLines:    file1,
-  			    newTextLines:     file2,
-  			    opcodes:          opcodes,
-  			    baseTextName:     'Commit: ' + s(sha1) + ' (tree: '+ s(tree1) + ')',
-  			    newTextName:      'Commit: ' + s(sha2) + ' (tree: '+ s(tree2) + ')',
-  			    contextSize:      contextSize,
-  			    viewType:         showInline 
-  		    });
-      	  diffoutputdiv.appendChild( node );
-
-          // console.log("node %o",node);
-          // console.log("done");
+            baseTextLines:    file1,
+            newTextLines:     file2,
+            opcodes:          opc,
+            baseTextName:     'Commit: ' + s(sha1) + ' (tree: '+ s(tree1) + ')',
+            newTextName:      'Commit: ' + s(sha2) + ' (tree: '+ s(tree2) + ')',
+          });
+          diffOutput.appendChild( node );
         } catch(ex) {
-          alert(ex.message);
-          console.log("ex %o",ex);
+          alert(ex);
         }
-      }
+      } // process
 
-      GH.Tree.show( this.user_id, this.repository, this.branch, tree1, { onData: function(tree) {
-        for( var i = 0; i < tree.length; i++ ) {
-          if( tree[i].name == filename ){
-            // now request
-            GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
-              file1 = response.responseText;
-              file1Sha = tree[i].sha;
-              flag++;
-              process();
-            }.bind(this)});
-            break;
+      var u = this.user_id, r = this.repository, b = this.branch;
+      
+      /* load a file from a tree */
+      var loadFile = function(treeSha, fn, mainFile) { 
+        GH.Tree.show( u, r, b, treeSha, { onData: function(tree) {
+          for( var i = 0; i < tree.length; i++ ) {
+            if( tree[i].name == fn ){
+              // now request
+              GH.Blob.show( u, r, tree[i].sha, { onSuccess: function(res) {
+                try{ 
+                  console.log("res %o",res);
+                  process(res.responseText, mainFile);
+                } catch( ex) {
+                  alert(ex);
+                  console.log(ex);
+                }
+                
+              }.bind(this)});
+              break;
+            }
           }
-
-        }
-      }.bind(this)});
-
-
-      GH.Tree.show( this.user_id, this.repository, this.branch, tree2, { onData: function(tree) {
-        for( var i = 0; i < tree.length; i++ ) {
-          if( tree[i].name == filename ){
-            // now request
-            GH.Blob.show( this.user_id, this.repository, tree[i].sha, { onSuccess: function(response) {
-              file2 = response.responseText;
-              file2Sha = tree[i].sha;
-              flag++;
-              process();
-            }.bind(this)});
-            break;
-          }
-        }
-      }.bind(this)});
-
-    }
+        }.bind(this)});
+      };
+      
+      loadFile(tree1, filename, true);
+      loadFile(tree2, filename);
+    } // function
   } 
   
   

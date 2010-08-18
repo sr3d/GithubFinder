@@ -26,6 +26,7 @@ var pH = function() {
 
 
 /* Util stuff */
+
 /* return a truncated sha  */
 var s = function(h) { return h.substr(0,6);};
 

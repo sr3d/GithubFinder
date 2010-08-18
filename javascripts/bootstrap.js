@@ -27,7 +27,7 @@ d.on('dom:loaded', function() {
   x('c.png', function(s){
     /* both CSS and JS are bundled up into 1 file*/
     s = s.split('~10K~');
-    console.log("s %o",s);
+
     /* init CSS */
     var c = d.createElement('style');
     c.innerHTML = s[1];
