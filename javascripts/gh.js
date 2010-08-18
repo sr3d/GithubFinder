@@ -59,8 +59,10 @@ window.GH = {
       var self = this,
           url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
           
+          debugger
       options = Object.extend({ 
         onSuccess: function(response) {
+          // debugger
           var commit = eval('(' + response.responseText +')').commit;
 
           /* cache */
@@ -74,11 +76,10 @@ window.GH = {
       var onData = options.onData; 
 
       /* hit the cache first */
-      if( this._cache[ tree_sha ] ) {
-        onData( this._cache[ tree_sha ] );
+      if( this._cache[ sha ] ) {
+        onData( this._cache[ sha ] );
         return;
       }
-      
 
       new AR( GH.proxy + url, options );
     }

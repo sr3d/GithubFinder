@@ -4,7 +4,7 @@
 var Diff = Class.create( PluginBase, {
   mixin: {
     diff: function( sha1, tree1, sha2, tree2, filename ) {
-      $('file').hide();
+      $('f').hide();
       var file1, file2, file1Sha, file2Sah, diff;
 
       var flag = 0;
@@ -27,7 +27,7 @@ var Diff = Class.create( PluginBase, {
         var sm = new difflib.SequenceMatcher( file1, file2 );
         var opcodes = sm.get_opcodes();
         // debugger
-        var diffoutputdiv = $("diffoutput");
+        var diffoutputdiv = $("diffoutput").show();
         while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
         var contextSize = null; // or a number 
         var showInline = false;

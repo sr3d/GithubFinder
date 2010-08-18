@@ -29,7 +29,7 @@ textarea { width: 400px; height: 500px}
       .files { padding: 0; margin: 0; }
       .files li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding: 6px; background-color: #F8F8F8; }
 #info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: right; height: 300px; overflow-y: auto; }
-#info_wrapper .padding { padding: 10px; }
+.padding { padding: 10px; }
 #info_wrapper .commits { height: 200px; overflow: auto}
 
 #info_wrapper .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
@@ -40,9 +40,16 @@ textarea { width: 400px; height: 500px}
 .current { background: #3D8CFF url('./img/la_h.png') no-repeat 95% 50% !important;}
 .current a { color: white;}
 .file { background-image: none !important;}
+.recent a { color: red; }
 
 .files a { padding: 3px 15px }
 
+#f_c_w .p {padding: 10px}
+#f_c { width: 80%; float: left; overflow: hidden; }
+#c_w { width: 19%; border-left: 1px solid #DCDCDC; border-bottom: 1px solid #DCDCDC;float: right; height: 300px; overflow-y: auto;}
+#f_c_s { overflow-y: auto; }
+
+#commits .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
 
 /* lift from Github.com */
 pre, code, .meta {

@@ -29,7 +29,6 @@ window.F = Class.create({
     
     this.repo = null;
 
-
     
     document.on('click','a[data-sha]', function( event, element ){ 
       var sha = element.readAttribute('data-sha');
@@ -42,7 +41,7 @@ window.F = Class.create({
         s = function() { idc.show() },
         h = function() { if( Ajax.activeRequestCount == 0 ) idc.hide() };
     Ajax.Responders.register( { 
-      onException: s
+      onException: function(ex) { console.log(ex); h() }
       ,onComplete: h
       ,onCreate: s
     });
@@ -81,7 +80,7 @@ window.F = Class.create({
           '</div>',  // .p
         '</div>',   // #r_w
       
-        '<div id=r_i_w>', // #repo info
+        '<div id=r_i_w>', // #repo info wrapper
           '<div class=p><span id=r_i></span></div>',
         '</div>',
       
@@ -97,13 +96,27 @@ window.F = Class.create({
         '<div class="clear"></div>',
       '</div>', // #finder 
 
-      '<div id=f_c_w>', // file content wrapper
-        '<div id=fc>',
-          '<div id="f_w">',
-            '<div id="f"></div>',
-          '</div>',
+      '<div id=f_c_w style="display:none">',                 // file content wrapper
+        '<div id=f_h>',                 // file header
         '</div>',
-        '<div id="diffoutput"></div>',
+        
+        '<div id=f_c>',                 // file content
+          '<div class=p>',                 // padding
+            '<div id="f_w">',             // file wrapper
+              '<div id="f"></div>',       // file 
+            '</div>',
+          '</div>', // padding
+          
+          
+          '<div id=diffoutput></div>',
+        '</div>',
+        
+        '<div id=c_w>',                 // commit wrapper
+          '<div id=commits>',
+            '<div class=big>Commits Log</div>',
+            '<div class=padding id=c_l_w>Commits Log</div>', // commits log wrapper
+          '</div>',
+        '</div>', // #c_w
       '</div>'  // #f_c_w
     ];
     
@@ -194,7 +207,7 @@ window.F = Class.create({
     for( var i = this.panels.length - 1; i > index; i-- ) {
       (this.panels.pop()).dispose();
     }
-
+    // debugger
     this.open( tree_sha, item );
   }
   
@@ -207,7 +220,7 @@ window.F = Class.create({
     this.browserWrapper.scrollLeft = w;
   }
 
-  
+  /* request the content of the tree and render the panel */
   ,open: function( tree_sha, item ) {
     GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
       onData: function(tree) { // tree is already sorted 
@@ -216,8 +229,8 @@ window.F = Class.create({
           this.shas[ tree[i].sha ] = tree[i];
 
         var name = item ? item.name : '' ;
-        
-        var p = new P( { tree: tree, index: this.panels.length, name: name } );
+        // debugger
+        var p = new P( this, { tree: tree, index: this.panels.length, name: name, tree_sha: tree_sha, item: item } );
         this.panels.push( p );
         
         this._resizePanelsWrapper();
@@ -257,7 +270,8 @@ window.F = Class.create({
     /* remember the current selected item */
     this.panels[ index ].cI = item.index;
     
-    
+
+    /* don't be trigger happy */
     if(this._ptm) clearTimeout( this._ptm );
 
     /* set a small delay here incase user switches really fast (e.g. keyboard navigation ) */
@@ -265,8 +279,12 @@ window.F = Class.create({
       
       if( item.type == 'tree' ) {
         this.renderPanel( item.sha, index, item );
+
+        // don't show file preview panel 
+        $('f_c_w').hide();
       } else {
-        // open the file;
+        
+        $('f_c_w').show();
         if( /text/.test(item.mime_type) ) {
           GH.Blob.show( this.user_id, this.repository, item.sha, { onSuccess: function(response) {
             this.previewTextFile(response.responseText, item);  
@@ -284,56 +302,75 @@ window.F = Class.create({
 
       path = path.join("/");
 
-      GH.Commits.list( this.user_id, this.repository, this.branch, path, { onData: function(commits) {
-        var c = commits[0];
+      
+      var commit, commits;
+      var showInfo = function() {
+        var html = [
+           '<div><b>Name</b><br/>',
+             '<a href=',
+               'http://github.com/' + this.user_id + '/' + this.repository + '/' + item.type + '/' + this.branch + path,
+               ' target=_blank>',
+               item.name,
+             '</a>',
+           '</div>',
+           '<br/>',
+           '<div><b>Path</b><br/> ' + path + '</div>',
+
+           '<br/>',        
+           '<div><b>Last Committed</b><br/> ' + 
+             s( commit.id ) + ' on ' +
+             (new Date(commit.committed_date)).toString() + 
+           '</div>',
+           '<br/>',
+
+           '<div>',
+             '<b>Author</b><br/>',
+             '<a href=http://github.com/' + commit.author.login + '>' + commit.author.name + '</a>',
+             ' (' + commit.author.email +')',
+           '</div>',
+           '<br/>',
+           '<div>',
+             '<b>Commit Message</b><br/>',
+             commit.message,
+           '</div>'
+         ];
+         $('info').update( html.join(''));
+      }
+
+      var showCommitsLog = function() { 
         var commitsHTML = ['<div>'];
         for( var i = 0; i < commits.length; i++ ) {
-
           commitsHTML.push(
             '<div>Commit: ' + 
               '<a href=javascript:void(0) onclick=f.diff(' + 
-                [ '"', c.id, '","',  c.tree, '","', commits[i].id, '","',commits[i].tree, '","',item.name, '"' ].join('')+')>' +
-                commits[i].id +
+                  [ '"', commit.id, '","',  
+                    commit.tree, '","', 
+                    commits[i].id, '","',
+                    commits[i].tree, '","',
+                    item.name, '"' 
+                  ].join('') +
+                ')>' +
+                s(commits[i].id) +
               '</a>' + 
-              '(tree: ' + commits[i].tree + ')' +
-            '</div>' 
+              '(tree: ' + s(commits[i].tree) + ')' +
+            '</div>'
           );
-        }
+        };
         commitsHTML.push('</div>');
-        // debugger
-        var html = [
-          '<div><b>Name</b><br/>',
-            '<a href=',
-              'http://github.com/' + this.user_id + '/' + this.repository + '/' + item.type + '/' + this.branch + path,
-              ' target=_blank>',
-              item.name,
-            '</a>',
-          '</div>',
-          '<br/>',
-          '<div><b>Path</b><br/> ' + path + '</div>',
-
-          '<br/>',        
-          '<div><b>Last Committed</b><br/> ' + 
-            s( c.id ) + ' on ' +
-            (new Date(c.committed_date)).toString() + 
-          '</div>',
-          '<br/>',
-
-          '<div>',
-            '<b>Author</b><br/>',
-            '<a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
-            ' (' + c.author.email +')',
-          '</div>',
-          '<br/>',
-          '<div>',
-            '<b>Commit Message</b><br/>',
-            c.message,
-          '</div>'
-        ];
-        $('info').update( html.join(''));
-      }.bind(this)});      
-    
-    
+        $('c_l_w').update( commitsHTML.join('') );
+      };
+      
+      /* query the commits to get a list of commits and info */
+      
+      GH.Commits.list( this.user_id, this.repository, this.branch, path, { onData: function(cs) {
+        item.commit = commit = cs[0];  // also assign the item's commit to keep track of folder's latest commit
+        commits = cs;
+        
+        showInfo();
+        
+        if( item.type != 'tree' ) showCommitsLog();
+        
+      }.bind(this)});
     }.bind(this), 200); // time out
     
     
@@ -368,20 +405,22 @@ window.F = Class.create({
         '<span>' + item.size + ' bytes</span>',
       '</div>',
     
-      '<table>',
-        '<tr>',
-          '<td>',
-            '<pre class=ln>',
-              lineNumbers.join(''),
-            '</pre>',
-          '</td>',
+      '<div id=f_c_s>',  // file content scroll
+        '<table >',
+          '<tr>',
+            '<td>',
+              '<pre class=ln>',
+                lineNumbers.join(''),
+              '</pre>',
+            '</td>',
           
-          '<td width=100% valign=top>',
-            '<pre>',
-              lines.join(''),
-            '</pre>',
-          '</td>',
-        '</tr>'
+            '<td width=100% valign=top>',
+              '<pre>',
+                lines.join(''),
+              '</pre>',
+            '</td>',
+          '</tr>',
+        '</div>'
     ];
     
     $('f').update( html.join('') ).show();
@@ -396,19 +435,22 @@ window.F = Class.create({
 
 /* Panel */
 window.P = Class.create({
-  initialize: function(options) { 
+  initialize: function(f, options) { 
     options = Object.extend( {
-      tree: []
-      ,index: 0
-      ,name: ''
-      
+      tree:         []
+      ,index:       0
+      ,name:        ''
+      ,item:        null
     }, options, {});
     
+    this.f        = f;
     this.tree     = options.tree;
     this.index    = options.index;
     this.name     = options.name;
+    this.item     = options.item;
     
     this.render();
+    this.afterRender();
   }
   
   ,dispose: function() {
@@ -426,19 +468,22 @@ window.P = Class.create({
     })
   }
   
-  ,toHTML: function() { 
-    var item, icon, css, 
+  ,toHTML: function() {
+    var item, icon, css, recent,
         html = ['<ul class=files>'];
+
+    // debugger
     for( var i = 0, len = this.tree.length; i < len; i++ ) {
       item = this.tree[i];
+      // recent = this.item && item.sha == this.item.commit.id ? '*' : '';
       css  = item.type == 'tree' ? 'folder' : 'file';
-      icon = item.type == 'tree' ? 'dir' : 'txt';
-      
+
       html.push( 
         '<li class=' + css +'>' + 
-          // '<img src=img/' + icon + '.png />' +
           '<span class=ico>' +
-            '<a href=javascript:void(0) data-sha='+ item.sha + '>' + item.name + '</a>' +
+            '<a href=javascript:void(0) data-sha='+ item.sha + ' data-name="' + item.name + '">' + item.name + 
+              // recent +
+            '</a>' +
           '</span>' +
         '</li>'
       );
@@ -446,6 +491,35 @@ window.P = Class.create({
     html.push('</ul>');
 
     return '<div id=p' + this.index + ' data-index=' + this.index +' class=panel>' + html.join('') + '</div>';
+  }
+  
+  ,afterRender: function(){
+    if( !this.item ) { 
+      // console.log("root item, skipping");
+       return;
+    }
+    
+    // console.log("afterRender");
+    // debugger
+    
+    // get the commit log to show the latest changed
+    GH.Commits.show( this.f.user_id, this.f.repository, this.item.commit.id, { 
+      onData: function(commit) {
+        // console.log("afterRender: onData");
+        try{
+        var files = commit.modified; // TODO:  merge and move
+        for( var i = 0; i< files.length; i++ ) {
+          fn = files[i].filename.split('/');
+          fn = fn[ fn.length-1 ];
+          var e = $('p' + this.index ).down('a[data-name="' + fn + '"]');
+          if( e ) e.up('li').addClassName('recent');
+        }
+        
+        } catch(ex) {
+          console.log("ex %o",ex);
+        }
+      }.bind(this)
+    } );
   }
 
 });
