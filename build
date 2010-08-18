@@ -98,6 +98,9 @@ js = minify merge( js_files )
 puts "  minifying css..."
 css = minify(merge([ 'styles.css']), 'css')
 
+# css.gsub!('background-color:', '$')
+# css.gsub!('background-color', '$BC')
+
 puts "  bundling..."
 string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
 

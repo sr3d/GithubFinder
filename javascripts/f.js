@@ -356,13 +356,14 @@ window.F = Class.create({
     var cl = function() { 
       var dW, dH, dP,
           csHTML = '<div>';
-      var dl = function(a,b,l) {  // a, b, label
+      console.log("c %o",c);
+      var dl = function(a,b,l) {  // difflink a, b, label
         return '<a href=javascript:void(0) onclick=f.diff(' + 
             [ '"', a.id, '","',  
               a.tree, '","', 
               b.id, '","',
               b.tree, '","',
-              a.name, '"' 
+              it.name, '"' 
             ].join('') +
           ')>' + l + '</a> ';      
       };

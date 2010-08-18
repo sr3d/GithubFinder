@@ -4,8 +4,9 @@
 var Diff = Class.create( PluginBase, {
   mixin: {
     diff: function( sha1, tree1, sha2, tree2, filename ) {
+      // debugger
       $('f').hide();
-      var file1, file2, file1Sha, file2Sah, diff, flag = 0;
+      var file1, file2, diff, flag = 0;
       
       var process = function(file, mainFile) { 
         flag++;
@@ -43,13 +44,11 @@ var Diff = Class.create( PluginBase, {
         }
       } // process
 
-      var u = this.user_id, r = this.repository, b = this.branch;
+      var u = this.u, r = this.r, b = this.b;
       
       /* load a file from a tree */
-      var loadFile = function(treeSha, fn, mainFile) { 
-        GH.Tree.show( u, r, b, treeSha, { onData: function(tree) {
-
-          try{ 
+      var lf = function(sha, fn, mainFile) { 
+        GH.Tree.show( u, r, b, sha, { onData: function(tree) {
           for( var i = 0; i < tree.length; i++ ) {
             if( tree[i].name == fn ){
               // now request
@@ -64,17 +63,11 @@ var Diff = Class.create( PluginBase, {
               break;
             }
           }
-          
-          
-          } catch(x) {
-            alert(x);
-            // console.log(ex);
-          }
         }.bind(this)});
       };
       
-      loadFile(tree1, filename, true);
-      loadFile(tree2, filename);
+      lf(tree1, filename, true);
+      lf(tree2, filename);
     } // function
   } 
   
