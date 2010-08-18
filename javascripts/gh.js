@@ -16,8 +16,8 @@ window.GH = {
     /* list all commits for a specific branch */
     ,listBranch: function(user_id, repository, branch, options ) {
       options = Object.extend({ 
-        onSuccess: function(response) {
-          var commits = eval('(' + response.responseText +')');
+        onSuccess: function(res) {
+          var commits = eval('(' + res.responseText +')');
           onData( commits );
         }
         ,onData: Prototype.K
@@ -35,8 +35,8 @@ window.GH = {
           url = GH.api + '/commits/list/' + user_id + '/' + repository + '/' + branch + path;
           
       options = Object.extend({ 
-        onSuccess: function(response) {
-          var commits = eval('(' + response.responseText +')').commits;
+        onSuccess: function(res) {
+          var commits = eval('(' + res.responseText +')').commits;
           
           /* cache the commits */
           self._cache[ url ] = commits;
@@ -63,9 +63,9 @@ window.GH = {
           url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
 
       options = Object.extend({ 
-        onSuccess: function(response) {
+        onSuccess: function(res) {
           // debugger
-          var commit = eval('(' + response.responseText +')').commit;
+          var commit = eval('(' + res.responseText +')').commit;
 
           /* cache */
           self._cache[ sha ] = commit;
@@ -94,8 +94,8 @@ window.GH = {
           url = GH.api + '/tree/show/' + user_id +'/' + repository +'/' + tree_sha;
           
       options = Object.extend({ 
-        onSuccess: function(response) {
-          var tree = (eval('(' + response.responseText + ')')).tree;
+        onSuccess: function(res) {
+          var tree = (eval('(' + res.responseText + ')')).tree;
           
           tree = tree.sort(function(a,b){
             // blobs always lose to tree
@@ -147,8 +147,8 @@ window.GH = {
   ,Repo: {
     show: function( user_id, repository, options ) {
       options = Object.extend({ 
-        onSuccess: function(response) {
-          var repo = (eval('(' + response.responseText + ')')).repository;
+        onSuccess: function(res) {
+          var repo = (eval('(' + res.responseText + ')')).repository;
           onData(repo);
         }
         ,onData: Prototype.K
@@ -161,8 +161,8 @@ window.GH = {
     
     ,listBranches: function( user_id, repository, options ) {
       options = Object.extend({ 
-        onSuccess: function(response) {
-          var branches = (eval('(' + response.responseText + ')')).branches;
+        onSuccess: function(res) {
+          var branches = (eval('(' + res.responseText + ')')).branches;
           onData(branches);
         }
         ,onData: Prototype.K

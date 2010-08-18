@@ -3,24 +3,24 @@ if( typeof console == 'undefined' )
   console = { log: function(){} };
   
 /* placeholder */
-var pH = function() { 
-  if( 'placeholder' in (document.createElement('input') ) )
-    return;
-
-  $$('input[placeholder]').each(function(i) { 
-    var t = i.readAttribute('placeholder');
-    var f = function() { 
-      i.value.strip() == t ? i.value = '' : '';
-    };
-    i.on('focus', f);
-    
-    var b = function() { 
-      i.value.strip() == '' ? i.value = t : '';
-    };
-    i.on('blur', b);
-    b();
-  });
-};
+// var pH = function() { 
+//   if( 'placeholder' in (document.createElement('input') ) )
+//     return;
+// 
+//   $$('input[placeholder]').each(function(i) { 
+//     var t = i.readAttribute('placeholder');
+//     var f = function() { 
+//       i.value.strip() == t ? i.value = '' : '';
+//     };
+//     i.on('focus', f);
+//     
+//     var b = function() { 
+//       i.value.strip() == '' ? i.value = t : '';
+//     };
+//     i.on('blur', b);
+//     b();
+//   });
+// };
 
 
 

@@ -29,7 +29,7 @@ var Diff = Class.create( PluginBase, {
           var sm = new difflib.SequenceMatcher( file1, file2 );
           var opc = sm.get_opcodes();
           
-          var diffOutput = $("diffoutput").update('').show();
+          var dO = $("diffoutput").update('').show();
           // while (diffOutput.firstChild) diffOutput.removeChild(diffOutput.firstChild);
           // var showInline = false;          
           var node = diffview.buildView({ 
@@ -39,7 +39,7 @@ var Diff = Class.create( PluginBase, {
             baseTextName:     'Commit: ' + s(sha1) + ' (tree: '+ s(tree1) + ')',
             newTextName:      'Commit: ' + s(sha2) + ' (tree: '+ s(tree2) + ')',
           });
-          diffOutput.appendChild( node );
+          dO.appendChild( node );
         } catch(ex) {
           alert(ex);
         }
@@ -69,7 +69,7 @@ var Diff = Class.create( PluginBase, {
           }
           
           
-          } catch( ex) {
+          } catch(ex) {
             alert(ex);
             // console.log(ex);
           }

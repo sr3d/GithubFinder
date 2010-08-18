@@ -1,10 +1,8 @@
-
-
 /* PluginBase that allows for mixins into an object */
 var PluginBase = Class.create( { 
-  initialize: function(finder) {
+  initialize: function(o) {
     if( !this.mixin ) this.mixin = {};
-    Object.extend( finder, this.mixin );
+    Object.extend( o, this.mixin );
   }
 } );
 
@@ -25,7 +23,7 @@ window.F = Class.create({
     this.repository = options.repository;
     this.branch     = options.branch;
     
-    this.defaultRepo = 'sr3d/GithubFinder';
+    // this.defaultRepo = 'sr3d/GithubFinder';
 
     
     this.render();
@@ -34,9 +32,8 @@ window.F = Class.create({
 
     
     document.on('click','a[data-sha]', function( event, element ){ 
-      var sha = element.readAttribute('data-sha');
-      this.click( sha, element );
-      Event.stop(event);
+      this.click( element.readAttribute('data-sha'), element );
+      // Event.stop(event);
     }.bind(this) );
     
     
@@ -44,7 +41,7 @@ window.F = Class.create({
         s = function() { idc.show() },
         h = function() { if( Ajax.activeRequestCount == 0 ) idc.hide() };
     Ajax.Responders.register( { 
-      onException: function(ex) { console.log(ex); h() }
+      onException: function(res, ex) { console.log(ex); h() }
       ,onComplete: h
       ,onCreate: s
     });
@@ -59,7 +56,7 @@ window.F = Class.create({
     
     /* if user assigns user_id, repo, branch */
     this.extractUrl();
-
+    
     /* now let's finder begin! */
     try{
       this.openRepo();
@@ -78,14 +75,15 @@ window.F = Class.create({
   }
   
   ,render: function() { 
-    $('content').update( this.toHTML() );
-    this.panelsWrapper  = $('panels_wrapper');
-    this.browserWrapper = $('browser_wrapper');
+    $('content').update( this.h() );
+    this.psW  = $('ps_w');
+    this.bW = $('b_w');
+    // debugger
   }
     
-  ,toHTML: function() {
-    var html = [
-      '<div id=finder>',
+  ,h: function() {
+    return [
+      '<div id=finder class=tbb>',
         '<div id=r_w>',
           '<div class=p>',
             '<div id=url_w>',
@@ -100,20 +98,20 @@ window.F = Class.create({
           '</div>',  // .p
         '</div>',   // #r_w
       
-        '<div id=r_i_w>', // #repo info wrapper
+        '<div id=r_i_w class=tbb>', // #repo info wrapper
           '<div class=p><span id=r_i></span></div>',
         '</div>',
       
-        '<div id="browser_wrapper">',
-          '<div id="panels_wrapper" style="width:200px"></div>',
+        '<div id=b_w>', // browser wrapper 
+          '<div id=ps_w style="width:200px"></div>',
         '</div>',
 
-        '<div id="info_wrapper">',
-          '<div class="big">Info</div>',
-          '<div id="info" class="padding">Select an Item. Use Arrow Keys to navigate</div>',
+        '<div id=i_w>', // info_wrapper
+          '<div class=t>Info</div>',
+          '<div id=i class=p>Select an item or navigate with arrow keys</div>',
         '</div>',
 
-        '<div class="clear"></div>',
+        '<div class=clear></div>',
       '</div>', // #finder 
 
       '<div id=f_c_w style="display:none">',                 // file content wrapper
@@ -125,8 +123,8 @@ window.F = Class.create({
         
         '<div id=f_c>',                 // file content
           '<div class=p>',                 // padding
-            '<div id="f_w">',             // file wrapper
-              '<div id="f"></div>',       // file 
+            '<div id=f_w>',             // file wrapper
+              '<div id=f></div>',       // file 
             '</div>',
             '<div id=diffoutput></div>',
           '</div>', // padding
@@ -134,17 +132,17 @@ window.F = Class.create({
         
         '<div id=c_w>',                 // commit wrapper
           '<div id=commits>',
-            '<div class=big>Commits Log</div>',
-            '<div class=padding id=c_l_w>Commits Log</div>', // commits log wrapper
+            '<div class=t>Commits Log</div>',
+            '<div class=p id=c_l_w>Commits Log</div>', // commits log wrapper
           '</div>',
           '<div class=clear></div>',
         '</div>', // #c_w
 
         '<div class=clear></div>',
-      '</div>'  // #f_c_w
-    ];
-    
-    return html.join(' ');
+      '</div>',  // #f_c_w
+      
+      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github</div>'
+    ].join('');
   }
 
   ,openRepo: function(repo) {
@@ -194,34 +192,27 @@ window.F = Class.create({
   
   ,reset: function() {
     $('f_c_w').hide();
-    $('info').innerHTML = '';
     this.cI = -1;
     this.pI = 0;
     
-    for( var i = this.panels.length - 1; i >= 0; i-- )
-      (this.panels.pop()).dispose();    
+    while(this.panels.length > 0)
+      (this.panels.pop()).dispose();
   }
   
   ,browse: function() {
+    $('i').innerHTML = '';
     this.openRepo( $F('r') || $('r').readAttribute('placeholder') );
   }
   /* render the status bar */
   ,renderRepoInfo: function() {
     $('r_i').innerHTML = this.repo.description;
-    // var html = [
-    //   '<div>',
-    //     '<span class=big>',
-    //       
-    //     '</span>',
-    //   '</div>'
-    // ];
   }
   
   ,renderBranches: function() {
-    var html = ['Branch:  <select id=brs>'];
+    var html = ['Branch: <select id=brs>'];
     this.branches.each(function(b) { 
       html.push( 
-        '<option ' + (this.branch == b.key ? ' selected="selected"' : ' ' ) + '>' +
+        '<option ' + (this.branch == b.key ? ' selected=""' : ' ' ) + '>' +
           b.key +
         '</option>'
       );
@@ -244,10 +235,10 @@ window.F = Class.create({
   ,_resizePanelsWrapper: function() {
     var panelWidth = 201;
     var w = (this.panels.length * panelWidth  );
-    this.panelsWrapper.style.width = w + 'px';
+    this.psW.style.width = w + 'px';
 
     /* scroll to the last panel */    
-    this.browserWrapper.scrollLeft = w;
+    this.bW.scrollLeft = w;
   }
 
   /* request the content of the tree and render the panel */
@@ -284,10 +275,6 @@ window.F = Class.create({
     var p = e.up('div.panel'),
         li = e.up('li').addClassName('current'),
         posTop = li.positionedOffset().top + li.offsetHeight - p.offsetHeight;
-        
-        // console.log("posTop %o",posTop);
-    /* scroll viewport if needed*/
-    // debugger
     if( posTop > p.scrollTop) {
       p.scrollTop = posTop ;
     }
@@ -364,7 +351,7 @@ window.F = Class.create({
              commit.message,
            '</div>'
          ];
-         $('info').update( html.join(''));
+         $('i').update( html.join(''));
       }
 
       var showPreview = function() {

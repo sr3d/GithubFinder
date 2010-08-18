@@ -22,14 +22,14 @@ window.P = Class.create({
   }
   
   ,render: function() {
-    $('panels_wrapper').insert({ bottom: this.toHTML() });
-    $('p' + this.index ).select('li').each( function(item) { 
-      item.observe('mouseover', function() { 
-        item.addClassName('hover');
-      }).observe('mouseout', function() {
-        item.removeClassName('hover');
-      });
-    })
+    this.f.psW.insert({ bottom: this.toHTML() });
+    // $('p' + this.index ).select('li').each( function(item) { 
+    //   item.observe('mouseover', function() { 
+    //     item.addClassName('hover');
+    //   }).observe('mouseout', function() {
+    //     item.removeClassName('hover');
+    //   });
+    // })
   }
   
   ,toHTML: function() {

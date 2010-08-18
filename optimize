@@ -4,19 +4,12 @@ require 'ftools'
 files = [ 
     'index.min.html', 
     'styles.css', 
-    'javascripts/bootstrap.js',
-    'code.png',
-    
-    'img/dir.png',
-    'img/la.png',
-    'img/la_h.png',
-    'img/txt.png',
     
     'javascripts/f.js',
-    'javascripts/gh.js', 
-    'javascripts/k.js', 
+    'javascripts/gh.js',
+    'javascripts/keyboard.js', 
+    'javascripts/diff.js', 
     
-    # 'javascripts/vendors/jsdiff.js' 
     ]
 
 total_size = 0

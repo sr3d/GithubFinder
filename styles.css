@@ -1,71 +1,67 @@
 body { font-size: 12px; font-family: Arial; padding: 0; margin: 0 }
-/* share styles */
 .clear { clear:both }
 a { color: #4183C4; text-decoration: none; }
 a:active { outline: none; }
 :focus { -moz-outline-style: none; outline: none;}
-textarea { width: 400px; height: 500px}
+.p { padding: 10px; }
 
 #content { min-width: 940px }
 
-#finder { width: 100%; border-bottom: 3px solid #DCDCDC }
+#finder { width: 100%; }
 
-#r_w { width: 100%; background-color: #EAEAEA; border-bottom: 1px solid #D8D8D8;}
-#r_i_w { border-bottom: 3px solid #D8D8D8;}
-#r_w .p, #r_i_w .p { padding: 10px; }
+#r_w { width: 100%; background-color: #EAEAEA; border-bottom: 1px solid #CCC;}
+.tbb { border-bottom: 3px solid #CCC;} /* thick bottom border */
+
   
   
 /* logo */
 .big { font-size: 14px; font-weight: bold} 
 #r_w span { border-right: 1px solid white; padding-right: 10px; }
-#indicator { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px; font-size: 14px;}
+#in { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px;}
 
-#browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
-  #panels_wrapper {}
-    #panels_wrapper .panel { 
-      float: left; width: 200px; border-right: 1px solid #DCDCDC; overflow: hidden; overflow-y: auto;
-      height: 300px }
+#b_w { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
+.panel { 
+float: left; width: 200px; border-right: 1px solid #CCC; overflow: hidden; overflow-y: auto;
+height: 300px }
 
-      .files { padding: 0; margin: 0; }
-      .files li { list-style:none outside none; border-bottom: 1px solid #DCDCDC; padding: 6px; background-color: #F8F8F8; }
-#info_wrapper { width: 19%; border-left: 1px solid #DCDCDC; float: right; height: 300px; overflow-y: auto; }
-.padding { padding: 10px; }
-#info_wrapper .commits { height: 200px; overflow: auto}
+.files { padding: 0; margin: 0; }
+li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; background-color: #F8F8F8; }
+#i_w { width: 19%; border-left: 1px solid #CCC; float: right; height: 300px; overflow-y: auto; }
+/*.padding { padding: 10px; }*/
+#i_w .commits { height: 200px; overflow: auto}
 
-#info_wrapper .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
+.t { padding: 10px; border-bottom: 1px solid #CCC; font-size: 14px; font-weight: bold} /* title */
 
-.folder { background: #E8FFFF url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
+.folder { background: #F8F8F8 url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
   .ico { margin: 2px; background:url('./img/txt.gif') no-repeat top left; padding: 3px 6px; }
-  .folder .ico { background: url('./img/dir.gif') no-repeat top left; }
+  .folder .ico { background-image: url('./img/dir.gif'); }
 .current { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
 .current a { color: white;}
 .file { background-image: none !important;}
-.recent a { color: red; }
-
 .files a { padding: 3px 15px }
 
 #f_c_w .p {padding: 10px}
 #f_c { width: 80.85%; float: left; overflow: hidden; }
-#c_w { width: 19%; border-left: 1px solid #DCDCDC; border-bottom: 1px solid #DCDCDC;float: right; min-height: 500px; overflow-y: auto;}
+#c_w { width: 19%; border-left: 1px solid #CCC; border-bottom: 1px solid #CCC;float: right; min-height: 500px; overflow-y: auto;}
 #f_c_s { overflow-y: auto; }
-#f { border: 1px solid #CCCCCC; }
-#f_h_w { border-bottom: 3px solid #DCDCDC; }
+#f { border: 1px solid #CCC; }
+#f_h_w { border-bottom: 3px solid #CCC; }
 
-#commits .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
+#commits .big { padding: 10px; border-bottom: 1px solid #CCC;}
 
-.commit_entry { padding: 10px 0; border-bottom: 1px solid #DCDCDC; }
+.commit_entry { padding: 10px 0; border-bottom: 1px solid #CCC; }
 /* lift from Github.com */
-pre, .meta, .diff { font:10px Monaco,"Courier New",monospace; margin: 0; }
+pre, .meta, .diff { font:10px Monaco,monospace; margin: 0; }
 #file { overflow: auto;}
-.meta, .diff thead th { background-color: #EEEEEE; color:#333333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCCCCC}
+.meta, .diff thead th { background-color: #EEE; color:#333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCC}
 .meta span { margin-left: 5px; padding-left: 9px;}
 
-.ln, .diff th { background-color:#ECECEC; border-right:1px solid #DDDDDD; color:#AAAAAA; text-align: right; padding: 5px 5px }
+.ln, .diff th { background-color:#ECECEC; border-right:1px solid #DDD; color:#AAA; text-align: right; padding: 5px 5px }
 .code { padding: 5px; border: medium none}
-.hover { background-color: #FFFFC7; }
+/*.hover { background-color: #FFFFC7; }*/
 
-.diffoutput { border: 1px solid #CCCCCC}
-.diff { width: 100%; border-collapse:collapse; border-right:1px solid #DDDDDD }
+.diffoutput { border: 1px solid #DDD}
+.diff { width: 100%; border-collapse:collapse; border-right:1px solid #DDD }
 .diff th{ border: 1px solid #BBC; border-bottom: 0px; font-weight: normal;}
   .empty { background-color:#DDD; }
   .replace { background-color:#FD8; }
@@ -74,4 +70,6 @@ pre, .meta, .diff { font:10px Monaco,"Courier New",monospace; margin: 0; }
 }
   .insert { background-color:#9E9 }
 
-#diffoutput { border-bottom: 1px solid #CCCCCC}
+#diffoutput { border-bottom: 1px solid #CCC}
+
+#footer { padding: 10px; border-top: 1px solid #CCC}
