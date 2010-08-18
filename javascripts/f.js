@@ -55,12 +55,12 @@ window.F = Class.create({
     this.xU();
     
     /* now let's finder begin! */
-    try{
+    // try{
       this.oR(); // open repo
-    } catch(e) {
-      // alert(e + e);
-      console.log(e);
-    }
+    // } catch(e) {
+    //   // alert(e + e);
+    //   console.log(e);
+    // }
   }
   
   
@@ -72,7 +72,7 @@ window.F = Class.create({
   }
   
   ,render: function() { 
-    $('content').update( this.h() );
+    document.body.insert(this.h());
     this.psW  = $('ps_w');
     this.bW = $('b_w');
     // debugger
@@ -80,13 +80,14 @@ window.F = Class.create({
     
   ,h: function() {
     return [
+      '<div id=content>',
       '<div id=finder class=tbb>',
         '<div id=r_w>',
           '<div class=p>',
             '<div id=url_w>',
               '<span class=big>Github Finder</span>',
               '<span>',
-                'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + ' id=r />',
+                'Repo: http://github.com/<input type=text id=r />',
                 '<span id=brs_w></span>', // branches
                 '<input type=button id=go value=Go onclick=f.browse() />',
               '</span>',
@@ -138,7 +139,8 @@ window.F = Class.create({
         '<div class=clear></div>',
       '</div>',  // #f_c_w
       
-      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github</div>'
+      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github</div>',
+      '</div>' // # content
     ].join('');
   }
 

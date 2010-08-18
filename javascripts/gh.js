@@ -17,10 +17,10 @@ window.GH = {
     ,listBranch: function(u, r, b, o ) {
       o = Object.extend({ 
         onSuccess: function(res) {
-          var commits = eval('(' + res.responseText +')');
-          onData( commits );
+          // var commits = ;
+          onData( eval('(' + res.responseText +')') );
         }
-        ,onData: Prototype.K
+        // ,onData: Prototype.K
       }, o || {});
 
       var onData = o.onData; 
@@ -43,7 +43,7 @@ window.GH = {
                     
           onData( commits ); // get rid of root namespace
         }
-        ,onData: Prototype.K
+        // ,onData: Prototype.K
       }, o || {});
 
       
@@ -72,7 +72,7 @@ window.GH = {
 
           onData( commit );
         }
-        ,onData: Prototype.K
+        // ,onData: Prototype.K
       }, o || {});
 
       var onData = o.onData; 
@@ -151,7 +151,7 @@ window.GH = {
           var repo = (eval('(' + res.responseText + ')')).repository;
           onData(repo);
         }
-        ,onData: Prototype.K
+        // ,onData: Prototype.K
       }, o || {});
 
       var onData = o.onData; 
@@ -165,7 +165,7 @@ window.GH = {
           var branches = (eval('(' + res.responseText + ')')).branches;
           onData(branches);
         }
-        ,onData: Prototype.K
+        // ,onData: Prototype.K
       }, o || {});
 
       var onData = o.onData; 
