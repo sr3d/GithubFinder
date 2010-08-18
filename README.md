@@ -1,16 +1,15 @@
 == Github Finder
-
-This is a contest entry into the 10K Apart contest developing a meaningful app for the 10K Apart contest.
-
 GithubFinder is a fast and easy to browse through a Github repository.  Also, the files can quickly be diff-ed with one another to pin-point the changes.
 
+This is a contest entry into the 10K Apart contest developing a meaningful app for the 10K Apart contest ().
 
-== 10K build
+== 10K App
+==== Build
 Since the app needs to be under 10,240 bytes, it needs special optimization to achieve this size.  The unminifed, uncompressed JS is about 30+ KB, all compressed down to 8.5KB or so.  
 
-To build the app, run the provided ./build script to automatically bundle up everything into the ./app folder.
+To build the app, run the provided ./build script to automatically bundle up everything into the ./app folder
 
-==== 10K App
+==== App Bootstrap
 The minified app is working as follow:
 
 - bootstrap.js loads code from png and eval
