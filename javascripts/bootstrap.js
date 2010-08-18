@@ -33,6 +33,7 @@ d.on('dom:loaded', function() {
     c.innerHTML = s[1];
     d.body.appendChild(c);    
 
+    // console.log(s[1]);
     /* run the JS */
     eval(s[0]);
     

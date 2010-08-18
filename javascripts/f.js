@@ -19,9 +19,9 @@ window.F = Class.create({
     this.panels   = [];
     this.shas     = {};
     
-    this.user_id    = options.user_id;
-    this.repository = options.repository;
-    this.branch     = options.branch;
+    this.u    = options.user_id;
+    this.r = options.repository;
+    this.b     = options.branch;
     
     // this.defaultRepo = 'sr3d/GithubFinder';
 
@@ -37,11 +37,11 @@ window.F = Class.create({
     }.bind(this) );
     
     
-    var idc = $('indicator'),
+    var idc = $('in'),
         s = function() { idc.show() },
         h = function() { if( Ajax.activeRequestCount == 0 ) idc.hide() };
     Ajax.Responders.register( { 
-      onException: function(res, ex) { console.log(ex); h() }
+      onException: function(r,x) { console.log(x);h() }
       ,onComplete: h
       ,onCreate: s
     });
@@ -55,23 +55,22 @@ window.F = Class.create({
 
     
     /* if user assigns user_id, repo, branch */
-    this.extractUrl();
+    this.xU();
     
     /* now let's finder begin! */
     try{
-      this.openRepo();
+      this.oR(); // open repo
     } catch(e) {
       alert(e);
     }
   }
   
   
-  ,extractUrl: function() {
-    var ps = uP();
-    if( ps["user_id"] ) this.user_id      = ps["user_id"];
-    if( ps["repo"] )    this.repository   = ps["repo"];
-    if( ps["branch"] )  this.branch       = ps["branch"];
-    
+  ,xU: function() {
+    var p = uP();
+    if( p["user_id"] ) this.u   = p["user_id"];
+    if( p["repo"] )    this.r   = p["repo"];
+    if( p["branch"] )  this.b   = p["branch"];
   }
   
   ,render: function() { 
@@ -93,7 +92,7 @@ window.F = Class.create({
                 '<span id=brs_w></span>', // branches
                 '<input type=button id=go value=Go onclick=f.browse() />',
               '</span>',
-              '<span id=indicator style=display:none>Loading...</span>',
+              '<span id=in style=display:none>Loading...</span>',
             '</div>',
           '</div>',  // .p
         '</div>',   // #r_w
@@ -145,20 +144,21 @@ window.F = Class.create({
     ].join('');
   }
 
-  ,openRepo: function(repo) {
+  /* openRepo */
+  ,oR: function(repo) {
     this.reset()
     
     var u,r,b = 'master';
     if( !repo ) {
-      u = this.user_id;
-      r = this.repository;
-      b = this.branch;
+      u = this.u;
+      r = this.r;
+      b = this.b;
     } else {
       repo = repo.split('/');
       if( repo.length < 2 ) { alert('invalid repository'); return }
-      u = this.user_id    = repo[0];
-      r = this.repository = repo[1];
-      b = this.branch     = $('brs') ? $F('brs') : b;
+      u = this.u    = repo[0];
+      r = this.r = repo[1];
+      b = this.b     = $('brs') ? $F('brs') : b;
     }
     
     $('r').value = u + '/' + r;
@@ -178,12 +178,12 @@ window.F = Class.create({
         this.repo = repo;
         this.renderRepoInfo();
       }.bind(this)
-    });    
+    });
     
     /* Show branches info */
     GH.Repo.listBranches( u, r, { 
       onData: function(branches) {
-        this.branches = $H(branches);
+        this.bes = $H(branches);
         this.renderBranches();
       }.bind(this)
     });
@@ -210,9 +210,9 @@ window.F = Class.create({
   
   ,renderBranches: function() {
     var html = ['Branch: <select id=brs>'];
-    this.branches.each(function(b) { 
+    this.bes.each(function(b) { 
       html.push( 
-        '<option ' + (this.branch == b.key ? ' selected=""' : ' ' ) + '>' +
+        '<option ' + (this.b == b.key ? ' selected=""' : ' ' ) + '>' +
           b.key +
         '</option>'
       );
@@ -243,7 +243,7 @@ window.F = Class.create({
 
   /* request the content of the tree and render the panel */
   ,open: function( tree_sha, item ) {
-    GH.Tree.show( this.user_id, this.repository, this.branch, tree_sha, {
+    GH.Tree.show( this.u, this.r, this.b, tree_sha, {
       onData: function(tree) { // tree is already sorted 
         /* add all items to cache */
         for( var i = 0, len = tree.length; i < len; i++ )
@@ -271,7 +271,7 @@ window.F = Class.create({
 
 
     /* set selection cursor && focus the item */
-    e.up('ul').select('li.current').invoke('removeClassName','current');
+    e.up('ul').select('li.cur').invoke('removeClassName','cur');
     var p = e.up('div.panel'),
         li = e.up('li').addClassName('current'),
         posTop = li.positionedOffset().top + li.offsetHeight - p.offsetHeight;
@@ -303,7 +303,7 @@ window.F = Class.create({
         $('f_c_w').show();
         if( /text/.test(item.mime_type) ) {
           $('f').innerHTML = '';
-          GH.Blob.show( this.user_id, this.repository, item.sha, { onSuccess: function(response) {
+          GH.Blob.show( this.u, this.r, item.sha, { onSuccess: function(response) {
             this.previewTextFile(response.responseText, item);  
           }.bind(this)} );
         }
@@ -325,7 +325,7 @@ window.F = Class.create({
         var html = [
            '<div><b>Name</b><br/>',
              '<a href=',
-               'http://github.com/' + this.user_id + '/' + this.repository + '/' + item.type + '/' + this.branch + path,
+               'http://github.com/' + this.u + '/' + this.r + '/' + item.type + '/' + this.b + path,
                ' target=_blank>',
                item.name,
              '</a>',
@@ -400,7 +400,7 @@ window.F = Class.create({
       
       /* query the commits to get a list of commits and info */
       
-      GH.Commits.list( this.user_id, this.repository, this.branch, path, { onData: function(cs) {
+      GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cs) {
         item.commit = commit = cs[0];  // also assign the item's commit to keep track of folder's latest commit
         commits = cs;
         

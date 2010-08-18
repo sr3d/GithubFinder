@@ -6,7 +6,7 @@ window.P = Class.create({
       ,index:       0
       ,name:        ''
       ,item:        null
-    }, options, {});
+    }, options || {});
     
     this.f        = f;
     this.tree     = options.tree;
@@ -14,47 +14,32 @@ window.P = Class.create({
     this.name     = options.name;
     this.item     = options.item;
     
-    this.render();
+    this.r();
   }
   
   ,dispose: function() {
     $('p' + this.index ).remove();
   }
   
-  ,render: function() {
-    this.f.psW.insert({ bottom: this.toHTML() });
-    // $('p' + this.index ).select('li').each( function(item) { 
-    //   item.observe('mouseover', function() { 
-    //     item.addClassName('hover');
-    //   }).observe('mouseout', function() {
-    //     item.removeClassName('hover');
-    //   });
-    // })
+  ,r: function() {
+    this.f.psW.insert({ bottom: this.h() });
   }
   
-  ,toHTML: function() {
-    var item, icon, css, recent,
-        html = ['<ul class=files>'];
+  ,h: function() {
+    var it, css, recent, ix=this.index, t=this.tree,
+        h = '<ul class=files>';
 
-    // debugger
-    for( var i = 0, len = this.tree.length; i < len; i++ ) {
-      item = this.tree[i];
-      // recent = this.item && item.sha == this.item.commit.id ? '*' : '';
-      css  = item.type == 'tree' ? 'folder' : 'file';
-
-      html.push( 
-        '<li class=' + css +'>' + 
-          '<span class=ico>' +
-            '<a href=javascript:void(0) data-sha='+ item.sha + ' data-name="' + item.name + '">' + item.name + 
-              // recent +
-            '</a>' +
-          '</span>' +
-        '</li>'
-      );
+    for( var i = 0; i < t.length; i++ ) {
+      it = t[i];
+      h += '<li class=' + it.type +'>' + 
+              '<span class=ico>' +
+                '<a href=# data-sha=' + it.sha + ' data-name="' + it.name + '">' + it.name + '</a>' +
+              '</span>' +
+            '</li>';
     }
-    html.push('</ul>');
+    h += '</ul>';
 
-    return '<div id=p' + this.index + ' data-index=' + this.index +' class=panel>' + html.join('') + '</div>';
+    return '<div id=p' + ix + ' data-index=' + ix +' class=panel>' + h + '</div>';
   }
 
 });

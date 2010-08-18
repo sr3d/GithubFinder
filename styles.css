@@ -32,11 +32,11 @@ li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; 
 
 .t { padding: 10px; border-bottom: 1px solid #CCC; font-size: 14px; font-weight: bold} /* title */
 
-.folder { background: #F8F8F8 url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
-  .ico { margin: 2px; background:url('./img/txt.gif') no-repeat top left; padding: 3px 6px; }
-  .folder .ico { background-image: url('./img/dir.gif'); }
-.current { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
-.current a { color: white;}
+.tree { background: #F8F8F8 url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
+.ico { margin: 2px; background:url('./img/txt.gif') no-repeat top left; padding: 3px 6px; }
+.tree .ico { background-image: url('./img/dir.gif'); }
+.cur { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
+.cur a { color: white;}
 .file { background-image: none !important;}
 .files a { padding: 3px 15px }
 
