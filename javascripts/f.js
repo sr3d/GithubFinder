@@ -54,7 +54,7 @@ window.F = Class.create({
       ,onCreate: s
     });
     
-    /* if we have plugins */
+    /* init plugins */
     if( FP ) {
       for( var i = 0; i < FP.length; i++ ) {
         new FP[i](this);
@@ -105,7 +105,10 @@ window.F = Class.create({
       '</div>', // #finder 
 
       '<div id=f_c_w style="display:none">',                 // file content wrapper
-        '<div id=f_h>',                 // file header
+        '<div id=f_h_w>',                 // file header
+          '<div class=p>',
+            '<div id=f_h class=big></div>',
+          '</div>',
         '</div>',
         
         '<div id=f_c>',                 // file content
@@ -197,9 +200,7 @@ window.F = Class.create({
     var html = ['Branch:  <select id=brs>'];
     this.branches.each(function(b) { 
       html.push( 
-        '<option ' +
-          //'value=' + b.value + 
-          (this.branch == b.key ? ' selected="selected"' : ' ' ) + '>' +
+        '<option ' + (this.branch == b.key ? ' selected="selected"' : ' ' ) + '>' +
           b.key +
         '</option>'
       );
@@ -345,6 +346,12 @@ window.F = Class.create({
          $('info').update( html.join(''));
       }
 
+      var showPreview = function() {
+        $('diffoutput').hide();
+        $('f_c_w').show();
+        $('f_h').innerHTML = path;
+      }
+
       var showCommitsLog = function() { 
         var diffWith, diffHead, diffPrevious,
             commitsHTML = ['<div>'];
@@ -392,7 +399,10 @@ window.F = Class.create({
         
         showInfo();
         
-        if( item.type != 'tree' ) showCommitsLog();
+        if( item.type != 'tree' ) { 
+          showPreview();
+          showCommitsLog();
+        }
         
       }.bind(this)});
     }.bind(this), 200); // time out
@@ -410,7 +420,7 @@ window.F = Class.create({
         lines = []
         sloc = 0;
     for( var i = 0, len = text.length; i < len; i++ ) {
-      lineNumbers.push( '<div>' + (i + 1) + '</div>');
+      lineNumbers.push( '<span>' + (i + 1) + "</span>\n");
       
       lines.push( [ 
         '<div class=l>',
@@ -425,12 +435,12 @@ window.F = Class.create({
     var html = [
       '<div class=meta>',
         '<span>' + item.mode + '</span>',
-        '<span>' + text.length + ' (' + sloc +' sloc)</span>',
+        '<span>' + text.length + ' lines (' + sloc +' sloc)</span>',
         '<span>' + item.size + ' bytes</span>',
       '</div>',
     
       '<div id=f_c_s>',  // file content scroll
-        '<table >',
+        '<table cellspacing=0 cellpadding=0>',
           '<tr>',
             '<td>',
               '<pre class=ln>',
@@ -439,7 +449,7 @@ window.F = Class.create({
             '</td>',
           
             '<td width=100% valign=top>',
-              '<pre>',
+              '<pre class=code>',
                 lines.join(''),
               '</pre>',
             '</td>',

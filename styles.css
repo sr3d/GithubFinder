@@ -6,7 +6,7 @@ a:active { outline: none; }
 :focus { -moz-outline-style: none; outline: none;}
 textarea { width: 400px; height: 500px}
 
-
+#content { min-width: 940px }
 
 #finder { width: 100%; border-bottom: 3px solid #DCDCDC }
 
@@ -45,22 +45,22 @@ textarea { width: 400px; height: 500px}
 .files a { padding: 3px 15px }
 
 #f_c_w .p {padding: 10px}
-#f_c { width: 80%; float: left; overflow: hidden; }
+#f_c { width: 80.85%; float: left; overflow: hidden; }
 #c_w { width: 19%; border-left: 1px solid #DCDCDC; border-bottom: 1px solid #DCDCDC;float: right; min-height: 500px; overflow-y: auto;}
 #f_c_s { overflow-y: auto; }
+#f { border: 1px solid #CCCCCC; }
+#f_h_w { border-bottom: 3px solid #DCDCDC; }
 
 #commits .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
 
 .commit_entry { padding: 10px 0; border-bottom: 1px solid #DCDCDC; }
 /* lift from Github.com */
-pre, code, .meta {
-font:11px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
-}
+pre, .meta { font:10px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace; margin: 0; }
 #file { overflow: auto;}
-#file .meta span { margin-left: 5px; padding-left: 9px;}
+.meta { background-color: #EEEEEE; color:#333333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCCCCC}
+.meta span { margin-left: 5px; padding-left: 9px;}
 
-#file .ln { text-align: right; }
-
-
+.ln { background-color:#ECECEC; border-right:1px solid #DDDDDD; color:#AAAAAA; text-align: right; padding: 5px 5px }
+.code { padding: 5px; border: medium none}
 .hover { background-color: #FFFFC7; }
 
