@@ -300,7 +300,7 @@ window.F = Class.create({
         
         $('f_c_w').show();
         if( /text/.test(it.mime_type) ) {
-          $('f').innerHTML = '';
+          $('f').innerHTML = '<div class=p>Loading File</p>';
           GH.Blob.show( this.u, this.r, it.sha, { onSuccess: function(r) {
             this.previewTextFile(r.responseText, it);  
           }.bind(this)} );
@@ -310,8 +310,8 @@ window.F = Class.create({
 
       /* display file info */
       for( var i = 0; i <= ix; i++ )
-        path += '/' + this.ps[i].name;
-      path += '/' + it.name;
+        path += this.ps[i].name + "/";
+      path += it.name;
 
 
     var c, cs;
@@ -405,9 +405,7 @@ window.F = Class.create({
   
 
   ,previewTextFile: function( text, it ) {
-    // debugger
     text = text.replace(/\r\n/, "\n").split(/\n/);
-    /* render line numbers */
 
     var ln = [],
         l = [],
