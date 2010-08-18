@@ -8,7 +8,7 @@ var Keyboard = Class.create( PluginBase, {
       var cI = f.cI,
           pI = f.pI;
       
-      var p = f.panels[pI]; // panel
+      var p = f.ps[pI]; // panel
       var t = p.tree;       // the panel's tree
       
       // e.stop();
@@ -34,12 +34,12 @@ var Keyboard = Class.create( PluginBase, {
       }
       
       var l = function() {
-        if( f.panels[--pI] ) {
+        if( f.ps[--pI] ) {
           // debugger
-          t = f.panels[pI].tree;
+          t = f.ps[pI].tree;
           // get index of the previously selected item
-          cI = f.panels[pI].cI;
-          // var item = f.panels[pI]; 
+          cI = f.ps[pI].cI;
+          // var item = f.ps[pI]; 
           f.click( t[cI].sha, $$('#p' + pI + ' a')[cI] );
           
         } else {
@@ -51,8 +51,8 @@ var Keyboard = Class.create( PluginBase, {
       var r = function() {
         if( t[cI].type != 'tree' ) return;
         
-        if( f.panels[++pI] ) {
-          t = f.panels[pI].tree;
+        if( f.ps[++pI] ) {
+          t = f.ps[pI].tree;
           cI = -1;
           d(); // down!
 

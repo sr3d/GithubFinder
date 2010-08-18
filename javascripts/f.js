@@ -58,7 +58,8 @@ window.F = Class.create({
     try{
       this.oR(); // open repo
     } catch(e) {
-      alert(e);
+      // alert(e + e);
+      console.log(e);
     }
   }
   
@@ -356,7 +357,6 @@ window.F = Class.create({
     var cl = function() { 
       var dW, dH, dP,
           csHTML = '<div>';
-      console.log("c %o",c);
       var dl = function(a,b,l) {  // difflink a, b, label
         return '<a href=javascript:void(0) onclick=f.diff(' + 
             [ '"', a.id, '","',  

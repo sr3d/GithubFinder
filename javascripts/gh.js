@@ -8,33 +8,33 @@ window.GH = {
   /* set the proxy.php url and switch to the correct AR (AjaxRequest) */
   ,setProxy: function(p) { 
     this.proxy = p;
-    window.AR = p.indexOf('./') == 0 ? Ajax.Request : Ajax.JSONRequest;    
+    window.AR = p.indexOf('./') == 0 ? Ajax.Request : JSP;    
   }
   
   ,Commits: {
     _cache: []
     /* list all commits for a specific branch */
-    ,listBranch: function(user_id, repository, branch, options ) {
-      options = Object.extend({ 
+    ,listBranch: function(u, r, b, o ) {
+      o = Object.extend({ 
         onSuccess: function(res) {
           var commits = eval('(' + res.responseText +')');
           onData( commits );
         }
         ,onData: Prototype.K
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData; 
+      var onData = o.onData; 
 
-      var url = GH.api + '/commits/list/' + user_id + '/' + repository + '/' + branch;
+      var url = GH.api + '/commits/list/' + u + '/' + r + '/' + b;
 
-      new AR( GH.proxy + url, options );
+      new AR( GH.proxy + url, o );
     }
     
-    ,list: function( user_id, repository, branch, path, options ) {
+    ,list: function( u, r, b, path, o ) {
       var self = this,
-          url = GH.api + '/commits/list/' + user_id + '/' + repository + '/' + branch + path;
+          url = GH.api + '/commits/list/' + u + '/' + r + '/' + b + path;
           
-      options = Object.extend({ 
+      o = Object.extend({ 
         onSuccess: function(res) {
           var commits = eval('(' + res.responseText +')').commits;
           
@@ -44,10 +44,10 @@ window.GH = {
           onData( commits ); // get rid of root namespace
         }
         ,onData: Prototype.K
-      }, options || {});
+      }, o || {});
 
       
-      var onData = options.onData; 
+      var onData = o.onData; 
 
       /* hit the cache first */
       if( this._cache[ url ] ) {
@@ -55,14 +55,14 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, options );
+      new AR( GH.proxy + url, o );
     }
     
-    ,show: function( user_id, repository, sha, options ) {
+    ,show: function( u, r, sha, o ) {
       var self = this,
-          url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
+          url = GH.api + '/commits/show/' + u + '/' + r + '/' + sha;
 
-      options = Object.extend({ 
+      o = Object.extend({ 
         onSuccess: function(res) {
           // debugger
           var commit = eval('(' + res.responseText +')').commit;
@@ -73,9 +73,9 @@ window.GH = {
           onData( commit );
         }
         ,onData: Prototype.K
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData; 
+      var onData = o.onData; 
 
       /* hit the cache first */
       if( this._cache[ sha ] ) {
@@ -83,17 +83,17 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, options );
+      new AR( GH.proxy + url, o );
     }
   }
   
   ,Tree: {
     _cache: {}
-    ,show: function( user_id, repository, branch, tree_sha, options  ) {
+    ,show: function( u, r, b, tree_sha, o  ) {
       var self = this,
-          url = GH.api + '/tree/show/' + user_id +'/' + repository +'/' + tree_sha;
+          url = GH.api + '/tree/show/' + u +'/' + r +'/' + tree_sha;
           
-      options = Object.extend({ 
+      o = Object.extend({ 
         onSuccess: function(res) {
           var tree = (eval('(' + res.responseText + ')')).tree;
           
@@ -116,9 +116,9 @@ window.GH = {
           
           onData(tree);
         }
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData;
+      var onData = o.onData;
       
       /* hit the cache first */
       if( this._cache[ tree_sha ] ) {
@@ -126,51 +126,51 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, options);
+      new AR( GH.proxy + url, o);
     }
   }
   
   ,Blob: {
-    show: function( user_id, repository, sha, options ) {
-      options = Object.extend({ 
+    show: function( u, r, sha, o ) {
+      o = Object.extend({ 
         onSuccess: Prototype.K
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData; 
+      var onData = o.onData; 
 
-      var url = GH.api + '/blob/show/' + user_id + '/' + repository + '/' + sha;
+      var url = GH.api + '/blob/show/' + u + '/' + r + '/' + sha;
 
-      new AR( GH.proxy + url, options );
+      new AR( GH.proxy + url, o );
     }
   }
   
   ,Repo: {
-    show: function( user_id, repository, options ) {
-      options = Object.extend({ 
+    show: function( u, r, o ) {
+      o = Object.extend({ 
         onSuccess: function(res) {
           var repo = (eval('(' + res.responseText + ')')).repository;
           onData(repo);
         }
         ,onData: Prototype.K
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData; 
-      var url = GH.api + '/repos/show/' + user_id + '/' + repository;
-      new AR( GH.proxy + url, options );
+      var onData = o.onData; 
+      var url = GH.api + '/repos/show/' + u + '/' + r;
+      new AR( GH.proxy + url, o );
     }
     
-    ,listBranches: function( user_id, repository, options ) {
-      options = Object.extend({ 
+    ,listBranches: function( u, r, o ) {
+      o = Object.extend({ 
         onSuccess: function(res) {
           var branches = (eval('(' + res.responseText + ')')).branches;
           onData(branches);
         }
         ,onData: Prototype.K
-      }, options || {});
+      }, o || {});
 
-      var onData = options.onData; 
-      var url = GH.api + '/repos/show/' + user_id + '/' + repository + '/branches';
-      new AR( GH.proxy + url, options );      
+      var onData = o.onData; 
+      var url = GH.api + '/repos/show/' + u + '/' + r + '/branches';
+      new AR( GH.proxy + url, o );      
     }
   }
 };

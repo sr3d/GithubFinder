@@ -17,7 +17,7 @@
  *
  * See examples below for usage.
  */
-Ajax.JSONRequest = Class.create(Ajax.Base, (function() {
+JSP = Class.create(Ajax.Base, (function() {
   var id = 0, head = document.getElementsByTagName('head')[0];
   return {
     initialize: function($super, url, options) {
