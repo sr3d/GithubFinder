@@ -148,8 +148,8 @@ window.F = Class.create({
   }
 
   ,openRepo: function(repo) {
-    this.cI = -1;
-    this.pI = 0;
+    this.reset()
+    
     var u,r,b = 'master';
     if( !repo ) {
       u = this.user_id;
@@ -165,10 +165,7 @@ window.F = Class.create({
     
     $('r').value = u + '/' + r;
     
-    for( var i = this.panels.length - 1; i >= 0; i-- )
-      (this.panels.pop()).dispose();
 
-      
     /* Load the master branch */
     GH.Commits.listBranch( u, r, b, { 
       onData: function(commits) { 
@@ -193,6 +190,16 @@ window.F = Class.create({
       }.bind(this)
     });
     
+  }
+  
+  ,reset: function() {
+    $('f_c_w').hide();
+    $('info').innerHTML = '';
+    this.cI = -1;
+    this.pI = 0;
+    
+    for( var i = this.panels.length - 1; i >= 0; i-- )
+      (this.panels.pop()).dispose();    
   }
   
   ,browse: function() {
