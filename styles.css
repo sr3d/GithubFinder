@@ -18,7 +18,7 @@ textarea { width: 400px; height: 500px}
 /* logo */
 .big { font-size: 14px; font-weight: bold} 
 #r_w span { border-right: 1px solid white; padding-right: 10px; }
-#indicator { float: right; background-color: #4F4A45; color: white; padding: 5px;}
+#indicator { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px; font-size: 14px;}
 
 #browser_wrapper { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
   #panels_wrapper {}
@@ -46,11 +46,12 @@ textarea { width: 400px; height: 500px}
 
 #f_c_w .p {padding: 10px}
 #f_c { width: 80%; float: left; overflow: hidden; }
-#c_w { width: 19%; border-left: 1px solid #DCDCDC; border-bottom: 1px solid #DCDCDC;float: right; height: 300px; overflow-y: auto;}
+#c_w { width: 19%; border-left: 1px solid #DCDCDC; border-bottom: 1px solid #DCDCDC;float: right; min-height: 500px; overflow-y: auto;}
 #f_c_s { overflow-y: auto; }
 
 #commits .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
 
+.commit_entry { padding: 10px 0; border-bottom: 1px solid #DCDCDC; }
 /* lift from Github.com */
 pre, code, .meta {
 font:11px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;

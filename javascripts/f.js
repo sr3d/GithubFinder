@@ -338,21 +338,37 @@ window.F = Class.create({
       }
 
       var showCommitsLog = function() { 
-        var commitsHTML = ['<div>'];
+        var diffWith, diffHead, diffPrevious,
+            commitsHTML = ['<div>'];
         for( var i = 0; i < commits.length; i++ ) {
+          diffWith = commits.length > 1 ? '<br/>Diff with: ' : '';
+          diffHead = i > 0 ? 
+            '<a href=javascript:void(0) onclick=f.diff(' + 
+                [ '"', commit.id, '","',  
+                  commit.tree, '","', 
+                  commits[i].id, '","',
+                  commits[i].tree, '","',
+                  item.name, '"' 
+                ].join('') +
+              ')>Head</a> '
+              : '';
+          
+          diffPrevious = commits[i+1] ? 
+            ' <a href=javascript:void(0) onclick=f.diff(' + 
+              [ '"', commit.id, '","',  
+                commit.tree, '","', 
+                commits[i+1].id, '","',
+                commits[i+1].tree, '","',
+                item.name, '"' 
+              ].join('') +
+            ')>Previous</a>'
+            : '';
+          
           commitsHTML.push(
-            '<div>Commit: ' + 
-              '<a href=javascript:void(0) onclick=f.diff(' + 
-                  [ '"', commit.id, '","',  
-                    commit.tree, '","', 
-                    commits[i].id, '","',
-                    commits[i].tree, '","',
-                    item.name, '"' 
-                  ].join('') +
-                ')>' +
-                s(commits[i].id) +
-              '</a>' + 
-              '(tree: ' + s(commits[i].tree) + ')' +
+            '<div class=commit_entry>' +
+              '<b>' + s(commits[i].id) +'</b>' + ' by ' + commits[i].author.name +
+              diffWith + diffHead + diffPrevious +
+              // '(tree: ' + s(commits[i].tree) + ')' +
             '</div>'
           );
         };
@@ -423,6 +439,7 @@ window.F = Class.create({
         '</div>'
     ];
     
+    $('diffoutput').hide();
     $('f').update( html.join('') ).show();
     
     // 1.  get current file
