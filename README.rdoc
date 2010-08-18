@@ -1,7 +1,7 @@
 == Github Finder
 GithubFinder is a fast and easy to browse through a Github repository.  Also, the files can quickly be diff-ed with one another to pin-point the changes.
 
-This is a contest entry into the 10K Apart contest developing a meaningful app for the 10K Apart contest ().
+This is a contest entry into the 10K Apart contest developing a meaningful app for the 10K Apart contest (http://10k.aneventapart.com/).
 
 == 10K App
 ==== Build

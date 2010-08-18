@@ -25,6 +25,16 @@ var x = function(z, m ) {  // image, callback
 d.on('dom:loaded', function() { 
   /* execute */
   x('c.png', function(s){
-    eval(s);
+    /* both CSS and JS are bundled up into 1 file*/
+    s = s.split('~10K~');
+    console.log("s %o",s);
+    /* init CSS */
+    var c = d.createElement('style');
+    c.innerHTML = s[1];
+    d.body.appendChild(c);    
+
+    /* run the JS */
+    eval(s[0]);
+    
   });
 })

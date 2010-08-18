@@ -53,6 +53,7 @@ end
 release_path = 'app'
 
 # Clean up
+puts "Clean up release folder (#{release_path})"
 FileUtils.rm_rf release_path
 File.makedirs release_path + '/img'
 
@@ -65,9 +66,10 @@ files_to_copy = {
   'javascripts/prototype.js'  => 'prototype.js'
 }
 
+puts "Copy files"
 files_to_copy.each do |src,dest|
   dest = release_path + '/' + dest
-  puts "cp #{src} to #{dest}"
+  puts "  cp #{src} => #{dest}"
   File.copy src, dest
 end
 
@@ -87,24 +89,28 @@ js_files = [
   'javascripts/app.js'
 ]
 
-puts "minifying js"
+
+puts "bundling js and css:"
+
+puts "  minifying js..."
 js = minify merge( js_files )
 
-puts "string2png"
-string2png js, release_path + '/c.png'
+puts "  minifying css..."
+css = minify(merge([ 'styles.css']), 'css')
+
+puts "  bundling..."
+string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
+
 
 files_to_minify = [ 
-  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
-  { :files => [ 'styles.css'], :output => 'styles.css', :type => 'css' }
+  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' }
+  # { :files => [ 'styles.css'], :output => 'styles.css', :type => 'css' }
 ]
 files_to_minify.each do |group|
   puts "minify #{group[:output]}"
   minify_to_file merge(group[:files]), group[:type], release_path + '/' + group[:output]
 end
 
-# minify css 
-css = minify(merge([ 'styles.css']), 'css')
-string2png css, release_path + '/s.png'
 
 puts "------ Size Report ------"
 
@@ -115,7 +121,7 @@ files_to_skip_counting = [
 
 
 total_size = 0
-Dir.glob( [release_path + '/*', release_path + '/img/*']  ).each do |file|
+Dir.glob( [release_path + '/*' ]  ).each do |file|
   next if files_to_skip_counting.include? File.basename(file)
   
   puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
