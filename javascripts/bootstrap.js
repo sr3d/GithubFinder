@@ -13,9 +13,9 @@ var x = function(z, m ) {  // image, callback
     t.drawImage(o, 0, 0);
     
     var b = t.getImageData( 0, 0, w, h ).data; //b : bucket of data
-    for(var i= 0, l = b.length; i < l; i += 4){
+    for(var i= 0; i < b.length; i += 4) {
       if( b[i] > 0 )
-       s += String.fromCharCode(b[i]);
+        s += String.fromCharCode(b[i]);
     }
     m(s);
   }
@@ -30,12 +30,11 @@ d.on('dom:loaded', function() {
 
     /* init CSS */
     var c = d.createElement('style');
-    c.innerHTML = s[1];
+    c.innerHTML = s[1]; //.replace('$', 'background-color:');
     d.body.appendChild(c);    
 
     // console.log(s[1]);
     /* run the JS */
-    eval(s[0]);
-    
+    eval(s[0]);    
   });
 })

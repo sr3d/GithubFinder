@@ -16,12 +16,12 @@ window.F = Class.create({
       ,branch:      'master'
     }, options || {} );
     
-    this.panels   = [];
-    this.shas     = {};
+    this.ps   = [];
+    this.shas = {};
     
     this.u    = options.user_id;
-    this.r = options.repository;
-    this.b     = options.branch;
+    this.r    = options.repository;
+    this.b    = options.branch;
     
     // this.defaultRepo = 'sr3d/GithubFinder';
 
@@ -47,12 +47,9 @@ window.F = Class.create({
     });
     
     /* init plugins */
-    if( FP ) {
-      for( var i = 0; i < FP.length; i++ ) {
+    if( FP )
+      for( var i = 0; i < FP.length; i++ )
         new FP[i](this);
-      }
-    }
-
     
     /* if user assigns user_id, repo, branch */
     this.xU();
@@ -195,8 +192,8 @@ window.F = Class.create({
     this.cI = -1;
     this.pI = 0;
     
-    while(this.panels.length > 0)
-      (this.panels.pop()).dispose();
+    while(this.ps.length > 0)
+      (this.ps.pop()).dispose();
   }
   
   ,browse: function() {
@@ -221,22 +218,19 @@ window.F = Class.create({
     $('brs_w').innerHTML = html.join();
   }
   
-  ,renderPanel: function( tree_sha, index, item ) { 
-    index = (typeof index == 'undefined' ) ? 0 : index;
-
+  ,renderPanel: function( sh, ix, it ) { 
+    ix = ix || 0;
     /* clear previously opened panels */
-    for( var i = this.panels.length - 1; i > index; i-- ) {
-      (this.panels.pop()).dispose();
+    for( var i = this.ps.length - 1; i > ix; i-- ) {
+      (this.ps.pop()).dispose();
     }
-    // debugger
-    this.open( tree_sha, item );
+    this.open( sh, it );
   }
   
   ,_resizePanelsWrapper: function() {
-    var panelWidth = 201;
-    var w = (this.panels.length * panelWidth  );
+    var w = (this.ps.length * 201);
     this.psW.style.width = w + 'px';
-
+    
     /* scroll to the last panel */    
     this.bW.scrollLeft = w;
   }
@@ -251,8 +245,8 @@ window.F = Class.create({
 
         var name = item ? item.name : '' ;
         // debugger
-        var p = new P( this, { tree: tree, index: this.panels.length, name: name, tree_sha: tree_sha, item: item } );
-        this.panels.push( p );
+        var p = new P( this, { tree: tree, index: this.ps.length, name: name, tree_sha: tree_sha, item: item } );
+        this.ps.push( p );
         
         this._resizePanelsWrapper();
         
@@ -266,14 +260,15 @@ window.F = Class.create({
    */
   ,click: function(sha, e) {
     // debugger
-    var item = this.shas[ sha ];
-    var index = +(e.up('.panel')).readAttribute('data-index');
+    var it = this.shas[ sha ],
+        ix = +(e.up('.panel')).readAttribute('data-index'),
+        path = "";
 
 
     /* set selection cursor && focus the item */
     e.up('ul').select('li.cur').invoke('removeClassName','cur');
     var p = e.up('div.panel'),
-        li = e.up('li').addClassName('current'),
+        li = e.up('li').addClassName('cur'),
         posTop = li.positionedOffset().top + li.offsetHeight - p.offsetHeight;
     if( posTop > p.scrollTop) {
       p.scrollTop = posTop ;
@@ -281,140 +276,128 @@ window.F = Class.create({
       
 
     /* current index */
-    this.cI = item.index;
-    this.pI = index; // current panel index;
+    this.cI = it.index;
+    this.pI = ix; // current panel index;
 
     /* remember the current selected item */
-    this.panels[ index ].cI = item.index;
+    this.ps[ ix ].cI = it.index;
     
 
     /* don't be trigger happy: ptm = preview timer  */
-    if(this._ptm) clearTimeout( this._ptm );
+    if(this._p) clearTimeout( this._p );
 
     /* set a small delay here incase user switches really fast (e.g. keyboard navigation ) */
-    this._ptm = setTimeout( function(){
+    this._p = setTimeout( function(){
       
-      if( item.type == 'tree' ) {
-        this.renderPanel( item.sha, index, item );
+      if( it.type == 'tree' ) {
+        this.renderPanel( it.sha, ix, it );
         // don't show file preview panel 
         $('f_c_w').hide();
       } else {
         
         $('f_c_w').show();
-        if( /text/.test(item.mime_type) ) {
+        if( /text/.test(it.mime_type) ) {
           $('f').innerHTML = '';
-          GH.Blob.show( this.u, this.r, item.sha, { onSuccess: function(response) {
-            this.previewTextFile(response.responseText, item);  
+          GH.Blob.show( this.u, this.r, it.sha, { onSuccess: function(r) {
+            this.previewTextFile(r.responseText, it);  
           }.bind(this)} );
         }
       }
 
 
       /* display file info */
-      var path = [];
-      for( var i = 0; i <= index; i++ ) {
-        path.push(this.panels[i].name);
-      }
-      path.push( item.name );
+      for( var i = 0; i <= ix; i++ )
+        path += '/' + this.ps[i].name;
+      path += '/' + it.name;
 
-      path = path.join("/");
 
-      
-      var commit, commits;
-      var showInfo = function() {
-        var html = [
-           '<div><b>Name</b><br/>',
-             '<a href=',
-               'http://github.com/' + this.u + '/' + this.r + '/' + item.type + '/' + this.b + path,
-               ' target=_blank>',
-               item.name,
-             '</a>',
-           '</div>',
-           '<br/>',
-           '<div><b>Path</b><br/> ' + path + '</div>',
+    var c, cs;
+    var info = function() {
+      var h = [
+         '<div><b>Name</b><br/>',
+           '<a href=',
+             'http://github.com/' + this.u + '/' + this.r + '/' + it.type + '/' + this.b + path,
+             ' target=_blank>',
+             it.name,
+           '</a>',
+         '</div>',
+         '<br/>',
+         '<div><b>Path</b><br/> ' + path + '</div>',
 
-           '<br/>',        
-           '<div><b>Last Committed</b><br/> ' + 
-             s( commit.id ) + ' on ' +
-             (new Date(commit.committed_date)).toString() + 
-           '</div>',
-           '<br/>',
+         '<br/>',        
+         '<div><b>Last Committed</b><br/> ' + 
+           s( c.id ) + ' on ' +
+           (new Date(c.committed_date)).toString() + 
+         '</div>',
+         '<br/>',
 
-           '<div>',
-             '<b>Author</b><br/>',
-             '<a href=http://github.com/' + commit.author.login + '>' + commit.author.name + '</a>',
-             ' (' + commit.author.email +')',
-           '</div>',
-           '<br/>',
-           '<div>',
-             '<b>Commit Message</b><br/>',
-             commit.message,
-           '</div>'
-         ];
-         $('i').update( html.join(''));
-      }
+         '<div>',
+           '<b>Author</b><br/>',
+           '<a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
+           ' (' + c.author.email +')',
+         '</div>',
+         '<br/>',
+         '<div>',
+           '<b>Commit Message</b><br/>',
+           c.message,
+         '</div>'
+       ];
+       $('i').update( h.join(''));
+    }
 
-      var showPreview = function() {
-        $('diffoutput').hide();
-        $('f_c_w').show();
-        $('f_h').innerHTML = path;
-      }
+    /* showPreview */
+    var p = function() {
+      $('diffoutput').hide();
+      $('f_c_w').show();
+      $('f_h').innerHTML = path;
+    }
 
-      var showCommitsLog = function() { 
-        var diffWith, diffHead, diffPrevious,
-            commitsHTML = ['<div>'];
-        for( var i = 0; i < commits.length; i++ ) {
-          diffWith = commits.length > 1 ? '<br/>Diff with: ' : '';
-          diffHead = i > 0 ? 
-            '<a href=javascript:void(0) onclick=f.diff(' + 
-                [ '"', commit.id, '","',  
-                  commit.tree, '","', 
-                  commits[i].id, '","',
-                  commits[i].tree, '","',
-                  item.name, '"' 
-                ].join('') +
-              ')>Head</a> '
-              : '';
-          
-          diffPrevious = commits[i+1] ? 
-            ' <a href=javascript:void(0) onclick=f.diff(' + 
-              [ '"', commits[i].id, '","',  
-                commits[i].tree, '","', 
-                commits[i+1].id, '","',
-                commits[i+1].tree, '","',
-                item.name, '"' 
-              ].join('') +
-            ')>Previous</a>'
-            : '';
-          
-          commitsHTML.push(
-            '<div class=ce>' +
-              '<b>' + s(commits[i].id) +'</b>' + ' by ' + commits[i].author.name +
-              diffWith + diffHead + (diffHead && diffPrevious ? ' - ' : '') + diffPrevious +
-            '</div>'
-          );
-        };
-        commitsHTML.push('</div>');
-        $('c_l_w').update( commitsHTML.join('') );
+    /* commits log */
+    var cl = function() { 
+      var dW, dH, dP,
+          csHTML = '<div>';
+      var dl = function(a,b,l) {  // a, b, label
+        return '<a href=javascript:void(0) onclick=f.diff(' + 
+            [ '"', a.id, '","',  
+              a.tree, '","', 
+              b.id, '","',
+              b.tree, '","',
+              a.name, '"' 
+            ].join('') +
+          ')>' + l + '</a> ';      
       };
-      
-      /* query the commits to get a list of commits and info */
-      
-      GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cs) {
-        item.commit = commit = cs[0];  // also assign the item's commit to keep track of folder's latest commit
-        commits = cs;
-        
-        showInfo();
-        
-        if( item.type != 'tree' ) { 
-          showPreview();
-          showCommitsLog();
-        }
-        
-      }.bind(this)});
-    }.bind(this), 200); // time out
-    
-    
+      for( var i = 0; i < cs.length; i++ ) {
+        dW = cs.length > 1 ? '<br/>Diff with: ' : ''; // diffWith
+        dH = i > 0 ? dl( c , cs[i], 'Head') : '' ;      // diffHead
+        dP = cs[i+1] ? dl(cs[i], cs[i+1], 'Previous') : '' ;  // diffPrevious
+
+        csHTML +=
+          '<div class=ce>' +
+            '<b>' + s(cs[i].id) +'</b>' + ' by ' + cs[i].author.name +
+            dW + dH + (dH && dP ? ' - ' : '') + dP +
+          '</div>';
+      };
+      // csHTML.push('</div>');
+      $('c_l_w').update( csHTML + '</div>' );
+    };
+
+    /* query the cs to get a list of cs and info */
+
+    GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cms) { // cms == commits
+      it.c = c = cms[0];  // also assign the it's c to keep track of folder's latest c
+      cs = cms;
+
+      info();
+
+      if( it.type != 'tree' ) { 
+        p();
+        cl();
+      }
+
+    }.bind(this)});
+  }.bind(this), 200); // time out
+
+
   }
   
 
