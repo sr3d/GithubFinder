@@ -73,6 +73,7 @@ window.F = Class.create({
               '<span class=big>Github Finder</span>',
               '<span>',
                 'Repo: http://github.com/<input type=text name="" placeholder=' + this.defaultRepo + ' id=r />',
+                '<span id=brs_w></span>', // branches
                 '<input type=button id=go value=Go onclick=f.browse() />',
               '</span>',
               '<span id=indicator style=display:none>Loading...</span>',
@@ -119,12 +120,14 @@ window.F = Class.create({
       if( repo.length < 2 ) { alert('invalid repository'); return }
       u = this.user_id    = repo[0];
       r = this.repository = repo[1];
+      b = this.branch     = $('brs') ? $F('brs') : b;
     }
     
     for( var i = this.panels.length - 1; i >= 0; i-- )
       (this.panels.pop()).dispose();
 
-    
+      
+    /* Load the master branch */
     GH.Commits.listBranch( u, r, b, { 
       onData: function(commits) { 
         var tree_sha = commits.commits[0].tree;
@@ -132,13 +135,21 @@ window.F = Class.create({
       }.bind(this)
     });
     
-    
+    /* Show the repo info */
     GH.Repo.show( u, r, { 
       onData: function(repo) {
         this.repo = repo;
         this.renderRepoInfo();
       }.bind(this)
     });    
+    
+    /* Show branches info */
+    GH.Repo.listBranches( u, r, { 
+      onData: function(branches) {
+        this.branches = $H(branches);
+        this.renderBranches();
+      }.bind(this)
+    });
     
   }
   
@@ -157,6 +168,20 @@ window.F = Class.create({
     // ];
   }
   
+  ,renderBranches: function() {
+    var html = ['Branch:  <select id=brs>'];
+    this.branches.each(function(b) { 
+      html.push( 
+        '<option ' +
+          //'value=' + b.value + 
+          (this.branch == b.key ? ' selected="selected"' : ' ' ) + '>' +
+          b.key +
+        '</option>'
+      );
+    }.bind(this));
+    html.push('</select>');
+    $('brs_w').innerHTML = html.join();
+  }
   
   ,renderPanel: function( tree_sha, index, item ) { 
     index = (typeof index == 'undefined' ) ? 0 : index;

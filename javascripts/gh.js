@@ -155,6 +155,20 @@ window.GH = {
       var url = GH.api + '/repos/show/' + user_id + '/' + repository;
       new AR( GH.proxy + url, options );
     }
+    
+    ,listBranches: function( user_id, repository, options ) {
+      options = Object.extend({ 
+        onSuccess: function(response) {
+          var branches = (eval('(' + response.responseText + ')')).branches;
+          onData(branches);
+        }
+        ,onData: Prototype.K
+      }, options || {});
+
+      var onData = options.onData; 
+      var url = GH.api + '/repos/show/' + user_id + '/' + repository + '/branches';
+      new AR( GH.proxy + url, options );      
+    }
   }
 };
 
