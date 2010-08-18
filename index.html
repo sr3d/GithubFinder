@@ -6,6 +6,7 @@
   <title>Github File Finder</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" src="javascripts/prototype.js" charset="utf-8"></script> 
+  <script type="text/javascript" src="javascripts/util.js" charset="utf-8"></script>  
   
   <script type="text/javascript" src="javascripts/vendors/difflib.js"></script> 
   <script type="text/javascript" src="javascripts/vendors/diffview.js"></script>   
@@ -18,7 +19,6 @@
   <script type="text/javascript" src="javascripts/diff.js"></script>
 
 
-  <script type="text/javascript" src="data.js"></script>
   <link href="styles.css" media="all" rel="stylesheet" type="text/css" /> 
   <link href="diffview.css" media="all" rel="stylesheet" type="text/css" />   
 </head>
@@ -26,42 +26,17 @@
   <div id="content"></div>
     
 <script type="text/javascript">
-var f;
+var f = 'http://alexle.net/experiments/githubfinder/proxy.php?url=';
 var run = function() { 
-  f = new F( { 
-    // user_id: 'rails'
-    // ,repository: 'rails'
-    // ,branch: 'master'
-    user_id: 'sr3d'
-    ,repository: 'githubfinder'
-    ,branch: 'master'
-  });
+  // proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url=';
+  GH.setProxy('http://alexle.net/experiments/githubfinder/proxy.php?url=')
+  f = new F();
 };
 
 document.on('dom:loaded', function() { 
+  /* enalbe placer holder */
+  pH();  
   run();
-  
-  var enablePlaceHolder = function() { 
-    if( 'placeholder' in (document.createElement('input') ) )
-      return;
-
-    $$('input[placeholder]').each(function(i) { 
-      var t = i.readAttribute('placeholder');
-      var f = function() { 
-        i.value.strip() == t ? i.value = '' : '';
-      };
-      i.on('focus', f);
-      
-      var b = function() { 
-        i.value.strip() == '' ? i.value = t : '';
-      };
-      i.on('blur', b);
-      b();
-    });
-  }  
-  
-  enablePlaceHolder();
-  
 });  
 </script>    
 </body>

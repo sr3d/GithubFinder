@@ -1,17 +1,19 @@
-/* switch to the correct AR */
-if( window.proxy )
-  window.AR = window.proxy.indexOf('./') == 0 ? Ajax.Request : Ajax.JSONRequest;
-
 window.GH = {
   hash: {}
   // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
-  ,proxy: window.proxy ? window.proxy : './proxy.php?url='
+  ,proxy: './proxy.php?url='
   
   ,api: 'http://github.com/api/v2/json'
   
+  /* set the proxy.php url and switch to the correct AR (AjaxRequest) */
+  ,setProxy: function(p) { 
+    this.proxy = p;
+    window.AR = p.indexOf('./') == 0 ? Ajax.Request : Ajax.JSONRequest;    
+  }
+  
   ,Commits: {
     _cache: []
-
+    /* list all commits for a specific branch */
     ,listBranch: function(user_id, repository, branch, options ) {
       options = Object.extend({ 
         onSuccess: function(response) {
@@ -44,6 +46,7 @@ window.GH = {
         ,onData: Prototype.K
       }, options || {});
 
+      
       var onData = options.onData; 
 
       /* hit the cache first */
@@ -172,5 +175,5 @@ window.GH = {
   }
 };
 
-window.AR = GH.proxy.indexOf('./') == 0 ? Ajax.Request :
-              Ajax.JSONRequest;
+// window.AR = GH.proxy.indexOf('./') == 0 ? Ajax.Request :
+//               Ajax.JSONRequest;

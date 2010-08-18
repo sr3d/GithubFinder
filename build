@@ -31,6 +31,7 @@ def minify_to_file( string, type, output )
   stdin, stdout, stderr = Open3.popen3( cmd )
   stdin.write string
   stdin.close
+  puts stderr.read
 end
 
 def string2png( string, output )
@@ -73,7 +74,7 @@ end
 
 js_files = [ 
   'javascripts/vendors/jsonp.js',
-  
+  'javascripts/util.js',
   'javascripts/f.js',
   'javascripts/p.js',
   'javascripts/diff.js',
@@ -81,14 +82,16 @@ js_files = [
   'javascripts/keyboard.js',
   
   'javascripts/vendors/difflib.js',
-  'javascripts/vendors/diffview.js'  
+  'javascripts/vendors/diffview.js',
+
+  'javascripts/app.js'
 ]
 
 puts "minifying js"
 js = minify merge( js_files )
 
 puts "string2png"
-string2png js, release_path + '/code.png'
+string2png js, release_path + '/c.png'
 
 files_to_minify = [ 
   { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
@@ -101,7 +104,7 @@ end
 
 # minify css 
 css = minify(merge([ 'styles.css']), 'css')
-string2png css, release_path + '/css.png'
+string2png css, release_path + '/s.png'
 
 puts "------ Size Report ------"
 
@@ -113,7 +116,6 @@ files_to_skip_counting = [
 
 total_size = 0
 Dir.glob( [release_path + '/*', release_path + '/img/*']  ).each do |file|
-  puts "File: #{file}"
   next if files_to_skip_counting.include? File.basename(file)
   
   puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"

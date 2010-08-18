@@ -1,23 +1,4 @@
-if( typeof console == 'undefined' ) 
-  console = { log: function(){} };
 
-/* Util stuff */
-/* return a truncated s */
-var s = function(h) { return h.substr(0,6);};
-/* grab URL Params */
-var uP = function() { 
-  var url = window.location.href.split('?');
-  var ps = [];
-  if( url.length == 1 ) return ps;
-
-  var pairs = url[1].split('&');
-  var pair;
-  for( var i = 0; i < pairs.length; i++ ) {
-    pair = pairs[i].split('=');
-    ps[ pair[0].toLowerCase() ] = pair[1];
-  }
-  return ps;
-}
 
 /* PluginBase that allows for mixins into an object */
 var PluginBase = Class.create( { 
@@ -74,19 +55,25 @@ window.F = Class.create({
         new FP[i](this);
       }
     }
+
     
     /* if user assigns user_id, repo, branch */
     this.extractUrl();
+
     /* now let's finder begin! */
-    this.openRepo();
+    try{
+      this.openRepo();
+    } catch(e) {
+      alert(e);
+    }
   }
   
   
   ,extractUrl: function() {
     var ps = uP();
-    this.user_id      = ps["user_id"];
-    this.repository   = ps["repo"];
-    this.branch       = ps["branch"] || 'master';
+    if( ps["user_id"] ) this.user_id      = ps["user_id"];
+    if( ps["repo"] )    this.repository   = ps["repo"];
+    if( ps["branch"] )  this.branch       = ps["branch"];
     
   }
   
