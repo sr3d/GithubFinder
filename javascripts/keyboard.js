@@ -1,6 +1,7 @@
-var KB = Class.create( { 
-  initialize: function(f) {
-
+var Keyboard = Class.create( PluginBase, { 
+  initialize: function($super, f) {
+    $super(f);
+    
     document.on('keydown', function(e) { 
       var k = e.which ? e.which : e.keyCode; // keycode
 
@@ -86,13 +87,7 @@ var KB = Class.create( {
       
     });
   }
-  // listen: function() {
-  //   var f = this.getFinder();
-  // }
-  // 
-  // ,getFinder: function() { return window.f; }
-  //   
 });
 
 /* add the plugin to the plugins list */
-window.FP.push(KB)
+window.FP.push(Keyboard);

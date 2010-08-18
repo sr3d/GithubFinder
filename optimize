@@ -10,9 +10,12 @@ files = [
     'img/dir.png',
     'img/la.png',
     'img/la_h.png',
-    'img/txt.png'
-    # 'javascripts/f.js',
-    # 'javascripts/gh.js', 
+    'img/txt.png',
+    
+    'javascripts/f.js',
+    'javascripts/gh.js', 
+    'javascripts/k.js', 
+    
     # 'javascripts/vendors/jsdiff.js' 
     ]
 
