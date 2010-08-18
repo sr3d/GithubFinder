@@ -37,7 +37,7 @@ li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; 
 .tree .ico { background-image: url('./img/dir.gif'); }
 .cur { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
 .cur a { color: white;}
-.file { background-image: none !important;}
+.blob { background-image: none !important;}
 .files a { padding: 3px 15px }
 
 #f_c_w .p {padding: 10px}

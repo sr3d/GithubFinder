@@ -32,7 +32,9 @@ files.each do |file|
   if ['.css', '.js'].include? File.extname(file)
     
     minified_file = "./min/#{File.basename(file)}"
-    cmd = "java -jar bin/yuicompressor-2.4.2.jar #{file} -o #{minified_file}"
+    
+    puts minified_file
+    cmd = "java -jar bin/yuicompressor-2.4.2.jar #{file} -v -o #{minified_file}"
 
     `#{cmd}`
 
