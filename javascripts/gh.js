@@ -58,8 +58,7 @@ window.GH = {
     ,show: function( user_id, repository, sha, options ) {
       var self = this,
           url = GH.api + '/commits/show/' + user_id + '/' + repository + '/' + sha;
-          
-          debugger
+
       options = Object.extend({ 
         onSuccess: function(response) {
           // debugger

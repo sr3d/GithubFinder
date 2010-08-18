@@ -450,7 +450,6 @@ window.P = Class.create({
     this.item     = options.item;
     
     this.render();
-    this.afterRender();
   }
   
   ,dispose: function() {
@@ -491,35 +490,6 @@ window.P = Class.create({
     html.push('</ul>');
 
     return '<div id=p' + this.index + ' data-index=' + this.index +' class=panel>' + html.join('') + '</div>';
-  }
-  
-  ,afterRender: function(){
-    if( !this.item ) { 
-      // console.log("root item, skipping");
-       return;
-    }
-    
-    // console.log("afterRender");
-    // debugger
-    
-    // get the commit log to show the latest changed
-    GH.Commits.show( this.f.user_id, this.f.repository, this.item.commit.id, { 
-      onData: function(commit) {
-        // console.log("afterRender: onData");
-        try{
-        var files = commit.modified; // TODO:  merge and move
-        for( var i = 0; i< files.length; i++ ) {
-          fn = files[i].filename.split('/');
-          fn = fn[ fn.length-1 ];
-          var e = $('p' + this.index ).down('a[data-name="' + fn + '"]');
-          if( e ) e.up('li').addClassName('recent');
-        }
-        
-        } catch(ex) {
-          console.log("ex %o",ex);
-        }
-      }.bind(this)
-    } );
   }
 
 });
