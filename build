@@ -1,0 +1,123 @@
+#!/usr/bin/env ruby
+require 'ftools'
+require 'fileutils'
+require 'rubygems'
+require 'RMagick'
+include Magick
+
+require 'open3'
+
+def merge( files = [] )
+  merged_file = ""
+  files.each do |file|
+    File.open( file, "r") { |f| 
+      merged_file += f.read + "\n" 
+    }
+  end
+  merged_file
+end
+
+def minify( string = '', type = 'js' )
+  cmd = "java -jar bin/yuicompressor-2.4.2.jar --type #{type}"
+  stdin, stdout, stderr = Open3.popen3( cmd )
+  stdin.write string
+  stdin.close
+  stdout.read
+end
+
+def minify_to_file( string, type, output )
+  cmd = "java -jar bin/yuicompressor-2.4.2.jar -v --type #{type} -o #{output}"
+  # puts cmd
+  stdin, stdout, stderr = Open3.popen3( cmd )
+  stdin.write string
+  stdin.close
+end
+
+def string2png( string, output )
+  image = Magick::Image.new 1,string.length
+  for i in 0 .. string.length
+    color = '#%02X0000' % string[i]
+    pixel = Magick::Pixel.from_color color
+    image.pixel_color 0, i, pixel
+  end
+  image.compression = ZipCompression
+  image.write("png8:"+ output)
+  
+  image = nil
+end
+
+
+
+
+release_path = 'app'
+
+# Clean up
+FileUtils.rm_rf release_path
+File.makedirs release_path + '/img'
+
+files_to_copy = {
+  'index.app.html'            => 'index.html',
+  'img/dir.gif'               => 'img/dir.gif',  
+  'img/la.gif'                => 'img/la.gif',
+  'img/la_h.gif'              => 'img/la_h.gif',  
+  'img/txt.gif'               => 'img/txt.gif',
+  'javascripts/prototype.js'  => 'prototype.js'
+}
+
+files_to_copy.each do |src,dest|
+  dest = release_path + '/' + dest
+  puts "cp #{src} to #{dest}"
+  File.copy src, dest
+end
+
+
+js_files = [ 
+  'javascripts/vendors/jsonp.js',
+  
+  'javascripts/f.js',
+  'javascripts/p.js',
+  'javascripts/diff.js',
+  'javascripts/gh.js', 
+  'javascripts/keyboard.js',
+  
+  'javascripts/vendors/difflib.js',
+  'javascripts/vendors/diffview.js'  
+]
+
+puts "minifying js"
+js = minify merge( js_files )
+
+puts "string2png"
+string2png js, release_path + '/code.png'
+
+files_to_minify = [ 
+  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
+  { :files => [ 'styles.css'], :output => 'styles.css', :type => 'css' }
+]
+files_to_minify.each do |group|
+  puts "minify #{group[:output]}"
+  minify_to_file merge(group[:files]), group[:type], release_path + '/' + group[:output]
+end
+
+# minify css 
+css = minify(merge([ 'styles.css']), 'css')
+string2png css, release_path + '/css.png'
+
+puts "------ Size Report ------"
+
+files_to_skip_counting = [ 
+  'prototype.js',
+  'styles.css'
+]
+
+
+total_size = 0
+Dir.glob( [release_path + '/*', release_path + '/img/*']  ).each do |file|
+  puts "File: #{file}"
+  next if files_to_skip_counting.include? File.basename(file)
+  
+  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
+  total_size += File.stat( file ).size  
+end
+puts "Total size:         #{total_size}"
+puts "10K Limit:          #{- total_size + 10240}"

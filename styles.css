@@ -34,10 +34,10 @@ textarea { width: 400px; height: 500px}
 
 #info_wrapper .big { padding: 10px; border-bottom: 1px solid #DCDCDC;}
 
-.folder { background: #E8FFFF url('./img/la.png') no-repeat 95% 50%; font-weight: bold; }
-  .ico { margin: 2px; background:url('./img/txt.png') no-repeat top left; padding: 3px 6px; }
-  .folder .ico { background: url('./img/dir.png') no-repeat top left; }
-.current { background: #3D8CFF url('./img/la_h.png') no-repeat 95% 50% !important;}
+.folder { background: #E8FFFF url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
+  .ico { margin: 2px; background:url('./img/txt.gif') no-repeat top left; padding: 3px 6px; }
+  .folder .ico { background: url('./img/dir.gif') no-repeat top left; }
+.current { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
 .current a { color: white;}
 .file { background-image: none !important;}
 .recent a { color: red; }
