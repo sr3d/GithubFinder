@@ -388,10 +388,9 @@ window.F = Class.create({
             : '';
           
           commitsHTML.push(
-            '<div class=commit_entry>' +
+            '<div class=ce>' +
               '<b>' + s(commits[i].id) +'</b>' + ' by ' + commits[i].author.name +
               diffWith + diffHead + (diffHead && diffPrevious ? ' - ' : '') + diffPrevious +
-              // '(tree: ' + s(commits[i].tree) + ')' +
             '</div>'
           );
         };
@@ -430,11 +429,7 @@ window.F = Class.create({
     for( var i = 0, len = text.length; i < len; i++ ) {
       lineNumbers.push( '<span>' + (i + 1) + "</span>\n");
       
-      lines.push( [ 
-        '<div class=l>',
-          text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '<br/>',
-        '</div>'
-      ].join(''));
+      lines.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '' );
 
       // count actual loc
       sloc += text[i] ? 1 : 0;
@@ -458,7 +453,7 @@ window.F = Class.create({
           
             '<td width=100% valign=top>',
               '<pre class=code>',
-                lines.join(''),
+                lines.join("\n"),
               '</pre>',
             '</td>',
           '</tr>',
