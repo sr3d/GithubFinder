@@ -1,7 +1,8 @@
 /* make sure we have console */
-if( typeof console == 'undefined' ) 
+/*
+;if( typeof(console) == 'undefined' ) 
   console = { log: function(){} };
-  
+  */
 /* placeholder */
 // var pH = function() { 
 //   if( 'placeholder' in (document.createElement('input') ) )
@@ -28,19 +29,17 @@ if( typeof console == 'undefined' )
 /* Util stuff */
 
 /* return a truncated sha  */
-var s = function(h) { return h.substr(0,6);};
+var s = function(h) { return h.substr(0,6); };
 
 /* parse URL Params as a hash with key are lowered case.  (Doesn't handle duplicated key). */
 var uP = function() { 
-  var url = window.location.href.split('?');
-  var ps = [];
+  var ps = [],url = window.location.href.split('?');
   if( url.length == 1 ) return ps;
 
-  var pairs = url[1].split('&');
-  var pair;
+  var pair,pairs = url[1].split('&');
   for( var i = 0; i < pairs.length; i++ ) {
     pair = pairs[i].split('=');
     ps[ pair[0].toLowerCase() ] = pair[1];
   }
   return ps;
-}
+};

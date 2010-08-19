@@ -1,3 +1,11 @@
+;window.FP = [];
+
+var PluginBase = Class.create( { 
+  initialize: function(o) {
+    if( !this.mixin ) this.mixin = {};
+    Object.extend( o, this.mixin );
+  }
+} );
 /* Diff plugin
   require difflib and diffview
 */
@@ -17,12 +25,12 @@ var Diff = Class.create( PluginBase, {
           file2 = file;
 
         if( flag < 2 ) {
-          // console.log("pending request");
+          // console.lo(g"pending request");
           return;
         }
         //       
         // console.log("file1 %o",file1);
-        // console.log("file2 %o",file2);
+        // console.log("fil2e %o",file2);
         try{
           
           file1 = difflib.stringAsLines(file1);
@@ -37,7 +45,7 @@ var Diff = Class.create( PluginBase, {
             newTextLines:     file2,
             opcodes:          opc,
             baseTextName:     'Commit: ' + s(sha1) + ' (tree: '+ s(tree1) + ')',
-            newTextName:      'Commit: ' + s(sha2) + ' (tree: '+ s(tree2) + ')',
+            newTextName:      'Commit: ' + s(sha2) + ' (tree: '+ s(tree2) + ')'
           });
           dO.appendChild( node );
         } catch(ex) {

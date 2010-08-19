@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+require 'ftools'
+require 'fileutils'
+require 'rubygems'
+require 'RMagick'
+include Magick
+
+require 'open3'
+
+def string2png( string, output )
+  size = string.length / 2 + 1 
+  image = Magick::Image.new size, size # 1,string.length
+  for i in 0 .. string.length
+    color = '#%02X0000' % string[i]
+    pixel = Magick::Pixel.from_color color
+    image.pixel_color( i / size ,( i % size ), pixel)
+  end
+  image.compression = ZipCompression
+  image.write("png8:"+ output)
+  
+  image = nil
+end
+
+#32768 = 2^15  // 2^13 fail ?
+# fail at 8192 = 32768 /4 
+#string2png "a" * 10000, 'ie9bug.png'
+
+
+def string2pngs(string,output)
+  images_count = string.length / 8192 # max
+  
+  i = 0
+  while i < string.length
+    for j .. images_count
+      image_size = Math.min( 8192 )
+      image = Magick::Image.new 1, 8192 # 1,string.length
+      for k in 0 .. string.length
+        color = '#%02X0000' % string[i]
+        pixel = Magick::Pixel.from_color color
+        image.pixel_color( i / size ,( i % size ), pixel)
+        
+        
+        i += 1
+      end
+      image.compression = ZipCompression
+      image.write("png8:"+ output)
+      
+      
+    end
+  end 
+  
+
+  image = nil  
+end
+
+
+

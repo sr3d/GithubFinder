@@ -1,4 +1,4 @@
-var Keyboard = Class.create( PluginBase, { 
+;var Keyboard = Class.create( PluginBase, { 
   initialize: function($super, f) {
     $super(f);
     

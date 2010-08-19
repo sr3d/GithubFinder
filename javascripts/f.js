@@ -1,11 +1,5 @@
 /* PluginBase that allows for mixins into an object */
-var PluginBase = Class.create( { 
-  initialize: function(o) {
-    if( !this.mixin ) this.mixin = {};
-    Object.extend( o, this.mixin );
-  }
-} );
-
+;( function() { 
 window.FP = [];  // finder plugins
 
 window.F = Class.create({
@@ -438,3 +432,5 @@ window.F = Class.create({
     $('f').update( html.join('') ).show();
   }
 });
+
+})();

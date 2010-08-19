@@ -1,4 +1,4 @@
-window.GH = {
+;window.GH = {
   hash: {}
   // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   ,proxy: './proxy.php?url='

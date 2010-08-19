@@ -1,19 +1,12 @@
 /* Panel */
-window.P = Class.create({
+;window.P = Class.create({
   initialize: function(f, options) { 
-    options = Object.extend( {
-      tree:         []
-      ,index:       0
-      ,name:        ''
-      ,item:        null
-    }, options || {});
-    
     this.f        = f;
-    this.tree     = options.tree;
-    this.index    = options.index;
+    this.tree     = options.tree  || [];
+    this.index    = options.index || 0 ;
     this.name     = options.name;
     this.item     = options.item;
-    
+
     this.r();
   }
   
@@ -31,7 +24,7 @@ window.P = Class.create({
 
     for( var i = 0; i < t.length; i++ ) {
       it = t[i];
-      h += '<li class=' + it.type +'>' + 
+      h += '<li class=' + it.type + '>' + 
               '<span class=ico>' +
                 '<a href=# data-sha=' + it.sha + ' data-name="' + it.name + '">' + it.name + '</a>' +
               '</span>' +

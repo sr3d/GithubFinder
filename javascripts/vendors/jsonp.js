@@ -17,7 +17,7 @@
  *
  * See examples below for usage.
  */
-JSP = Class.create(Ajax.Base, (function() {
+window.JSP = Class.create(Ajax.Base, (function() {
   var id = 0, head = document.getElementsByTagName('head')[0];
   return {
     initialize: function($super, url, options) {

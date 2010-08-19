@@ -16,6 +16,8 @@ var x = function(z, m ) {  // image, callback
     for(var i= 0; i < b.length; i += 4) {
       if( b[i] > 0 )
         s += String.fromCharCode(b[i]);
+      else
+        console.log('b[i] == 0 at ' + i);
     }
     m(s);
   }
@@ -25,10 +27,11 @@ var x = function(z, m ) {  // image, callback
 d.on('dom:loaded', function() { 
   /* execute */
   x('c.png', function(s){
-    console.log(s);
+    $('log').value = s;
     
     /* both CSS and JS are bundled up into 1 file*/
     s = s.split('~10K~');
+    
 
     /* init CSS */
     var c = d.createElement('style');

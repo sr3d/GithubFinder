@@ -144,4 +144,4 @@ diffview = {
 		
 		return node;
 	}
-}
+};
