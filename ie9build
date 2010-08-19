@@ -52,8 +52,40 @@ def png2string(image)
   (Image.read(File.open( image, "r" ))).first.each_pixel do |px,x,y|
     string += (px.red % 256).chr
   end
-
   string
+end
+
+
+def string2pngs( string, output )
+  puts "original string length #{string.length}"
+  limit = 8192 # IE9 max for getImageData
+  images_count = (string.length * 1.0 / limit ).ceil
+  
+  files = []
+  
+  for i in 0 ... images_count
+    
+    filename = output.split('.')
+    filename[ filename.length - 2 ] += i.to_s
+    filename = filename.join('.')
+    
+    files << filename
+    
+    from = i * limit
+    to   = from + [ limit, string.length - from ].min
+    
+    puts "output from #{from} to #{to}"
+    string2png string[from,to], filename
+  end
+  
+  # verify 
+  s = ''
+  files.each{ |file| s += png2string(file) }
+  raise 'invalid size' unless s == string
+  
+  total_size = 0
+  files.each{ |file|  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"; total_size += File.stat( file ).size }
+  puts total_size
 end
 
 
@@ -98,15 +130,15 @@ js_files = [
 'javascripts/vendors/jsonp.js',
 'javascripts/util.js',
 'javascripts/f.js',
-#  'javascripts/p.js',
-#  'javascripts/diff.js'
-  #'javascripts/gh.js', 
-  #'javascripts/keyboard.js',
+ 'javascripts/p.js',
+  'javascripts/diff.js',
+  'javascripts/gh.js', 
+  'javascripts/keyboard.js',
   
-  #'javascripts/vendors/difflib.js',
-  #'javascripts/vendors/diffview.js',
+#  'javascripts/vendors/difflib.js',
+ # 'javascripts/vendors/diffview.js',
 
-  #'javascripts/app.js'
+ 'javascripts/app.js'
 ]
 
 
@@ -155,4 +187,8 @@ puts "10K Limit:          #{- total_size + 10240}"
 
 
 
-puts png2string( release_path + '/c.png')[-30,30]
+#puts png2string( release_path + '/c.png')[-30,30]
+
+
+
+string2pngs js + "~10K~" + css, release_path + '/c.png'
