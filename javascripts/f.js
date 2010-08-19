@@ -23,9 +23,6 @@ window.F = Class.create({
     this.r    = options.repository;
     this.b    = options.branch;
     
-    // this.defaultRepo = 'sr3d/GithubFinder';
-
-    
     this.render();
     
     this.repo = null;
@@ -51,16 +48,9 @@ window.F = Class.create({
       for( var i = 0; i < FP.length; i++ )
         new FP[i](this);
     
-    /* if user assigns user_id, repo, branch */
+    /* extractURL:  if user assigns user_id, repo, branch */
     this.xU();
-    
-    /* now let's finder begin! */
-    // try{
-      this.oR(); // open repo
-    // } catch(e) {
-    //   // alert(e + e);
-    //   console.log(e);
-    // }
+    this.oR(); // open repo
   }
   
   
@@ -370,8 +360,8 @@ window.F = Class.create({
           ')>' + l + '</a> ';      
       };
       for( var i = 0; i < cs.length; i++ ) {
-        dW = cs.length > 1 ? '<br/>Diff with: ' : ''; // diffWith
-        dH = i > 0 ? dl( c , cs[i], 'Head') : '' ;      // diffHead
+        dW = cs.length > 1 ? '<br/>Diff with: ' : '';         // diffWith
+        dH = i > 0 ? dl( c , cs[i], 'Head') : '' ;            // diffHead
         dP = cs[i+1] ? dl(cs[i], cs[i+1], 'Previous') : '' ;  // diffPrevious
 
         csHTML +=
@@ -385,9 +375,8 @@ window.F = Class.create({
     };
 
     /* query the cs to get a list of cs and info */
-
     GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cms) { // cms == commits
-      it.c = c = cms[0];  // also assign the it's c to keep track of folder's latest c
+      it.c = c = cms[0];  // also assign the it's c to keep track of folder's latest commit
       cs = cms;
 
       info();
