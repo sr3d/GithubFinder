@@ -77,4 +77,4 @@ pre, #code, .meta, .diff { font:10px Monaco,monospace; margin: 0; }
 
 
 /* extension stuff */
-.resize { cursor: col-resize; float: left; background-color: #DCDCDC; border-left: 1px solid #CCC; border-right: 1px solid #CCC;}
+.resize { cursor: col-resize; float: left; background-color: #DCDCDC;border-right: 1px solid #CCC;}

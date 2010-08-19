@@ -212,7 +212,7 @@ CodeHighlighter.addStyle("css", {
 	},
 	units : {
 		exp  : /([0-9])(em|en|px|%|pt)\b/,
-		replacement : "$1<span class=\"$0\">$2"
+		replacement : "$1<span class=\"$0\">$2</span>"
 	},
 	urls : {
 		exp  : /url\([^\)]*\)/
