@@ -73,25 +73,25 @@ CodeHighlighter.addStyle = function(name, rules) {
 		ignoreCase : arguments[2] || false
 	})
 
-	function setEvent() {
-		// set highlighter to run on load (use LowPro if present)
-		if (typeof Event != 'undefined' && typeof Event.onReady == 'function')
-		  return Event.onReady(CodeHighlighter.init.bind(CodeHighlighter));
-
-		var old = window.onload;
-
-		if (typeof window.onload != 'function') {
-			window.onload = function() { CodeHighlighter.init() };
-		} else {
-			window.onload = function() {
-				old();
-				CodeHighlighter.init();
-			}
-		}
-	}
-
-	// only set the event when the first style is added
-	if (this.styleSets.length==1) setEvent();
+  // function setEvent() {
+  //  // set highlighter to run on load (use LowPro if present)
+  //  if (typeof Event != 'undefined' && typeof Event.onReady == 'function')
+  //    return Event.onReady(CodeHighlighter.init.bind(CodeHighlighter));
+  // 
+  //  var old = window.onload;
+  // 
+  //  if (typeof window.onload != 'function') {
+  //    window.onload = function() { CodeHighlighter.init() };
+  //  } else {
+  //    window.onload = function() {
+  //      old();
+  //      CodeHighlighter.init();
+  //    }
+  //  }
+  // }
+  // 
+  // // only set the event when the first style is added
+  // if (this.styleSets.length==1) setEvent();
 }
 
 CodeHighlighter.init = function() {
@@ -99,11 +99,17 @@ CodeHighlighter.init = function() {
 	if ("a".replace(/a/, function() {return "b"}) != "b") return; // throw out Safari versions that don't support replace function
 	// throw out older browsers
 
-	var codeEls = document.getElementsByTagName("CODE");
+  // var codeEls = document.getElementsByTagName("CODE");
+  
+  // HACK:  
+  var codeEls = [$('code')];
+  
 	// collect array of all pre elements
 	codeEls.filter = function(f) {
 		var a =  new Array;
-		for (var i = 0; i < this.length; i++) if (f(this[i])) a[a.length] = this[i];
+		for (var i = 0; i < this.length; i++) 
+		  if (f(this[i])) 
+		    a[a.length] = this[i];
 		return a;
 	}
 
@@ -134,7 +140,7 @@ CodeHighlighter.init = function() {
 			while (rule = rules[i++]) {
 				if (arguments[j]) {
 					// if no custom replacement defined do the simple replacement
-					if (!rule.replacement) return "<span class=\"" + rule.className + "\">" + arguments[0] + "";
+					if (!rule.replacement) return "<span class=\"" + rule.className + "\">" + arguments[0] + "</span>";
 					else {
 						// replace $0 with the className then do normal replaces
 						var str = rule.replacement.replace("$0", rule.className);
@@ -150,10 +156,11 @@ CodeHighlighter.init = function() {
 		// clear rules array
 		var parsed, clsRx = new RegExp("(\\s|^)" + styleSet.name + "(\\s|$)");
 		rules.length = 0;
-
-		// get stylable elements by filtering out all code elements without the correct className
-		var stylableEls = codeEls.filter(function(item) { return clsRx.test(item.className) });
-
+    
+    // // get stylable elements by filtering out all code elements without the correct className
+    var stylableEls = codeEls.filter(function(item) { return clsRx.test(item.className) });
+    // var stylableEls = codeEls;
+    
 		// add style rules to parser
 		for (var className in styleSet.rules) addRule(className, styleSet.rules[className]);
 
@@ -169,17 +176,11 @@ CodeHighlighter.init = function() {
 				});
 				parsed = parsed.replace(/\n( *)/g, function() {
 					var spaces = "";
-					for (var i = 0; i < arguments[1].length; i++) spaces+= " ";
+					for (var i = 0; i < arguments[1].length; i++) spaces+= "&nbsp;";
 					return "\n" + spaces;
 				});
-				parsed = parsed.replace(/\t/g, "    ");
-				parsed = parsed.replace(/\n(<\/\w+>)?/g, "
-$1").replace(/
-[\n\r\s]*
-/g, "
-
-
-");
+				parsed = parsed.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+				parsed = parsed.replace(/\n(<\/\w+>)?/g, "<br />$1").replace(/<br \/>[\n\r\s]*<br \/>/g, "<p><br></p>");
 
 			} else parsed = parse(stylableEls[i].innerHTML, styleSet.ignoreCase);
 
@@ -226,7 +227,7 @@ CodeHighlighter.addStyle("ruby",{
 		exp  : /\(|\)/
 	},
 	string : {
-		exp  : /'[^']*'|"[^"]*"/
+		exp  : /'[^'\\]*(\\.[^'\\]*)*'|"[^"\\]*(\\.[^"\\]*)*"|\%w\(.*\)|`[^`\\]*(\\.[^`\\]*)*`/
 	},
 	keywords : {
 		exp  : /\b(do|end|self|class|def|if|module|yield|then|else|for|until|unless|while|elsif|case|when|break|retry|redo|rescue|require|raise)\b/
@@ -234,9 +235,6 @@ CodeHighlighter.addStyle("ruby",{
 	/* Added by Shelly Fisher (shelly@agileevolved.com) */
 	symbol : {
 	  exp : /([^:])(:[A-Za-z0-9_!?]+)/
-	},
-	ivar : {
-	  exp : /\@[A-Za-z0-9_!?]+/
 	}
 });
 

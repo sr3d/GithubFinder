@@ -393,8 +393,7 @@ window.F = Class.create({
     for( var i = 0, len = text.length; i < len; i++ ) {
       ln.push( '<span>' + (i + 1) + "</span>\n");
 
-      l.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : '' );
-
+      l.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : "" );
       // count actual loc
       sloc += text[i] ? 1 : 0;
     }
@@ -409,14 +408,14 @@ window.F = Class.create({
       '<div id=f_c_s>',  // file content scroll
         '<table cellspacing=0 cellpadding=0>',
           '<tr>',
-            '<td>',
+            '<td valign=top>',
               '<pre class=ln>',
                 ln.join(''),
               '</pre>',
             '</td>',
 
             '<td width=100% valign=top>',
-              '<pre class=code>',
+              '<pre id=code>',
                 l.join("\n"),
               '</pre>',
             '</td>',

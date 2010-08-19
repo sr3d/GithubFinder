@@ -52,13 +52,13 @@ li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; 
 /* commit entry */
 .ce { padding: 10px 0; border-bottom: 1px solid #CCC; }
 
-pre, .meta, .diff { font:10px Monaco,monospace; margin: 0; }
+pre, #code, .meta, .diff { font:10px Monaco,monospace; margin: 0; }
 
 .meta, .diff thead th { background-color: #EEE; color:#333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCC}
 .meta span { margin-left: 5px; padding-left: 9px;}
 
 .ln, .diff th { background-color:#ECECEC; border-right:1px solid #DDD; color:#AAA; text-align: right; padding: 5px 5px }
-.code { padding: 5px;}
+#code { padding: 5px;}
 /*.hover { background-color: #FFFFC7; }*/
 
 .diffoutput { border: 1px solid #DDD}

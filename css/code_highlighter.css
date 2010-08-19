@@ -1,0 +1,24 @@
+#code .comment {
+	color : green;
+}
+
+#code .string {
+	color : teal;
+}
+
+#code .keywords {
+	color : navy; font-weight: bold;
+}
+
+#code .global {
+	color : blue;
+}
+
+#code .brackets {
+	color : navy;
+}
+
+/* for ruby */
+#code .symbol { 
+  font-weight: bold;
+}
