@@ -1,24 +1,14 @@
-#code .comment {
-	color : green;
-}
+#code { background-color: #191919; color: white; }
+#code .comment { color: #5E5A5F; }
+#code .string { color: #93996D; }
+#code .keywords { color: #CAA76F;}
+#code .brackets { color: #F5F8F8; }
+#code .symbol { color: #C06F52; }
 
-#code .string {
-	color : teal;
-}
-
-#code .keywords {
-	color : navy; font-weight: bold;
-}
-
-#code .global {
-	color : blue;
-}
-
-#code .brackets {
-	color : navy;
-}
-
-/* for ruby */
-#code .symbol { 
-  font-weight: bold;
-}
+/* on white */
+#code.white .comment { color : green; }
+#code.white .string { color : teal; }
+#code.white .keywords { color : navy; }
+#code.white .global { color : blue; }
+#code.white .brackets { color : navy; }
+#code.white .symbol { font-weight: bold; }

@@ -221,7 +221,7 @@ CodeHighlighter.addStyle("css", {
 
 CodeHighlighter.addStyle("ruby",{
 	comment : {
-		exp  : /#[^\n]+/
+		exp  : /#[^\n]*/
 	},
 	brackets : {
 		exp  : /\(|\)/
@@ -230,7 +230,7 @@ CodeHighlighter.addStyle("ruby",{
 		exp  : /'[^'\\]*(\\.[^'\\]*)*'|"[^"\\]*(\\.[^"\\]*)*"|\%w\(.*\)|`[^`\\]*(\\.[^`\\]*)*`/
 	},
 	keywords : {
-		exp  : /\b(do|end|self|class|def|if|module|yield|then|else|for|until|unless|while|elsif|case|when|break|retry|redo|rescue|require|raise)\b/
+		exp  : /\b(do|end|self|class|def|if|module|yield|then|else|for|until|unless|while|elsif|case|when|break|retry|redo|rescue|require|raise|extend)\b/
 	},
 	/* Added by Shelly Fisher (shelly@agileevolved.com) */
 	symbol : {
