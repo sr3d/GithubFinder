@@ -4,7 +4,7 @@
 var Diff = Class.create( PluginBase, {
   mixin: {
     diff: function( sha1, tree1, sha2, tree2, filename ) {
-      // debugger
+
       $('f').hide();
       var file1, file2, diff, flag = 0;
       
@@ -17,6 +17,7 @@ var Diff = Class.create( PluginBase, {
           file2 = file;
 
         if( flag < 2 ) {
+          // console.log("pending request");
           return;
         }
         //       
@@ -51,6 +52,8 @@ var Diff = Class.create( PluginBase, {
         GH.Tree.show( u, r, b, sha, { onData: function(tree) {
           for( var i = 0; i < tree.length; i++ ) {
             if( tree[i].name == fn ){
+              // console.log( 'found file' );
+              // console.log("tree %o",tree);
               // now request
               GH.Blob.show( u, r, tree[i].sha, { onSuccess: function(res) {
                 try{ 

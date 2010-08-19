@@ -25,6 +25,8 @@ var x = function(z, m ) {  // image, callback
 d.on('dom:loaded', function() { 
   /* execute */
   x('c.png', function(s){
+    console.log(s);
+    
     /* both CSS and JS are bundled up into 1 file*/
     s = s.split('~10K~');
 

@@ -5,24 +5,28 @@
 <head>
   <title>Github File Finder</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" src="javascripts/prototype.js" charset="utf-8"></script>
-  <script type="text/javascript" src="javascripts/bootstrap.js" charset="utf-8"></script>  
+  <script type="text/javascript" src="javascripts/prototype.js" charset="utf-8"></script> 
+  <script type="text/javascript" src="min/util.js" charset="utf-8"></script>  
+  
+  <script type="text/javascript" src="min/difflib.js"></script> 
+  <script type="text/javascript" src="min/diffview.js"></script>   
+  <script type="text/javascript" src="min/jsonp.js"></script> 
+  
+  <script type="text/javascript" src="min/gh.js"></script>
+  <script type="text/javascript" src="min/p.js"></script>  
+  <script type="text/javascript" src="min/f.js"></script>
+  <script type="text/javascript" src="min/keyboard.js"></script>
+  <script type="text/javascript" src="min/diff.js"></script>
 
   <link href="styles.css" media="all" rel="stylesheet" type="text/css" /> 
-  <link href="diffview.css" media="all" rel="stylesheet" type="text/css" />
   <script type="text/javascript">
   var f;
-  var codePng = 'code.png';
-  var run = function() { 
-    f = new F( { 
-      user_id: 'rails'
-      ,repository: 'rails'
-      ,branch: 'master'
-    });
-  };
+  document.on('dom:loaded', function() { 
+    GH.setProxy('./proxy.php?url=');
+    window.f = new F();
+  });  
   </script>
 </head>
 <body>
-  <div id="content"></div>
 </body>
 </html>

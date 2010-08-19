@@ -62,7 +62,7 @@ window.F = Class.create({
   }
   
   ,render: function() { 
-    document.body.insert(this.h());
+    $(document.body).insert(this.h());
     this.psW  = $('ps_w');
     this.bW = $('b_w');
     // debugger

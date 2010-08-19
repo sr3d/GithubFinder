@@ -8,12 +8,10 @@ var Keyboard = Class.create( PluginBase, {
       var cI = f.cI,
           pI = f.pI;
       
-      var p = f.ps[pI]; // panel
+      var p = f.ps[pI];     // panel
       var t = p.tree;       // the panel's tree
       
-      // e.stop();
-      
-      // console.log("k %o",k);
+
       var d = function() { 
         if( t[ ++cI ] ) {
           var item = t[cI]; 
@@ -49,7 +47,7 @@ var Keyboard = Class.create( PluginBase, {
       
       
       var r = function() {
-        if( t[cI].type != 'tree' ) return;
+        if( !t[cI] || t[cI].type != 'tree' ) return;
         
         if( f.ps[++pI] ) {
           t = f.ps[pI].tree;
