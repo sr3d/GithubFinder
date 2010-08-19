@@ -262,6 +262,11 @@ CodeHighlighter.addStyle("javascript",{
 	comment : {
 		exp  : /(\/\/[^\n]*(\n|$))|(\/\*[^*]*\*+([^\/][^*]*\*+)*\/)/
 	},
+	parameter: {
+		exp: /\bfunction\s?\((.+)\)/
+    // ,replacement: "<span class='parameter'>$1</span>"
+	},
+		
 	brackets : {
 		exp  : /\(|\)/
 	},
@@ -272,8 +277,10 @@ CodeHighlighter.addStyle("javascript",{
 		exp  : /\b(arguments|break|case|continue|default|delete|do|else|false|for|function|if|in|instanceof|new|null|return|switch|this|true|typeof|var|void|while|with)\b/
 	},
 	global : {
-		exp  : /\b(toString|valueOf|window|element|prototype|constructor|document|escape|unescape|parseInt|parseFloat|setTimeout|clearTimeout|setInterval|clearInterval|NaN|isNaN|Infinity)\b/
-	}
+		exp  : /\b(toString|valueOf|window|element|prototype|constructor|document|escape|unescape|parseInt|parseFloat|setTimeout|clearTimeout|setInterval|clearInterval|NaN|isNaN|Infinity|String|Numeric|Array)\b/
+	},
+	
+
 });
 
 CodeHighlighter.addStyle("yaml", {

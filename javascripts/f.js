@@ -393,7 +393,7 @@ window.F = Class.create({
     for( var i = 0, len = text.length; i < len; i++ ) {
       ln.push( '<span>' + (i + 1) + "</span>\n");
 
-      l.push( text[i] ? text[i].replace('<', '&lt;').replace('>', '&gt;') : "" );
+      l.push( text[i] ? text[i].replace(/&/g, '&amp;').replace(/</g, '&lt;') : "" );
       // count actual loc
       sloc += text[i] ? 1 : 0;
     }
