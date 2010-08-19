@@ -11,30 +11,25 @@
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/vendors/difflib.js"></script> 
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/vendors/diffview.js"></script>   
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/vendors/jsonp.js"></script> 
+  <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/util.js"></script>
   
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/gh.js"></script>
+  <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/p.js"></script>
   <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/f.js"></script>
+  <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/keyboard.js"></script>
+  <script type="text/javascript" src="http://github.com/sr3d/GithubFinder/raw/master/javascripts/diff.js"></script>
+  
   <link href="http://github.com/sr3d/GithubFinder/raw/master/styles.css" media="all" rel="stylesheet" type="text/css" /> 
-  <link href="http://github.com/sr3d/GithubFinder/raw/master/diffview.css" media="all" rel="stylesheet" type="text/css" />   
 </head>
 <body>
-  <div id="content"></div>
     
 <script type="text/javascript">
 var f;
-window.proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url=';
-
-var run = function() { 
-  f = new F( { 
-    user_id:      'nvartolomei'
-    ,repository:  'Mongrel2'
-    ,branch:      'master'
-  }); 
-};
-
 document.on('dom:loaded', function() { 
-  run();
-});  
+  GH.setProxy('http://alexle.net/experiments/githubfinder/proxy.php?url=')
+  f = new F();
+});
+
 </script>
 
 <script type="text/javascript">
