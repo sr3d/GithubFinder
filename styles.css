@@ -19,7 +19,7 @@ a:active { outline: none; }
 #r_w span { margin-right: 20px; }
 #in { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px;}
 
-#b_w { width: 80%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
+#b_w { width: 80%; position: relative; /*overflow: hidden;*/ overflow-x: auto; height: 300px; float: left;}
 .panel { 
 float: left; width: 200px; border-right: 1px solid #CCC; overflow: hidden; overflow-y: auto;
 height: 300px }
@@ -74,3 +74,7 @@ pre, #code, .meta, .diff { font:10px Monaco,monospace; margin: 0; }
 #diffoutput { border-bottom: 1px solid #CCC}
 
 #footer { padding: 10px; border-top: 1px solid #CCC}
+
+
+/* extension stuff */
+.resize { cursor: col-resize; float: left; background-color: #DCDCDC; border-left: 1px solid #CCC; border-right: 1px solid #CCC;}

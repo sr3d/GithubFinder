@@ -1,5 +1,5 @@
 /* Panel */
-;window.P = Class.create({
+window.P = Class.create({
   initialize: function(f, options) { 
     this.f        = f;
     this.tree     = options.tree  || [];

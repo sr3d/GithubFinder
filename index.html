@@ -23,7 +23,8 @@
 
   <script type="text/javascript" src="javascripts/plugins/code_highlighter.js"></script>
   <script type="text/javascript" src="javascripts/vendors/code_highlighter.js"></script>
-
+  
+  <script type="text/javascript" src="javascripts/plugins/resizeable_panel.js"></script>
 
   <link href="styles.css" media="all" rel="stylesheet" type="text/css" /> 
   
@@ -35,7 +36,7 @@ var run = function() {
   // proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url=';
   // GH.setProxy('http://alexle.net/experiments/githubfinder/proxy.php?url=')
   GH.setProxy('./proxy.php?url=');
-  f = new F();
+  f = new F({ user_id: 'sr3d', repository: 'GithubFinder' });
 };
 
 document.on('dom:loaded', function() { 

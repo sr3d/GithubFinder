@@ -34,6 +34,7 @@ var s = function(h) { return h.substr(0,6); };
 /* parse URL Params as a hash with key are lowered case.  (Doesn't handle duplicated key). */
 var uP = function() { 
   var ps = [],url = window.location.href.split('?');
+  url = url[0].split('#');
   if( url.length == 1 ) return ps;
 
   var pair,pairs = url[1].split('&');
