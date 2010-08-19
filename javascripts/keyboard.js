@@ -3,8 +3,11 @@ var Keyboard = Class.create( PluginBase, {
     $super(f);
     
     document.on('keydown', function(e) { 
-      var k = e.which ? e.which : e.keyCode; // keycode
-
+      if(e.findElement().tagName == 'INPUT') return; //  user has focus in something, bail out.
+      
+      // var k = e.which ? e.which : e.keyCode; // keycode
+      var k = e.which || e.keyCode; // keycode
+      
       var cI = f.cI,
           pI = f.pI;
       

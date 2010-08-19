@@ -30,6 +30,7 @@ window.GH = {
           
       o.onSuccess = function(res) {
         var cs = eval('(' + res.responseText +')').commits;
+        // if(!cs) { alert('not found'); return;}
         /* cache the commits */
         self._cache[ url ] = cs;
         onData( cs );
@@ -75,7 +76,7 @@ window.GH = {
           
       o.onSuccess = function(res) {
         var tree = (eval('(' + res.responseText + ')')).tree;
-        
+        // if(!tree) { alert('not found'); return;}
         tree = tree.sort(function(a,b){
           // blobs always lose to tree
           if( a.type == 'blob' && b.type == 'tree' ) 

@@ -147,8 +147,8 @@ window.F = Class.create({
       repo = repo.split('/');
       if( repo.length < 2 ) { alert('invalid repository'); return }
       u = this.u    = repo[0];
-      r = this.r = repo[1];
-      b = this.b     = $('brs') ? $F('brs') : b;
+      r = this.r    = repo[1];
+      b = this.b    = $('brs') ? $F('brs') : b;
     }
     
     $('r').value = u + '/' + r;
@@ -156,8 +156,9 @@ window.F = Class.create({
 
     /* Load the master branch */
     GH.Commits.listBranch( u, r, b, { 
-      onData: function(commits) { 
-        var tree_sha = commits.commits[0].tree;
+      onData: function(cs) {
+        // if(!cs.commits) { alert('repo not found'); return; }
+        var tree_sha = cs.commits[0].tree;
         this.renderPanel(tree_sha);
       }.bind(this)
     });

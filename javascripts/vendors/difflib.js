@@ -31,33 +31,31 @@ DAMAGE.
 __whitespace = {" ":true, "\t":true, "\n":true, "\f":true, "\r":true};
 
 difflib = {
-	defaultJunkFunction: function (c) {
+	defJF: function (c) {
 		return c in __whitespace;
 	},
 	
 	stripLinebreaks: function (str) { return str.replace(/^[\n\r]*|[\n\r]*$/g, ""); },
 	
 	stringAsLines: function (str) {
-		var lfpos = str.indexOf("\n");
-		var crpos = str.indexOf("\r");
-		var linebreak = ((lfpos > -1 && crpos > -1) || crpos < 0) ? "\n" : "\r";
-		
-		var lines = str.split(linebreak);
-		for (var i = 0; i < lines.length; i++) {
-			lines[i] = difflib.stripLinebreaks(lines[i]);
+		var lfpos = str.indexOf("\n"),
+		    crpos = str.indexOf("\r"),
+		    linebreak = ((lfpos > -1 && crpos > -1) || crpos < 0) ? "\n" : "\r",
+		    l = str.split(linebreak);
+		for (var i = 0; i < l.length; i++) {
+			l[i] = difflib.stripLinebreaks(l[i]);
 		}
-		
-		return lines;
+		return l;
 	},
 	
 	// iteration-based reduce implementation
 	__reduce: function (func, list, initial) {
 		if (initial != null) {
-			var value = initial;
-			var idx = 0;
+			var value = initial,
+			    idx = 0;
 		} else if (list) {
-			var value = list[0];
-			var idx = 1;
+			var value = list[0],
+			    idx = 1;
 		} else {
 			return null;
 		}
@@ -116,10 +114,10 @@ difflib = {
 		}
 		
 		this.__chain_b = function () {
-			var b = this.b;
-			var n = b.length;
-			var b2j = this.b2j = {};
-			var populardict = {};
+			var b = this.b,
+			    n = b.length,
+			    b2j = this.b2j = {},
+			    populardict = {};
 			for (var i = 0; i < b.length; i++) {
 				var elt = b[i];
 				if (elt in b2j) {
@@ -139,8 +137,8 @@ difflib = {
 			for (var elt in populardict)
 				delete b2j[elt];
 			
-			var isjunk = this.isjunk;
-			var junkdict = {};
+			var isjunk = this.isjunk,
+			    junkdict = {};
 			if (isjunk) {
 				for (var elt in populardict) {
 					if (isjunk(elt)) {
@@ -161,20 +159,21 @@ difflib = {
 		}
 		
 		this.find_longest_match = function (alo, ahi, blo, bhi) {
-			var a = this.a;
-			var b = this.b;
-			var b2j = this.b2j;
-			var isbjunk = this.isbjunk;
-			var besti = alo;
-			var bestj = blo;
-			var bestsize = 0;
-			var j = null;
+			var a = this.a,
+			    b = this.b,
+			    b2j = this.b2j,
+			    isbjunk = this.isbjunk,
+			    besti = alo,
+			    bestj = blo,
+			    bestsize = 0,
+			    j = null,
 	
-			var j2len = {};
-			var nothing = [];
+			    j2len = {},
+			    nothing = [];
+			    
 			for (var i = alo; i < ahi; i++) {
-				var newj2len = {};
-				var jdict = difflib.__dictget(b2j, a[i], nothing);
+				var newj2len = {},
+				    jdict = difflib.__dictget(b2j, a[i], nothing);
 				for (var jkey in jdict) {
 					j = jdict[jkey];
 					if (j < blo) continue;
@@ -217,12 +216,11 @@ difflib = {
 		
 		this.get_matching_blocks = function () {
 			if (this.matching_blocks != null) return this.matching_blocks;
-			var la = this.a.length;
-			var lb = this.b.length;
-	
-			var queue = [[0, la, 0, lb]];
-			var matching_blocks = [];
-			var alo, ahi, blo, bhi, qi, i, j, k, x;
+			var la = this.a.length,
+			    lb = this.b.length,
+			    queue = [[0, la, 0, lb]],
+			    matching_blocks = [],
+			    alo, ahi, blo, bhi, qi, i, j, k, x;
 			while (queue.length) {
 				qi = queue.pop();
 				alo = qi[0];
@@ -245,8 +243,8 @@ difflib = {
 			
 			matching_blocks.sort(difflib.__ntuplecomp);
 	
-			var i1 = j1 = k1 = block = 0;
-			var non_adjacent = [];
+			var i1 = j1 = k1 = block = 0,
+			    non_adjacent = [];
 			for (var idx in matching_blocks) {
 				block = matching_blocks[idx];
 				i2 = block[0];
@@ -271,12 +269,12 @@ difflib = {
 		
 		this.get_opcodes = function () {
 			if (this.opcodes != null) return this.opcodes;
-			var i = 0;
-			var j = 0;
-			var answer = [];
+			var i = 0,
+			    j = 0,
+			    answer = [];
 			this.opcodes = answer;
-			var block, ai, bj, size, tag;
-			var blocks = this.get_matching_blocks();
+			var block, ai, bj, size, tag,
+			    blocks = this.get_matching_blocks();
 			for (var idx in blocks) {
 				block = blocks[idx];
 				ai = block[0];
@@ -367,9 +365,9 @@ difflib = {
 			}
 			fullbcount = this.fullbcount;
 	
-			var avail = {};
-			var availhas = difflib.__isindict(avail);
-			var matches = numb = 0;
+			var avail = {},
+			    availhas = difflib.__isindict(avail),
+			    matches = numb = 0;
 			for (var i = 0; i < this.a.length; i++) {
 				elt = this.a[i];
 				if (availhas(elt)) {
@@ -385,12 +383,12 @@ difflib = {
 		}
 		
 		this.real_quick_ratio = function () {
-			var la = this.a.length;
-			var lb = this.b.length;
+			var la = this.a.length,
+			    lb = this.b.length;
 			return _calculate_ratio(Math.min(la, lb), la + lb);
 		}
 		
-		this.isjunk = isjunk ? isjunk : difflib.defaultJunkFunction;
+		this.isjunk = isjunk ? isjunk : difflib.defJF;
 		this.a = this.b = null;
 		this.set_seqs(a, b);
 	}
