@@ -1,7 +1,3 @@
-/* PluginBase that allows for mixins into an object */
-;( function() { 
-window.FP = [];  // finder plugins
-
 window.F = Class.create({
   initialize: function(options){
     options = Object.extend( { 
@@ -331,7 +327,7 @@ window.F = Class.create({
          '</div>'
        ];
        $('i').update( h.join(''));
-    }
+    }.bind(this);
 
     /* showPreview */
     var p = function() {
@@ -432,5 +428,3 @@ window.F = Class.create({
     $('f').update( html.join('') ).show();
   }
 });
-
-})();

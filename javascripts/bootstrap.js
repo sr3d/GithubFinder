@@ -1,4 +1,5 @@
 var f,proxy,d=document;
+
 /* xtract textual content from an image*/
 var x = function(z, m ) {  // image, callback
   var o = new Image();

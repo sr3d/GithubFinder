@@ -1,11 +1,3 @@
-;window.FP = [];
-
-var PluginBase = Class.create( { 
-  initialize: function(o) {
-    if( !this.mixin ) this.mixin = {};
-    Object.extend( o, this.mixin );
-  }
-} );
 /* Diff plugin
   require difflib and diffview
 */

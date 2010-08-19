@@ -79,8 +79,10 @@ js_files = [
   'javascripts/util.js',
   'javascripts/f.js',
   'javascripts/p.js',
+  'javascripts/gh.js',
+  
+  'javascripts/plugins/base.js',
   'javascripts/diff.js',
-  'javascripts/gh.js', 
   'javascripts/keyboard.js',
   
   'javascripts/vendors/difflib.js',
