@@ -45,40 +45,41 @@ diffview = {
 	 * - viewType: if 0, a side-by-side diff view is generated (default); if 1, an inline diff view is
 	 *	   generated
 	 */
-	buildView: function (params) {
-		var baseTextLines = params.baseTextLines;
-		var newTextLines = params.newTextLines;
-		var opcodes = params.opcodes;
-		var baseTextName = params.baseTextName ? params.baseTextName : "Base Text";
-		var newTextName = params.newTextName ? params.newTextName : "New Text";
-		var contextSize = params.contextSize;
+	buildView: function (prms) {
+		var baseTextLines = prms.baseTextLines;
+		    newTextLines  = prms.newTextLines;
+		    opcodes       = prms.opcodes;
+        baseTextName  = prms.baseTextName // ? params.baseTextName : "Base Text";
+        newTextName   = prms.newTextName //? params.newTextName : "New Text";
 
+    var d = document;
+    
 		function celt (name, clazz) {
-			var e = document.createElement(name);
+			var e = d.createElement(name);
 			e.className = clazz;
 			return e;
 		}
 		
 		function telt (name, text) {
-			var e = document.createElement(name);
-			e.appendChild(document.createTextNode(text));
+			var e = d.createElement(name);
+			e.appendChild(d.createTextNode(text));
 			return e;
 		}
 		
 		function ctelt (name, clazz, text) {
-			var e = document.createElement(name);
+			var e = d.createElement(name);
 			e.className = clazz;
-			e.appendChild(document.createTextNode(text));
+			e.appendChild(d.createTextNode(text));
 			return e;
 		}
 	
-		var tdata = document.createElement("thead");
-		var node = document.createElement("tr");
+		var tdata = d.createElement("thead");
+		var node = d.createElement("tr");
 		tdata.appendChild(node);
 
-			node.appendChild(document.createElement("th"));
+			node.appendChild(d.createElement("th"));
 			node.appendChild(ctelt("th", "texttitle", baseTextName));
-			node.appendChild(document.createElement("th"));
+			node.appendChild(d.createElement("th"));
 			node.appendChild(ctelt("th", "texttitle", newTextName));
 
 		tdata = [tdata];
@@ -101,7 +102,7 @@ diffview = {
 				row.appendChild(ctelt("td", change, textLines[tidx].replace(/\t/g, "\u00a0\u00a0\u00a0\u00a0")));
 				return tidx + 1;
 			} else {
-				row.appendChild(document.createElement("th"));
+				row.appendChild(d.createElement("th"));
 				row.appendChild(celt("td", "empty"));
 				return tidx;
 			}
@@ -111,42 +112,17 @@ diffview = {
 		for (var idx = 0; idx < opcodes.length; idx++) {
 			code = opcodes[idx];
 			change = code[0];
-			var b = code[1];
-			var be = code[2];
-			var n = code[3];
-			var ne = code[4];
-			var rowcnt = Math.max(be - b, ne - n);
-			var toprows = [];
-			var botrows = [];
+			var b = code[1],
+			    be = code[2],
+			    n = code[3],
+			    ne = code[4],
+			    rowcnt = Math.max(be - b, ne - n),
+			    toprows = [],
+			    botrows = [];
 			for (var i = 0; i < rowcnt; i++) {
-				// jump ahead if we've alredy provided leading context or if this is the first range
-				if (contextSize && opcodes.length > 1 && ((idx > 0 && i == contextSize) || (idx == 0 && i == 0)) && change=="equal") {
-					var jump = rowcnt - ((idx == 0 ? 1 : 2) * contextSize);
-					if (jump > 1) {
-						toprows.push(node = document.createElement("tr"));
-						
-						b += jump;
-						n += jump;
-						i += jump - 1;
-						node.appendChild(telt("th", "..."));
-						if (!inline) node.appendChild(ctelt("td", "skip", ""));
-						node.appendChild(telt("th", "..."));
-						node.appendChild(ctelt("td", "skip", ""));
-						
-						// skip last lines if they're all equal
-						if (idx + 1 == opcodes.length) {
-							break;
-						} else {
-							continue;
-						}
-					}
-				}
-				
-				toprows.push(node = document.createElement("tr"));
-
-					b = addCells(node, b, be, baseTextLines, change);
-					n = addCells(node, n, ne, newTextLines, change);
-        // }
+				toprows.push(node = d.createElement("tr"));
+				b = addCells(node, b, be, baseTextLines, change);
+				n = addCells(node, n, ne, newTextLines, change);
 			}
 
 			for (var i = 0; i < toprows.length; i++) rows.push(toprows[i]);
@@ -154,7 +130,7 @@ diffview = {
 		}
 		
 		
-		tdata.push(node = document.createElement("tbody"));
+		tdata.push(node = d.createElement("tbody"));
 		
 		
 		for( var i = 0; i < rows.length; i++ ) {
