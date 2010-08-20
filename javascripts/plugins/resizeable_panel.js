@@ -26,23 +26,25 @@ var ResizablePanel = Class.create( PluginBase, {
       this.bW.scrollLeft = totalWidth;
       
       /* adjusting the height of the finder panels based on the scrollbar */
+      var scrollbarSize = self.scrollbarSize();
       if( totalWidth > this.bW.offsetWidth ) {
-        var scrollbarSize = self.scrollbarSize();
-        var newHeight = parseInt(this.bW.offsetHeight - scrollbarSize) + 'px';
-        this.psW.style.height = newHeight;
+        var newHeight = this.psW.style.height = (this.bW.offsetHeight - scrollbarSize) + 'px';
         this.psW.select('div').each(function(div) { 
           div.style.height = newHeight;
         } );
       } else { 
         if( this.psW.style.height != this.bW.style.height ) {
-          var newHeight = this.bW.style.height;
-          this.psW.style.height = newHeight;
-          this.psW.select('div').each(function(div) { 
-            div.style.height = newHeight;
-          } );
+          var newHeight = this.psW.style.height = this.bW.style.height;
+          this.psW.select('div').
+            invoke('setStyle',{height: newHeight} );
         }
       }
     }.bind(f);
+    
+    /* insert vertical resizable */
+    $('finder').removeClassName('tbb').insert({
+      after: '<div class="resize hrz"></div>'});
+    
   }
   
   ,extend: function() { 
@@ -58,13 +60,12 @@ var ResizablePanel = Class.create( PluginBase, {
           p.style.width = self.widths[ this.index ] + 'px';
         
         /* draw the resizer bar */
-        var height = p.offsetHeight + 'px'; // + 'px';
-        var style = 'height:' + height + ';width:2px';
-        var html = '<div id=resize' + this.index + ' style="' + style + '" data-index=' + this.index + ' class=resize></div>';
-
-        var psW = $('ps_w');
+        var height  = $('b_w').offsetHeight + 'px',
+            style   = 'height:' + height + ';width:2px',
+            html    = '<div id=resize' + this.index + ' style="' + style + '" data-index=' + this.index + ' class=resize></div>',
+            psW     = $('ps_w');
+            
         psW.insert(html);
-        
         self.resizeWidth = $('resize' + this.index).offsetWidth;
       }
       
@@ -81,43 +82,57 @@ var ResizablePanel = Class.create( PluginBase, {
       if( !e.hasClassName('resize') ) return;
       
       this.element = e;
-      this.start = event.clientX;
+      this.start = [event.clientX, event.clientY];
 
       /* make sure the cursor stays as col-resize */
-      document.body.style.cursor = 'col-resize';
-      
+      document.body.style.cursor = e.hasClassName('hrz') ? 'row-resize' : 'col-resize';
       event.stop();
+      
     }.bind(this));
     
     
     document.on('mouseup', function(event) { 
+      /* not dragging, bail out */
       if( !this.element ) return;
       
-      var end = event.clientX;
-      var pI  = +this.element.readAttribute('data-index');
-      var p   = $('p' + pI );
-      
-      var min         = 200;
-      var newWidth    = parseInt(p.offsetWidth) + (end - this.start);
-      newWidth        = newWidth < min ? min : newWidth;
-      p.style.width   = newWidth + 'px';
-      
-      /* store width so we can remember */
-      this.widths[ pI ] = newWidth;
-      
+      /* user drags, resizing ... */
+      if( this.element.hasClassName('hrz') ) {         // horizontal split 
+        var b         = $('b_w'),
+            i         = $('i_w'),
+            end       = event.clientY,
+            min       = 300,
+            newHeight = b.offsetHeight + (end - this.start[1]);
+            
+        newHeight     = newHeight < min ? min : newHeight;
+        i.style.height = b.style.height = newHeight + 'px';
+        this.f._resizePanelsWrapper();
 
-      this.element = null;
+      } else { // vertical split
+        var end       = event.clientX,
+            pI        = +this.element.readAttribute('data-index'),
+            p         = $('p' + pI ),
+            min       = 200,
+            newWidth  = parseInt(p.offsetWidth) + (end - this.start[0]);
+            
+        newWidth      = newWidth < min ? min : newWidth;
+        p.style.width = newWidth + 'px';
 
-      this.f._resizePanelsWrapper();
+        /* store width so we can remember */
+        this.widths[ pI ] = newWidth;
+      }
 
+      /* reset the cursor */
       document.body.style.cursor = '';
-      
+      this.element = null;      
+      this.f._resizePanelsWrapper();
+        
     }.bind(this));
     
   }
   
+  /* dynamically calculate the scrollbar size of the */
   ,scrollbarSize: function() { 
-    if( this._scrollbarSize) return this._scrollbarSize;
+    if( this.sbs) return this.sbs;
     
     var html = [
       '<div id=Z1 style="position:absolute;top:0;left:0;visibility:hidden;width:200px;height:150px;overflow:hidden">',
@@ -126,16 +141,15 @@ var ResizablePanel = Class.create( PluginBase, {
     ];
     
     $(document.body).insert(html.join());
-    var outer = $('Z1'), inner = $('Z2');
-    var w1 = inner.offsetWidth;
+    var outer = $('Z1'), 
+        inner = $('Z2'),
+        w1 = inner.offsetWidth;
     outer.style.overflow = 'scroll';
     var w2  = inner.offsetWidth;
     if( w1 == w2 ) w2 = outer.clientWidth;
     outer.remove();
-    
-    this._scrollbarSize = w1 - w2;
-    
-    return this._scrollbarSize;
+    return this.sbs = w1 - w2;
+    // return this.sbs;
   }
 });
 

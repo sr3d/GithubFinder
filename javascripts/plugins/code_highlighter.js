@@ -1,13 +1,11 @@
 /* code highliter */
 var CH = Class.create( PluginBase, { 
-  mixin: { 
-  }
-  ,initialize: function($super, f) {
+  initialize: function($super, f) {
     $super(f);
     
-    this.addStylesheet();
+    // this.addStylesheet();
 
-    var highlighter = CodeHighlighter;
+    var hlt = CodeHighlighter;
     
     var getFiletype = function(filename) {
       var fileType,
@@ -38,22 +36,20 @@ var CH = Class.create( PluginBase, {
       codeEl.className = ''; // clear previous syntax class
       codeEl.addClassName( getFiletype(item.name));
       
-      highlighter.init();
+      hlt.init();
     }
-    
-    
     
   }
   
   /* add the link to the stylesheet */
-  ,addStylesheet: function() {
-    // <link href="css/code_highlighter.css" media="all" rel="stylesheet" type="text/css" /> 
-    var css = document.createElement('link');
-    css.href = 'css/code_highlighter.css';
-    css.rel  = 'stylesheet';
-    css.type = 'text/css';
-    document.body.appendChild(css);
-  }
+  // ,addStylesheet: function() {
+  //   // <link href="css/code_highlighter.css" media="all" rel="stylesheet" type="text/css" /> 
+  //   var css = document.createElement('link');
+  //   css.href = 'css/code_highlighter.css';
+  //   css.rel  = 'stylesheet';
+  //   css.type = 'text/css';
+  //   document.body.appendChild(css);
+  // }
   
 });
 

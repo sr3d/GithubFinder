@@ -19,7 +19,7 @@ window.P = Class.create({
   }
   
   ,h: function() {
-    var it, css, recent, ix=this.index, t=this.tree,
+    var it, css, recent, ix=this.index, t=this.tree,bH = this.f.bW.offsetHeight,
         h = '<ul class=files>';
 
     for( var i = 0; i < t.length; i++ ) {
@@ -32,7 +32,7 @@ window.P = Class.create({
     }
     h += '</ul>';
 
-    return '<div id=p' + ix + ' data-index=' + ix +' class=panel>' + h + '</div>';
+    return '<div id=p' + ix + ' data-index=' + ix +' class=panel style="height:' + bH +'px">' + h + '</div>';
   }
 
 });
