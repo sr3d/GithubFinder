@@ -82,11 +82,18 @@ js_files = [
   'javascripts/gh.js',
   
   'javascripts/plugins/base.js',
-  'javascripts/diff.js',
-  'javascripts/keyboard.js',
+  # 'javascripts/diff.js',
+  # 'javascripts/keyboard.js',
+
+  'javascripts/plugins/code_highlighter.js',
+  'javascripts/vendors/code_highlighter.js',  
   
-  'javascripts/vendors/difflib.js',
-  'javascripts/vendors/diffview.js',
+  # 'javascripts/plugins/resizeable_panel.js',
+  
+
+  
+  # 'javascripts/vendors/difflib.js',
+  # 'javascripts/vendors/diffview.js',
 
   'javascripts/app.js'
 ]
@@ -98,7 +105,10 @@ puts "  minifying js..."
 js = minify merge( js_files )
 
 puts "  minifying css..."
-css = minify(merge([ 'styles.css']), 'css')
+css = minify(merge([ 
+  'styles.css', 
+  'css/code_highlighter.css'
+  ]), 'css')
 
 # css.gsub!('background-color:', '$')
 # css.gsub!('background-color', '$BC')

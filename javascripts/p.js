@@ -12,6 +12,7 @@ window.P = Class.create({
   
   ,dispose: function() {
     $('p' + this.index ).remove();
+    this.p = null;
   }
   
   ,r: function() {

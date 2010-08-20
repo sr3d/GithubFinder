@@ -13,12 +13,13 @@ var ResizablePanel = Class.create( PluginBase, {
       var defaultWidth = 201;
       var totalWidth = 0;
 
+      /* have to take into account the width of the resized panels */
       for( var i = 0; i < this.ps.length; i++ ) {
         totalWidth += self.widths[i] ? self.widths[i] : defaultWidth;
       }
       
       /* adding in the width or resizer*/
-      totalWidth += this.ps.length * self.resizeWidth + this.ps.length;
+      totalWidth += this.ps.length * (self.resizeWidth+1) - 2;
       
       this.psW.style.width = totalWidth + 'px';
 
@@ -53,8 +54,8 @@ var ResizablePanel = Class.create( PluginBase, {
     window.P = Class.create( window.P, { 
       r: function( $super ) {
         $super();
-        var p     = $('p' + this.index);
-        
+        var p = this.p = $('p' + this.index);
+
         /* set the width of the panel to the previously set width (if needed) */
         if( self.widths[ this.index ] )
           p.style.width = self.widths[ this.index ] + 'px';
@@ -67,11 +68,20 @@ var ResizablePanel = Class.create( PluginBase, {
             
         psW.insert(html);
         self.resizeWidth = $('resize' + this.index).offsetWidth;
+        
+        this.updateFileLabel();
       }
       
       ,dispose: function($super) {
         $super();
         $('resize' + this.index ).remove();
+      }
+      
+      ,updateFileLabel: function() {
+        var l = this.p.offsetWidth / 8;
+        this.p.select('a').each(function(a) { 
+          a.innerHTML = t(a.readAttribute('data-name'), l);
+        });
       }
     } );
     
@@ -119,6 +129,8 @@ var ResizablePanel = Class.create( PluginBase, {
 
         /* store width so we can remember */
         this.widths[ pI ] = newWidth;
+        
+        this.f.ps[pI].updateFileLabel();
       }
 
       /* reset the cursor */
@@ -149,7 +161,6 @@ var ResizablePanel = Class.create( PluginBase, {
     if( w1 == w2 ) w2 = outer.clientWidth;
     outer.remove();
     return this.sbs = w1 - w2;
-    // return this.sbs;
   }
 });
 

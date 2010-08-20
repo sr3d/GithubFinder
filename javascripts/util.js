@@ -31,6 +31,15 @@
 /* return a truncated sha  */
 var s = function(h) { return h.substr(0,6); };
 
+/* truncate text to a minimum length, similar to the way Finder does it  */
+var t = function(s,l) { 
+  var sl = s.length,
+      d  = '...',  // delimiter
+      dl = d.length,
+      r  = (l - dl) / 2; // radius
+  return  s.length < l ? s : s.substr(0, r) + d + s.substr( sl - r, sl);
+  }
+
 /* parse URL Params as a hash with key are lowered case.  (Doesn't handle duplicated key). */
 var uP = function() { 
   var ps = [],url = window.location.href.split('?');

@@ -79,13 +79,13 @@ def string2pngs( string, output )
   end
   
   # verify 
-  s = ''
-  files.each{ |file| s += png2string(file) }
-  raise 'invalid size' unless s == string
+  # s = ''
+  # files.each{ |file| s += png2string(file) }
+  # raise ('invalid string, expecting ' + s + "\n\n---but got---\n\n " + string) unless s == string
   
-  total_size = 0
-  files.each{ |file|  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"; total_size += File.stat( file ).size }
-  puts total_size
+  # total_size = 0
+  # files.each{ |file|  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"; total_size += File.stat( file ).size }
+  # puts total_size
 end
 
 
@@ -105,17 +105,17 @@ files_to_copy = {
   'javascripts/prototype.js'  => 'prototype.js',
   
   
-  'javascripts/vendors/jsonp.js'  => 'jsonp.js',
-  'javascripts/util.js'           => 'util.js',
-  'javascripts/f.js'              => 'f.js',
-  'javascripts/p.js'              => 'p.js',
-  'javascripts/diff.js'           => 'diff.js',
-  'javascripts/gh.js'             => 'gh.js' ,
-  'javascripts/keyboard.js'       => 'keyboard.js',
-  
-  
-  'javascripts/vendors/difflib.js'   => 'difflib.js',
-  'javascripts/vendors/diffview.js'  => 'diffview.js'
+  # 'javascripts/vendors/jsonp.js'  => 'jsonp.js',
+  # 'javascripts/util.js'           => 'util.js',
+  # 'javascripts/f.js'              => 'f.js',
+  # 'javascripts/p.js'              => 'p.js',
+  # 'javascripts/diff.js'           => 'diff.js',
+  # 'javascripts/gh.js'             => 'gh.js' ,
+  # 'javascripts/keyboard.js'       => 'keyboard.js',
+  # 
+  # 
+  # 'javascripts/vendors/difflib.js'   => 'difflib.js',
+  # 'javascripts/vendors/diffview.js'  => 'diffview.js'
 }
 
 puts "Copy files"
@@ -127,16 +127,22 @@ end
 
 
 js_files = [ 
-'javascripts/vendors/jsonp.js',
-'javascripts/util.js',
-'javascripts/f.js',
- 'javascripts/p.js',
-  'javascripts/diff.js',
-  'javascripts/gh.js', 
+  'javascripts/vendors/jsonp.js',
+  'javascripts/util.js',
+  'javascripts/f.js',
+  'javascripts/p.js',
+  'javascripts/gh.js',
+  
+  'javascripts/plugins/base.js',
+  # 'javascripts/diff.js',
   'javascripts/keyboard.js',
   
-#  'javascripts/vendors/difflib.js',
- # 'javascripts/vendors/diffview.js',
+  'javascripts/plugins/resizeable_panel.js',  
+
+  # 'javascripts/plugins/code_highlighter.js',
+  # 'javascripts/vendors/code_highlighter.js',
+  # 'javascripts/vendors/difflib.js',
+  # 'javascripts/vendors/diffview.js',
 
  'javascripts/app.js'
 ]
@@ -154,8 +160,9 @@ css = minify(merge([ 'styles.css']), 'css')
 # css.gsub!('background-color', '$BC')
 
 puts "  bundling..."
-string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
+# string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
 
+string2pngs js + "~10K~" + css, release_path + '/c.png'
 
 files_to_minify = [ 
   { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' }
@@ -191,4 +198,4 @@ puts "10K Limit:          #{- total_size + 10240}"
 
 
 
-string2pngs js + "~10K~" + css, release_path + '/c.png'
+# string2pngs js + "~10K~" + css, release_path + '/c.png'
