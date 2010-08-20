@@ -23,8 +23,8 @@ var x = function(z, m ) {  // image, callback
   o.src = z;
 }
 
-d.on('dom:loaded', function() { 
-  /* execute */
+// d.on('dom:loaded', function() { 
+//   /* execute */
   x('c.png', function(s){
     /* both CSS and JS are bundled up into 1 file*/
     s = s.split('~10K~');
@@ -39,4 +39,4 @@ d.on('dom:loaded', function() {
     /* run the JS */
     eval(s[0]);    
   });
-})
+// })

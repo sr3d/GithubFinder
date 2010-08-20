@@ -7,12 +7,13 @@ To see the finder in action, go to  <http://sr3d.github.com/GithubFinder>
 
 ## Features
 
-- Can quickly switch between repos and branches.
+- Switch between repos and branches with ease.
 - Keyboard navigation support with arrow keys.
-- Text files can be previewed inline.
-- Files can be diff-ed directly between revisions (still a bit buggy for large file)
+- Text files can be previewed inline with syntax highlighting (support Ruby, JavaScript, CSS, and HTML) with Textmate-like Twilight theme.
+- Files can be diff-ed directly between revisions (still a bit buggy for large files and across revisions)
 - 100% JS with full cross-domain support.  The provided proxy.php can proxy any requests to Github and return either JSONP callback, or raw contents.
-
+- flexible framework to customize and extend the existing functionalities
+- GitHub JS API
 
 # 10K App
 
@@ -24,6 +25,8 @@ Since the app needs to be under 10,240 bytes, it needs special optimization to a
 
 To build the app, run the provided ./build script to automatically bundle up everything into the ./app folder
 
+For an IE9 build, run ./ie9build
+
 ## App Bootstrap
 
 The minified app is working as follow:
@@ -32,9 +35,18 @@ The minified app is working as follow:
 - javascripts/app.js file is executed (this file is appended at the end of the files list)
 
 
-# Architect 
+# Architecture
 
-Code are somewhat modularized with a main class (F) that can be extended through various plugins.
+The code is somewhat modularized with a main class (F) for the Finder itself.  This class can be extended to add more functionalities through various plugins.  Currently the plugins are 
+
+- Diff:  allowing user to diff 2 different files from Github.
+- CH (Code Highlighter):  currently supports Ruby, JavaScript, CSS, and HTML.
+- Keyboard navigation:  user can use the a,s,d,f to navigate.
+- ResizablePanel, which enable the panels to be resizeable.
+
+Combined with the build script, this architecture is flexible enough to enable or disable certain components to achieve the right size/features.
+
+The Application also relies on JSONP to grab the data from Github.  The provided proxy.php script can handle both normal Ajax Requests and JSONP requests.  Currently this script is hosted on my own shared hosting account at 1and1, and limited to just process requests for Github.com domain.
 
 
 # Credits
@@ -45,6 +57,7 @@ Github Finder is possible by leveraging these tools:
 - The javascript implementation of difflib by Snowtide.com.  <http://snowtide.com/jsdifflib>
 - Dandean JSONP implementation for Prototype.  Code is patched to support onSuccess() event, and to also hook into Ajax.Responders live-cycle (useful for indicator).  <http://github.com/dandean/Ajax.JSONRequest>
 - Github API.
+
 
 # About
 
