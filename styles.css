@@ -26,7 +26,7 @@ height: 300px }
 
 .files { padding: 0; margin: 0; }
 li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; background-color: #F8F8F8; }
-#i_w { width: 19%; border-left: 1px solid #CCC; float: right; height: 300px; overflow-y: auto; }
+#i_w { width: 19%; border-left: 1px solid #CCC; float: left; height: 300px; overflow-y: auto; }
 /*.padding { padding: 10px; }*/
 #i_w .commits { height: 200px; overflow: auto}
 
