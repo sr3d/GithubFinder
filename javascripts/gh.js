@@ -113,6 +113,11 @@
       var url = GH.api + '/blob/show/' + u + '/' + r + '/' + sha;
       new AR( GH.proxy + url, o );
     }
+    
+    ,loadPage: function(u,r,b,fn, o) {
+      var url = 'http://github.com/' + u + '/' + r + '/blob/' + b +'/' + fn;
+      new AR( GH.proxy + url, o );
+    }
   }
   
   ,Repo: {
