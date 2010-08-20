@@ -20,7 +20,7 @@ window.F = Class.create({
     
     document.on('click','a[data-sha]', function( event, element ){ 
       this.click( element.readAttribute('data-sha'), element );
-      // Event.stop(event);
+      element.blur();
     }.bind(this) );
     
     
@@ -119,7 +119,7 @@ window.F = Class.create({
         '<div class=clear></div>',
       '</div>',  // #f_c_w
       
-      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github</div>',
+      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github.</div>',
       '</div>' // # content
     ].join('');
   }
