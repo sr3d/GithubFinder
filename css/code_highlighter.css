@@ -1,7 +1,7 @@
 #code { background-color: #191919; color: white; }
 #code .comment { color: #5E5A5F; }
 #code .string { color: #93996D; }
-#code .keywords, { color: #CAA76F;}
+#code .keywords { color: #CAA76F;}
 #code .brackets { color: #F5F8F8; }
 #code .symbol { color: #C06F52; }
 
