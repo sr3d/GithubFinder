@@ -7,7 +7,7 @@ var CH = Class.create( PluginBase, {
 
     var hlt = CodeHighlighter;
     
-    var getFiletype = function(filename) {
+    var getFiletype = function(filename,text) {
       var fileType,
           matchingRules = { 
               'ruby':         [ /\.rb$/i, /\bRakefile\b/i, /\bGemfile\b/i, /\.gemspec\b/i, /\bconsole\b/i ]
@@ -26,6 +26,15 @@ var CH = Class.create( PluginBase, {
         }
       } );
       
+      /* attempt to futher detect the fileType */
+      if( !fileType ) {
+        text = text.replace(/\r\n/, "\n").split(/\n/)[0];
+        fileType =  /ruby/i.test(text) ?    'ruby' : 
+                    /python/i.test(text) ?  'python' : 
+                    /php/i.test(text) ?     'php' : 
+                    '';
+      }
+      
       return fileType;
     }
     
@@ -34,7 +43,7 @@ var CH = Class.create( PluginBase, {
       old(text,item);
       var codeEl = $('code');
       codeEl.className = ''; // clear previous syntax class
-      codeEl.addClassName( getFiletype(item.name));
+      codeEl.addClassName(getFiletype(item.name,text));
       
       hlt.init();
     }

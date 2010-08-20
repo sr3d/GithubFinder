@@ -28,6 +28,13 @@ var Readme = Class.create( PluginBase, {
       self.loadReadme();
       
     }.bind(f);
+    
+    
+    var oldBrowse = f.browse.bind(f);
+    f.browse = function() {
+      oldBrowse();
+      if($('readme_wrapper')) $('readme_wrapper').remove();
+    }
   }
   
   ,loadReadme: function() {
