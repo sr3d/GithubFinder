@@ -17,12 +17,18 @@ window.F = Class.create({
     
     this.repo = null;
 
+    /* Prototype RC2 */
+    // document.on('click','a[data-sha]', function( event, element ){ 
+    //   this.click( element.readAttribute('data-sha'), element );
+    //   element.blur();
+    // }.bind(this) );
     
-    document.on('click','a[data-sha]', function( event, element ){ 
-      this.click( element.readAttribute('data-sha'), element );
-      element.blur();
-    }.bind(this) );
-    
+    document.observe('click', function(e) { 
+      e = e.findElement();
+      if( !e.readAttribute('data-sha') ) return;
+      this.click( e.readAttribute('data-sha'), e );
+      e.blur();
+    }.bind(this));
     
     var idc = $('in'),
         s = function() { idc.show() },

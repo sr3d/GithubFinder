@@ -2,7 +2,7 @@ var Keyboard = Class.create( PluginBase, {
   initialize: function($super, f) {
     $super(f);
     
-    document.on('keydown', function(e) { 
+    document.observe('keydown', function(e) { 
       if(e.findElement().tagName == 'INPUT') return; //  user has focus in something, bail out.
       
       // var k = e.which ? e.which : e.keyCode; // keycode

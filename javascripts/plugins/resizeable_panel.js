@@ -19,7 +19,7 @@ var ResizablePanel = Class.create( PluginBase, {
       }
       
       /* adding in the width or resizer*/
-      totalWidth += this.ps.length * (self.resizeWidth+1) - 2;
+      totalWidth += this.ps.length * (self.resizeWidth+1);
       
       this.psW.style.width = totalWidth + 'px';
 
@@ -45,7 +45,6 @@ var ResizablePanel = Class.create( PluginBase, {
     /* insert vertical resizable */
     $('finder').removeClassName('tbb').insert({
       after: '<div class="resize hrz"></div>'});
-    
   }
   
   ,extend: function() { 
@@ -86,7 +85,7 @@ var ResizablePanel = Class.create( PluginBase, {
     } );
     
     /* handle resizing drag */
-    document.on('mousedown', function(event) { 
+    document.observe('mousedown', function(event) { 
       var e = event.findElement();
 
       if( !e.hasClassName('resize') ) return;
@@ -101,7 +100,7 @@ var ResizablePanel = Class.create( PluginBase, {
     }.bind(this));
     
     
-    document.on('mouseup', function(event) { 
+    document.observe('mouseup', function(event) { 
       /* not dragging, bail out */
       if( !this.element ) return;
       
