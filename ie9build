@@ -76,6 +76,8 @@ def string2pngs( string, output )
     
     puts "output from #{from} to #{to}"
     string2png string[from,to], filename
+    
+    files << filename
   end
   
   # verify 
@@ -86,9 +88,17 @@ def string2pngs( string, output )
   # total_size = 0
   # files.each{ |file|  puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"; total_size += File.stat( file ).size }
   # puts total_size
+  
+  files
 end
 
 
+def pngout files = []
+  files.each do |file|
+    cmd = "bin/pngout #{file} -c2 -f3 -b128 -kbKGD -v"
+    puts `#{cmd}`
+  end
+end
 
 
 release_path = 'ie9'
@@ -179,7 +189,9 @@ css = minify(merge([
 puts "  bundling..."
 # string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
 
-string2pngs js + "~10K~" + css, release_path + '/js/c.png'
+code_pngs = string2pngs js + "~10K~" + css, release_path + '/js/c.png'
+
+pngout code_pngs # further compress!
 
 files_to_minify = [ 
   { :files => [ 'javascripts/bootstrap.js'], :output => 'js/bootstrap.js', :type => 'js' },
