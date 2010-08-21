@@ -139,22 +139,23 @@ window.F = Class.create({
     var u,r,b = 'master';
     if( !repo ) {
       
-      // check referrer here ... 
-      // var m         = (new RegExp("github.com\/(.+)","i")).exec(document.referrer),
-      //     path      = m ? m[1].split('/') : [];
-      // u = path[0] || this.u;
-      // r = path[1] || this.r;
-      // b = path[3] || this.b;
-
-
-      u = this.u;
-      r = this.r;
-      b = this.b;
+      /* check referrer here ... */
+      var m         = (new RegExp("github.com\/(.+)","i")).exec(document.referrer),
+          path      = m ? m[1].split('/') : [];
       
-      /* or extract url ?*/
-      //   
+      /* if user just come from a github repo ... */
+      if( path[0] ) {
+        u = this.u = path[0];
+        r = this.r = path[1];
+        b = this.b = path[3];
+        
+      } else { /* default to app settings */
+        u = this.u;
+        r = this.r;
+        b = this.b;
+      }
       
-    } else {
+    } else { /* User hits the "Go" button:  grabbing the user/repo */
       repo = repo.split('/');
       if( repo.length < 2 ) { alert('invalid repository!'); return; }
       u = this.u    = repo[0];
@@ -262,7 +263,7 @@ window.F = Class.create({
   /**
    * @sha: the sha of the object
    * @e:  the source element
-   * #@kb: is this trigged by the keyboard
+   * @kb: is this trigged by the keyboard
    */
   ,click: function(sha, e, kb) {
     // console.log("kb" + kb);
@@ -318,90 +319,95 @@ window.F = Class.create({
       path += it.name;
 
 
-    var c, cs;
-    var info = function() {
-      var h = [
-         '<div><b>Name</b><br/>',
-           '<a href=',
-             'http://github.com/' + this.u + '/' + this.r + '/' + it.type + '/' + this.b + path,
-             ' target=_blank>',
-             it.name,
-           '</a>',
-         '</div>',
-         '<br/>',
-         '<div><b>Path</b><br/> ' + path + '</div>',
+      var c, cs;
+      var info = function() {
+        var h = [
+           '<div><b>Name</b><br/>',
+             '<a href=',
+               'http://github.com/' + this.u + '/' + this.r + '/' + it.type + '/' + this.b + path,
+               ' target=_blank>',
+               it.name,
+             '</a>',
+           '</div>',
+           '<br/>',
+           '<div><b>Path</b><br/> ' + path + '</div>',
 
-         '<br/>',        
-         '<div><b>Last Committed</b><br/> ' + 
-           s( c.id ) +
-           ( Prototype.Browser.IE ? '' : ' on ' + (new Date(c.committed_date)).toString() ) + 
-         '</div>',
-         '<br/>',
+           '<br/>',        
+           '<div><b>Last Committed</b><br/> ' + 
+             s( c.id ) +
+             ( Prototype.Browser.IE ? '' : ' on ' + (new Date(c.committed_date)).toString() ) + 
+           '</div>',
+           '<br/>',
 
-         '<div>',
-           '<b>Author</b><br/>',
-           '<a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
-           ' (' + c.author.email +')',
-         '</div>',
-         '<br/>',
-         '<div>',
-           '<b>Commit Message</b><br/>',
-           c.message,
-         '</div>'
-       ];
-       $('i').update( h.join(''));
-    }.bind(this);
+           '<div>',
+             '<b>Author</b><br/>',
+             '<a href=http://github.com/' + c.author.login + '>' + c.author.name + '</a>',
+             ' (' + c.author.email +')',
+           '</div>',
+           '<br/>',
+           '<div>',
+             '<b>Commit Message</b><br/>',
+             c.message,
+           '</div>'
+         ];
+         $('i').update( h.join(''));
+      }.bind(this);
 
-    /* showPreview */
-    var p = function() {
-      $('diffoutput').hide();
-      $('f_c_w').show();
-      $('f_h').innerHTML = path;
-    }
-
-    /* commits log */
-    var cl = function() { 
-      var dW, dH, dP,
-          csHTML = '<div>';
-      var dl = function(a,b,l) {  // difflink a, b, label
-        return '<a href=javascript:void(0) onclick=f.diff(' + 
-            [ '"', a.id, '","',  
-              a.tree, '","', 
-              b.id, '","',
-              b.tree, '","',
-              it.name, '"' 
-            ].join('') +
-          ')>' + l + '</a> ';      
-      };
-      for( var i = 0; i < cs.length; i++ ) {
-        dW = cs.length > 1 ? '<br/>Diff with: ' : '';         // diffWith
-        dH = i > 0 ? dl( c , cs[i], 'Head') : '' ;            // diffHead
-        dP = cs[i+1] ? dl(cs[i], cs[i+1], 'Previous') : '' ;  // diffPrevious
-
-        csHTML +=
-          '<div class=ce>' +
-            '<b>' + s(cs[i].id) +'</b>' + ' by ' + cs[i].author.name +
-            dW + dH + (dH && dP ? ' - ' : '') + dP +
-          '</div>';
-      };
-      // csHTML.push('</div>');
-      $('c_l_w').update( csHTML + '</div>' );
-    };
-
-    /* query the cs to get a list of cs and info */
-    GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cms) { // cms == commits
-      it.c = c = cms[0];  // also assign the it's c to keep track of folder's latest commit
-      cs = cms;
-
-      info();
-
-      if( it.type != 'tree' ) { 
-        p();
-        cl();
+      /* showPreview */
+      var p = function() {
+        $('diffoutput').hide();
+        $('f_c_w').show();
+        $('f_h').innerHTML = path;
       }
 
-    }.bind(this)});
-  }.bind(this), (kb ? 350 : 10)); // time out
+      /* commits log */
+      var cl = function() { 
+        var dW, dH, dP,
+            csHTML = '<div>';
+        // debugger
+        var dl = function(a,b,l) {  // difflink a, b, label
+          return '<a href=javascript:void(0) onclick=f.diff(' + 
+              [ '"', a.id, '","', 
+                b.id, '","',
+                path, '"' 
+              ].join('') +
+            ')>' + l + '</a> ';      
+        };
+        
+        /* to get an object at a commit:  need the commit id, then path
+           then it's just 
+           http://github.com/:user_id/:repo/blob/:commit_id/:path
+        */
+        
+        for( var i = 0; i < cs.length; i++ ) {
+          dW = cs.length > 1 ? '<br/>Diff with: ' : '';         // diffWith
+          dH = i > 0 ? dl( c , cs[i], 'Head') : '' ;            // diffHead
+          dP = cs[i+1] ? dl(cs[i], cs[i+1], 'Previous') : '' ;  // diffPrevious
+
+          csHTML +=
+            '<div class=ce>' +
+              '<b>' + s(cs[i].id) +'</b>' + ' by ' + cs[i].author.name +
+              dW + dH + (dH && dP ? ' - ' : '') + dP +
+            '</div>';
+        };
+        // csHTML.push('</div>');
+        $('c_l_w').update( csHTML + '</div>' );
+      };
+
+      /* query the cs to get a list of cs and info */
+      GH.Commits.list( this.u, this.r, this.b, path, { onData: function(cms) { // cms == commits
+        it.c = c = cms[0];  // also assign the it's c to keep track of folder's latest commit
+        cs = cms;
+
+        info();
+
+        if( it.type != 'tree' ) { 
+          p();
+          cl();
+        }
+
+      }.bind(this)});
+    }.bind(this), (kb ? 350 : 10)); // time out
 
 
   }

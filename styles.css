@@ -62,7 +62,7 @@ pre, #code, .meta, .diff { font:12px Monaco,monospace; margin: 0; }
 /*.hover { background-color: #FFFFC7; }*/
 
 .diffoutput { border: 1px solid #DDD}
-.diff { width: 100%; border-collapse:collapse; border-right:1px solid #DDD }
+.diff { width: 100%; border-collapse:collapse; border-right:1px solid #DDD; font-size: 11px; }
 .diff th{ border: 1px solid #BBC; border-bottom: 0px; font-weight: normal;}
   .empty { background-color:#DDD; }
   .replace { background-color:#FD8; }

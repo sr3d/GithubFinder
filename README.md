@@ -10,10 +10,10 @@ To see the finder in action, go to  <http://sr3d.github.com/GithubFinder>
 - Switch between repos and branches with ease.
 - Keyboard navigation support with arrow keys.
 - Text files can be previewed inline with syntax highlighting (support Ruby, JavaScript, CSS, and HTML) with Textmate-like Twilight theme.
-- Files can be diff-ed directly between revisions (still a bit buggy for large files and across revisions)
+- Files can be diff-ed directly between commits.
 - 100% JS with full cross-domain support.  The provided proxy.php can proxy any requests to Github and return either JSONP callback, or raw contents.
 - flexible framework to customize and extend the existing functionalities
-- GitHub JS API
+- GitHub JS API wrapper (/javascripts/gh.js).
 
 # 10K App
 
@@ -37,7 +37,7 @@ The minified app is working as follow:
 
 # Architecture
 
-The code is somewhat modularized with a main class (F) for the Finder itself.  This class can be extended to add more functionalities through various plugins.  Currently the plugins are 
+The code is somewhat modularized with a main class (F, defined in /javascripts/f.js) for the Finder itself.  This class can be extended to add more functionalities through various plugins.  Currently the plugins are 
 
 - Diff:  allowing user to diff 2 different files from Github.
 - CH (Code Highlighter):  currently supports Ruby, JavaScript, CSS, and HTML.

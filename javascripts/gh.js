@@ -1,4 +1,4 @@
-;window.GH = {
+window.GH = {
   hash: {}
   // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   ,proxy: './proxy.php?url='
@@ -114,6 +114,11 @@
       new AR( GH.proxy + url, o );
     }
     
+    /**
+     * u,r,b: user, repo, branch
+     * fn: filename
+     * o: the options, with callback
+     */
     ,loadPage: function(u,r,b,fn, o) {
       var url = 'http://github.com/' + u + '/' + r + '/blob/' + b +'/' + fn;
       new AR( GH.proxy + url, o );
@@ -139,6 +144,15 @@
         onData(branches);
       }
       new AR( GH.proxy + url, o );
+    }
+  }
+  
+  ,Raw: {
+    loadBlobAtCommit: function( u, r, commitId, path, options ) {
+      //http://github.com/:user_id/:repo/blob/:commit_id/:path
+      // http://github.com/mojombo/grit/raw/c0f0b4f7a62d2e563b48d0dc5cd9eb3c21e3b4c2/lib/grit.rb
+      url = 'http://github.com/' + u + '/' + r + '/raw/' + commitId + path;
+      new AR( GH.proxy + url, options );
     }
   }
 };
