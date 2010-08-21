@@ -56,6 +56,7 @@ release_path = 'app'
 puts "Clean up release folder (#{release_path})"
 FileUtils.rm_rf release_path
 File.makedirs release_path + '/img'
+File.makedirs release_path + '/js'
 
 files_to_copy = {
   'index.app.html'            => 'index.html',
@@ -63,7 +64,6 @@ files_to_copy = {
   'img/la.gif'                => 'img/la.gif',
   'img/la_h.gif'              => 'img/la_h.gif',  
   'img/txt.gif'               => 'img/txt.gif',
-  'javascripts/prototype.js'  => 'prototype.js'
 }
 
 puts "Copy files"
@@ -110,15 +110,13 @@ css = minify(merge([
   'css/code_highlighter.css'
   ]), 'css')
 
-# css.gsub!('background-color:', '$')
-# css.gsub!('background-color', '$BC')
 
 puts "  bundling..."
 string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
 
 
 files_to_minify = [ 
-  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' }
+  { :files => [ 'javascripts/bootstrap.js'], :output => 'js/bootstrap.js', :type => 'js' }
   # { :files => [ 'styles.css'], :output => 'styles.css', :type => 'css' }
 ]
 files_to_minify.each do |group|
@@ -131,14 +129,14 @@ puts "------ Size Report ------"
 
 files_to_skip_counting = [ 
   'prototype.js',
-  'styles.css'
+  'styles.css',
+  'img'
 ]
 
 
 total_size = 0
-Dir.glob( [release_path + '/*' ]  ).each do |file|
+Dir.glob( [release_path + '/*', release_path + '/img/*',release_path + '/js/*'  ]  ).each do |file|
   next if files_to_skip_counting.include? File.basename(file)
-  
   puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"
   total_size += File.stat( file ).size  
 end

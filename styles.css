@@ -1,10 +1,10 @@
-body { font-size: 12px; font-family: Arial; padding: 0; margin: 0 }
+body { font-size: 12px; font-family: Arial; padding: 0px; margin: 0px }
 .clear { clear:both }
 a { color: #4183C4; text-decoration: none; }
 a:active { outline: none; }
 :focus { -moz-outline-style: none; outline: none;}
 .p { padding: 10px; }
-img { border: 0}
+img { border: 0px}
 
 #content { min-width: 940px }
 
@@ -16,9 +16,9 @@ img { border: 0}
   
   
 /* logo */
-.big { font-size: 14px; font-weight: bold} 
+.big { font-size: 14px; font-weight: bold;} 
 #r_w span { margin-right: 20px; }
-#in { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px;}
+#in { position: fixed; background-color: #4F4A45; color: white; top: 0px; right: 0px; padding: 5px;}
 
 #b_w { width: 79.9%; position: relative; overflow: hidden; overflow-x: auto; height: 300px; float: left;}
 .panel { float: left; width: 200px; border-right: 1px solid #CCC; overflow: hidden; overflow-y: auto;

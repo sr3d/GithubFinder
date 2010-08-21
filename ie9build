@@ -97,6 +97,7 @@ release_path = 'ie9'
 puts "Clean up release folder (#{release_path})"
 FileUtils.rm_rf release_path
 File.makedirs release_path + '/img'
+File.makedirs release_path + '/js'
 
 files_to_copy = {
   
@@ -178,10 +179,10 @@ css = minify(merge([
 puts "  bundling..."
 # string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
 
-string2pngs js + "~10K~" + css, release_path + '/c.png'
+string2pngs js + "~10K~" + css, release_path + '/js/c.png'
 
 files_to_minify = [ 
-  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
+  { :files => [ 'javascripts/bootstrap.js'], :output => 'js/bootstrap.js', :type => 'js' },
   # { :files => [ 'ie9fix.css'], :output => 'ie9fix.css', :type => 'css' }
 ]
 files_to_minify.each do |group|
@@ -195,12 +196,13 @@ puts "------ Size Report ------"
 files_to_skip_counting = [ 
   'prototype.js',
   'styles.css',
-  'img'
+  'img',
+  'js'
 ]
 
 
 total_size = 0
-Dir.glob( [release_path + '/*', release_path + '/img/*' ]  ).each do |file|
+Dir.glob( [release_path + '/*', release_path + '/img/*',release_path + '/js/*' ]  ).each do |file|
   # puts file
   next if files_to_skip_counting.include? File.basename(file)
   

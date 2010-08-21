@@ -49,6 +49,6 @@ document.observe('dom:loaded',function() {
   /* IE9 has a bug with getImageData to read all the pixel data.  
     So the JS was splitted into smaler images instead. */
   for(var i = 0; i < fc; i++ ) {
-    x('c' + i + '.png', run, i);
+    x('js/c' + i + '.png', run, i);
   }
 });

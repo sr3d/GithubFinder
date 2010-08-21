@@ -1,3 +1,5 @@
+/* to padd to get exactly 10,240 bytes */
+// ;"ALEXLE";
 window.F = Class.create({
   initialize: function(options){
     options = Object.extend( { 
@@ -73,8 +75,8 @@ window.F = Class.create({
             '<div id=url_w>',
               '<span class=big>Github Finder</span>',
               '<span>',
-                'Repo: http://github.com/<input type=text id=r />',
-                '<span id=brs_w></span>', // branches
+                'Repo: http://github.com/<input type=text id=r /> ',
+                'Branch: <span id=brs_w></span>', // branches
                 '<input type=button id=go value=Go onclick=f.browse() />',
               '</span>',
               '<span id=in style=display:none>Loading...</span>',
@@ -122,10 +124,10 @@ window.F = Class.create({
           '<div class=clear></div>',
         '</div>', // #c_w
 
-        // '<div class=clear></div>',
+        '<div class=clear></div>',
       '</div>',  // #f_c_w
       
-      '<div id=footer>(c) 2010 <a href="http://alexle.net">Alex Le</a>.  <a href=http://github.com/sr3d/GithubFinder>Fork</a> or visit <a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GHFinder</a> Page',
+      '<div id=footer>(c) 2010 <b><a href=http://alexle.net >Alex Le</a></b>.  <b><a href=http://github.com/sr3d/GithubFinder>Fork</a></b> or visit <b><a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GitHub Finder</a></b> Page',
       '</div>' // # content
     ].join('');
   }
@@ -136,12 +138,25 @@ window.F = Class.create({
     
     var u,r,b = 'master';
     if( !repo ) {
+      
+      // check referrer here ... 
+      // var m         = (new RegExp("github.com\/(.+)","i")).exec(document.referrer),
+      //     path      = m ? m[1].split('/') : [];
+      // u = path[0] || this.u;
+      // r = path[1] || this.r;
+      // b = path[3] || this.b;
+
+
       u = this.u;
       r = this.r;
       b = this.b;
+      
+      /* or extract url ?*/
+      //   
+      
     } else {
       repo = repo.split('/');
-      if( repo.length < 2 ) { alert('invalid repository'); return }
+      if( repo.length < 2 ) { alert('invalid repository!'); return; }
       u = this.u    = repo[0];
       r = this.r    = repo[1];
       b = this.b    = $('brs') ? $F('brs') : b;
