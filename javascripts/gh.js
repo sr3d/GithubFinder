@@ -2,13 +2,14 @@ window.GH = {
   hash: {}
   // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   ,proxy: './proxy.php?url='
-  
+  // ,proxy: ''
   ,api: 'http://github.com/api/v2/json'
   
   /* set the proxy.php url and switch to the correct AR (AjaxRequest) */
   ,setProxy: function(p) { 
     this.proxy = p;
-    window.AR = p.indexOf('./') == 0 ? Ajax.Request : JSP;
+    // window.AR = p.indexOf('./') == 0 ? Ajax.Request : JSP;
+    window.AR = JSP;
   }
   
   ,Commits: {
@@ -18,9 +19,9 @@ window.GH = {
       var onData = o.onData,
           url = GH.api + '/commits/list/' + u + '/' + r + '/' + b;
       o.onSuccess = function(res) {
-        onData( eval('(' + res.responseText +')' ) );
+        onData( res.responseText );
       }
-      new AR( GH.proxy + url, o );
+      new JSP( url, o );
     }
     
     ,list: function( u, r, b, path, o ) {
@@ -29,7 +30,7 @@ window.GH = {
           onData = o.onData;
           
       o.onSuccess = function(res) {
-        var cs = eval('(' + res.responseText +')').commits;
+        var cs = res.responseText.commits;
         // if(!cs) { alert('not found'); return;}
         /* cache the commits */
         self._cache[ url ] = cs;
@@ -42,7 +43,7 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, o );
+      new JSP( url, o );
     }
     
     ,show: function( u, r, sha, o ) {
@@ -51,7 +52,7 @@ window.GH = {
           onData = o.onData;
 
       o.onSuccess = function(res) {
-        var c = eval('(' + res.responseText +')').commit;
+        var c = res.responseText.commit;
         /* cache */
         self._cache[ sha ] = c;
         onData( c );
@@ -63,7 +64,7 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, o );
+      new JSP( url, o );
     }
   }
   
@@ -75,7 +76,7 @@ window.GH = {
           onData = o.onData;
           
       o.onSuccess = function(res) {
-        var tree = (eval('(' + res.responseText + ')')).tree;
+        var tree = res.responseText.tree;
         // if(!tree) { alert('not found'); return;}
         tree = tree.sort(function(a,b){
           // blobs always lose to tree
@@ -104,7 +105,7 @@ window.GH = {
         return;
       }
 
-      new AR( GH.proxy + url, o);
+      new JSP( url, o);
     }
   }
   
@@ -131,25 +132,25 @@ window.GH = {
           onData = o.onData;
 
       o.onSuccess = function(res) {
-        onData((eval('(' + res.responseText + ')')).repository);
+        onData(res.responseText.repository);
       }
-      new AR( GH.proxy + url, o );
+      new JSP( url, o );
     }
     
     ,listBranches: function( u, r, o ) {
       var url = GH.api + '/repos/show/' + u + '/' + r + '/branches',
           onData = o.onData; 
       o.onSuccess = function(res) {
-        var branches = (eval('(' + res.responseText + ')')).branches;
+        var branches = res.responseText.branches;
         onData(branches);
       }
-      new AR( GH.proxy + url, o );
+      new JSP( url, o );
     }
   }
   
   ,Raw: {
     loadBlobAtCommit: function( u, r, commitId, path, options ) {
-      //http://github.com/:user_id/:repo/blob/:commit_id/:path
+      //http://github.com/:user_id/:repo/raw/:commit_id/:path
       // http://github.com/mojombo/grit/raw/c0f0b4f7a62d2e563b48d0dc5cd9eb3c21e3b4c2/lib/grit.rb
       url = 'http://github.com/' + u + '/' + r + '/raw/' + commitId + path;
       new AR( GH.proxy + url, options );
