@@ -164,5 +164,5 @@ var ResizablePanel = Class.create( PluginBase, {
 });
 
 
-
-FP.push(ResizablePanel);
+if( !Prototype.Browser.IE )
+  FP.push(ResizablePanel);

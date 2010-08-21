@@ -2,7 +2,7 @@ var Keyboard = Class.create( PluginBase, {
   initialize: function($super, f) {
     $super(f);
     
-    document.observe('keydown', function(e) { 
+    document.observe('keypress', function(e) { 
       if(e.findElement().tagName == 'INPUT') return; //  user has focus in something, bail out.
       
       // var k = e.which ? e.which : e.keyCode; // keycode
@@ -19,7 +19,7 @@ var Keyboard = Class.create( PluginBase, {
         if( t[ ++cI ] ) {
           var item = t[cI]; 
           // debugger
-          f.click( item.sha, $$('#p' + pI + ' a')[cI] );
+          f.click( item.sha, $$('#p' + pI + ' a')[cI], true );
         } else {
           cI--;
         }
@@ -28,7 +28,7 @@ var Keyboard = Class.create( PluginBase, {
       var u = function() {
         if( t[ --cI ] ) {
           var item = t[cI]; 
-          f.click( item.sha, $$('#p' + pI + ' a')[cI] );
+          f.click( item.sha, $$('#p' + pI + ' a')[cI], true );
         } else {
           cI++;
         }        
@@ -41,7 +41,7 @@ var Keyboard = Class.create( PluginBase, {
           // get index of the previously selected item
           cI = f.ps[pI].cI;
           // var item = f.ps[pI]; 
-          f.click( t[cI].sha, $$('#p' + pI + ' a')[cI] );
+          f.click( t[cI].sha, $$('#p' + pI + ' a')[cI], true );
           
         } else {
           pI++; // undo 
@@ -65,7 +65,7 @@ var Keyboard = Class.create( PluginBase, {
       // k == 40 ? d() : ( k == 39 ? r() : ( k == 38 ? u() : ( k == 37 ? l() : '';
       switch( k ) {
         case 40: // key down
-          d();  
+          d();
           break;
           
         case 38: // up
@@ -80,11 +80,11 @@ var Keyboard = Class.create( PluginBase, {
           r();
           break;
         default:
-          return true;
           break;
       }
       
-      return false;
+      if( k >= 37 && k <= 40)
+        e.stop();
       
     });
   }

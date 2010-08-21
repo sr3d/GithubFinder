@@ -26,7 +26,7 @@ def minify( string = '', type = 'js' )
 end
 
 def minify_to_file( string, type, output )
-  cmd = "java -jar bin/yuicompressor-2.4.2.jar -v --type #{type} -o #{output}"
+  cmd = "java -jar bin/yuicompressor-2.4.2.jar -v --type #{type} -o #{output} --charset utf-8"
   # puts cmd
   stdin, stdout, stderr = Open3.popen3( cmd )
   stdin.write string
@@ -49,7 +49,7 @@ end
 
 def png2string(image)
   string = ''
-  (Image.read(File.open( image, "r" ))).first.each_pixel do |px,x,y|
+  Image.read(File.open( image, "r" )).first.each_pixel do |px,x,y|
     string += (px.red % 256).chr
   end
   string
@@ -58,7 +58,7 @@ end
 
 def string2pngs( string, output )
   puts "original string length #{string.length}"
-  limit = 8192 # IE9 max for getImageData
+  limit = 8192 #8192 # IE9 max for getImageData
   images_count = (string.length * 1.0 / limit ).ceil
   
   files = []
@@ -89,6 +89,8 @@ def string2pngs( string, output )
 end
 
 
+
+
 release_path = 'ie9'
 
 # Clean up
@@ -97,12 +99,14 @@ FileUtils.rm_rf release_path
 File.makedirs release_path + '/img'
 
 files_to_copy = {
+  
   'index.ie9.html'            => 'index.html',
+  'ie9fix.css'                => 'ie9fix.css',  
   'img/dir.gif'               => 'img/dir.gif',  
   'img/la.gif'                => 'img/la.gif',
   'img/la_h.gif'              => 'img/la_h.gif',  
   'img/txt.gif'               => 'img/txt.gif',
-  'javascripts/prototype.js'  => 'prototype.js',
+  # 'javascripts/prototype.js'  => 'prototype.js',
   
   
   # 'javascripts/vendors/jsonp.js'  => 'jsonp.js',
@@ -135,14 +139,18 @@ js_files = [
   
   'javascripts/plugins/base.js',
   # 'javascripts/diff.js',
-  'javascripts/keyboard.js',
+  # 'javascripts/keyboard.js',
   
-  'javascripts/plugins/resizeable_panel.js',  
+  # 'javascripts/plugins/resizeable_panel.js',  
+  'javascripts/plugins/github_readme.js',  
+  'javascripts/plugins/bookmarklet.js',
+
 
   # 'javascripts/plugins/code_highlighter.js',
   # 'javascripts/vendors/code_highlighter.js',
   # 'javascripts/vendors/difflib.js',
   # 'javascripts/vendors/diffview.js',
+
 
  'javascripts/app.js'
 ]
@@ -154,7 +162,12 @@ puts "  minifying js..."
 js = minify merge( js_files )
 
 puts "  minifying css..."
-css = minify(merge([ 'styles.css']), 'css')
+css = minify(merge([ 
+  'styles.css',
+  # 'github_readme.css' 
+  
+  ]), 'css')
+# css.gsub! /\.img/,'./'
 
 # css.gsub!('background-color:', '$')
 # css.gsub!('background-color', '$BC')
@@ -165,8 +178,8 @@ puts "  bundling..."
 string2pngs js + "~10K~" + css, release_path + '/c.png'
 
 files_to_minify = [ 
-  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' }
-  # { :files => [ 'styles.css'], :output => 'styles.css', :type => 'css' }
+  { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
+  { :files => [ 'ie9fix.css'], :output => 'ie9fix.css', :type => 'css' }
 ]
 files_to_minify.each do |group|
   puts "minify #{group[:output]}"

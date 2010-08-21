@@ -247,8 +247,9 @@ window.F = Class.create({
   /**
    * @sha: the sha of the object
    * @e:  the source element
+   * #@kb: is this trigged by the keyboard
    */
-  ,click: function(sha, e) {
+  ,click: function(sha, e, kb) {
     // debugger
     var it = this.shas[ sha ],
         ix = +(e.up('.panel')).readAttribute('data-index'),
@@ -316,8 +317,8 @@ window.F = Class.create({
 
          '<br/>',        
          '<div><b>Last Committed</b><br/> ' + 
-           s( c.id ) + ' on ' +
-           (new Date(c.committed_date)).toString() + 
+           s( c.id ) +
+           ( Prototype.Browser.IE ? '' : ' on ' + (new Date(c.committed_date)).toString() ) + 
          '</div>',
          '<br/>',
 
@@ -384,7 +385,7 @@ window.F = Class.create({
       }
 
     }.bind(this)});
-  }.bind(this), 200); // time out
+  }.bind(this), (kb ? 300 : 1)); // time out
 
 
   }
@@ -432,4 +433,6 @@ window.F = Class.create({
     $('diffoutput').hide();
     $('f').update( html.join('') ).show();
   }
+  
+  ,diff:function(){ alert('Diff is disabled.'); }
 });

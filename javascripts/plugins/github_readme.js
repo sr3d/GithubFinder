@@ -12,9 +12,9 @@ var Readme = Class.create( PluginBase, {
     f._resizePanelsWrapper = function() {
       old();
       
-      if( this.readme != null ) return; // don't run it again
+      if( self.readme != null ) {return; } // don't run it again
       
-      this.readme = false;
+      self.readme = false;
       var tree = this.ps[0].tree;
       for( var i = 0; i < tree.length; i++ ) {
         if( 'readme readme.md readme.textile'.indexOf(tree[i].name.toLowerCase()) >= 0) {
@@ -27,13 +27,16 @@ var Readme = Class.create( PluginBase, {
       
       self.loadReadme();
       
-    }.bind(f);
+    }; //.bind(f);
     
     
     var oldBrowse = f.browse.bind(f);
     f.browse = function() {
-      oldBrowse();
+      /* reset the readme stuff */
+      self.readme = null;
       if($('readme_wrapper')) $('readme_wrapper').remove();
+      
+      oldBrowse();
     }
   }
   

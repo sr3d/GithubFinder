@@ -1,4 +1,4 @@
-var f,proxy,d=document;
+var f,proxy,d=document,s;
 
 /* xtract textual content from an image*/
 var x = function(z, m ) {  // image, callback
@@ -23,20 +23,47 @@ var x = function(z, m ) {  // image, callback
   o.src = z;
 }
 
-// d.on('dom:loaded', function() { 
-//   /* execute */
-  x('c.png', function(s){
-    /* both CSS and JS are bundled up into 1 file*/
-    s = s.split('~10K~');
-    
+/*
+x('c.png', function(s){
+  // both CSS and JS are bundled up into 1 file
+  s = s.split('~10K~');
+  
 
-    /* init CSS */
-    var c = d.createElement('style');
-    c.innerHTML = s[1]; //.replace('$', 'background-color:');
-    d.body.appendChild(c);    
+  // init CSS
+  var c = d.createElement('style');
+  c.innerHTML = s[1]; //.replace('$', 'background-color:');
+  d.body.appendChild(c);    
 
-    // console.log(s[1]);
-    /* run the JS */
-    eval(s[0]);    
-  });
-// })
+  // console.log(s[1]);
+  // run the JS
+  eval(s[0]);    
+});
+
+*/
+var fc = 2; file = 0, js='';
+var run = function(s) {
+  js += s;
+
+  
+  if( ++file != fc ) 
+    return;
+
+  // console.log("js::::" + js );
+  
+  // debugger
+  
+  js = js.split('~10K~');
+  var c = d.createElement('style');
+  c.innerHTML = js[1]; //.replace('$', 'background-color:');
+  d.body.appendChild(c);    
+
+  // console.log(s[1]);
+  // run the JS
+  try{ eval(js[0]); } catch(ex) { alert(ex); }
+}
+
+document.observe('dom:loaded',function() { 
+  for(var i = 0; i < fc; i++ ) {
+    x('c' + i + '.png', run);
+  }  
+})

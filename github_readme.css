@@ -9,8 +9,8 @@
   .wikistyle h3{margin-top:1em!important;}
   .wikistyle p{margin:1em 0!important;line-height:1.5em!important;}
   .wikistyle a.absent{color:#a00;}
-  .wikistyle ul,#wiki-form .content-body ul{margin:1em 0 1em 2em!important;}
-  .wikistyle ol,#wiki-form .content-body ol{margin:1em 0 1em 2em!important;}
+/*  .wikistyle ul,#wiki-form .content-body ul{margin:1em 0 1em 2em!important;}
+  .wikistyle ol,#wiki-form .content-body ol{margin:1em 0 1em 2em!important;}*/
   .wikistyle ul ul,.wikistyle ul ol,.wikistyle ol ol,.wikistyle ol ul,#wiki-form .content-body ul ul,#wiki-form .content-body ul ol,#wiki-form .content-body ol ol,#wiki-form .content-body ol ul{margin-top:0!important;margin-bottom:0!important;}
   .wikistyle blockquote{margin:1em 0!important;border-left:5px solid #ddd!important;padding-left:.6em!important;color:#555!important;}
   .wikistyle dt{font-weight:bold!important;margin-left:1em!important;}
@@ -26,6 +26,7 @@
   .wikistyle pre.console code{padding:0!important;font-size:12px!important;background-color:black!important;border:none!important;color:white!important;}
   .wikistyle pre.console span{color:#888!important;}
   .wikistyle pre.console span.command{color:yellow!important;}
+  
   .wikistyle .frame{margin:0;display:inline-block;}
   .wikistyle .frame img{display:block;}
   .wikistyle .frame>span{display:block;border:1px solid #aaa;padding:4px;}

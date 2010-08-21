@@ -42,33 +42,17 @@ var t = function(s,l) {
 
 /* parse URL Params as a hash with key are lowered case.  (Doesn't handle duplicated key). */
 var uP = function() { 
-  var ps = [],url = window.location.href.split('?');
-  url = url[0].split('#');
+  var ps = [], pair, pairs,
+      url = window.location.href.split('?');
+
   if( url.length == 1 ) return ps;
 
-  var pair,pairs = url[1].split('&');
+  url = url[1].split('#')[0];
+  
+  pairs = url.split('&');
   for( var i = 0; i < pairs.length; i++ ) {
     pair = pairs[i].split('=');
     ps[ pair[0].toLowerCase() ] = pair[1];
   }
   return ps;
 };
-
-// if( !document.on) {
-//   document.on = function(e,el,fn) {
-//     document.onClick
-//     e = Event.element(event)
-//     if( )
-//   }
-// }
-
-// function findElement(event, expression) {
-//   var element = Event.element(event);
-//   if (!expression) return element;
-//   while (element) {
-//     if (Object.isElement(element) && Prototype.Selector.match(element, expression)) {
-//       return Element.extend(element);
-//     }
-//     element = element.parentNode;
-//   }
-// }
