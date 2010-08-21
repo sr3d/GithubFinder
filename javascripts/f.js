@@ -95,7 +95,7 @@ window.F = Class.create({
           '<div id=i class=p>Select an item or navigate with arrow keys</div>',
         '</div>',
 
-        '<div class=clear></div>',
+        // '<div class=clear></div>',
       '</div>', // #finder 
 
       '<div id=f_c_w style="display:none">',                 // file content wrapper
@@ -122,10 +122,10 @@ window.F = Class.create({
           '<div class=clear></div>',
         '</div>', // #c_w
 
-        '<div class=clear></div>',
+        // '<div class=clear></div>',
       '</div>',  // #f_c_w
       
-      '<div id=footer>(c) 2010 Alex Le.  <a href=http://github.com/sr3d/GithubFinder>Fork me</a> on Github.</div>',
+      '<div id=footer>(c) 2010 <a href="http://alexle.net">Alex Le</a>.  <a href=http://github.com/sr3d/GithubFinder>Fork</a> or visit <a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GHFinder</a> Page',
       '</div>' // # content
     ].join('');
   }
@@ -250,6 +250,7 @@ window.F = Class.create({
    * #@kb: is this trigged by the keyboard
    */
   ,click: function(sha, e, kb) {
+    // console.log("kb" + kb);
     // debugger
     var it = this.shas[ sha ],
         ix = +(e.up('.panel')).readAttribute('data-index'),
@@ -385,7 +386,7 @@ window.F = Class.create({
       }
 
     }.bind(this)});
-  }.bind(this), (kb ? 300 : 1)); // time out
+  }.bind(this), (kb ? 350 : 10)); // time out
 
 
   }

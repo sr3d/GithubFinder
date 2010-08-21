@@ -1,7 +1,17 @@
-var f,proxy,d=document,s;
+var f,proxy,d=document;
+
+var addCss = function(s) {
+  var c = d.createElement('style');
+  c.type = 'text/css';
+  if (c.styleSheet)
+    c.styleSheet.cssText = s;
+  else
+    c.appendChild(d.createTextNode(s));
+  d.getElementsByTagName('HEAD')[0].appendChild(c);    
+}
 
 /* xtract textual content from an image*/
-var x = function(z, m ) {  // image, callback
+var x = function(z, m, ix ) {  // image, callback, chunk index
   var o = new Image();
   o.onload = function() {
     var s = "", 
@@ -18,52 +28,27 @@ var x = function(z, m ) {  // image, callback
       if( b[i] > 0 )
         s += String.fromCharCode(b[i]);
     }
-    m(s);
+    
+    m(s, ix);
   }
   o.src = z;
 }
 
-/*
-x('c.png', function(s){
-  // both CSS and JS are bundled up into 1 file
-  s = s.split('~10K~');
-  
+var fc = 3, flag = 0, chks = [], js;
+var run = function(s,i) {
+  chks[i] = s
+  if( ++flag != fc ) return;
 
-  // init CSS
-  var c = d.createElement('style');
-  c.innerHTML = s[1]; //.replace('$', 'background-color:');
-  d.body.appendChild(c);    
-
-  // console.log(s[1]);
-  // run the JS
-  eval(s[0]);    
-});
-
-*/
-var fc = 2; file = 0, js='';
-var run = function(s) {
-  js += s;
-
-  
-  if( ++file != fc ) 
-    return;
-
-  // console.log("js::::" + js );
-  
-  // debugger
-  
-  js = js.split('~10K~');
-  var c = d.createElement('style');
-  c.innerHTML = js[1]; //.replace('$', 'background-color:');
-  d.body.appendChild(c);    
-
-  // console.log(s[1]);
-  // run the JS
+  /* Now we have the full script, let's the fun begin */
+  var js = (chks[0] + chks[1] + chks[3]).split('~10K~');
+  addCss(js[1]);
   try{ eval(js[0]); } catch(ex) { alert(ex); }
 }
 
 document.observe('dom:loaded',function() { 
+  /* IE9 has a bug with getImageData to read all the pixel data.  
+    So the JS was splitted into smaler images instead. */
   for(var i = 0; i < fc; i++ ) {
-    x('c' + i + '.png', run);
-  }  
-})
+    x('c' + i + '.png', run, i);
+  }
+});

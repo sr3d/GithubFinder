@@ -1,8 +1,8 @@
 var Keyboard = Class.create( PluginBase, { 
   initialize: function($super, f) {
-    $super(f);
+    // $super(f);
     
-    document.observe('keypress', function(e) { 
+    document.observe('keydown', function(e) { 
       if(e.findElement().tagName == 'INPUT') return; //  user has focus in something, bail out.
       
       // var k = e.which ? e.which : e.keyCode; // keycode
@@ -83,6 +83,9 @@ var Keyboard = Class.create( PluginBase, {
           break;
       }
       
+      
+      // console.log("keypress");
+      
       if( k >= 37 && k <= 40)
         e.stop();
       
@@ -91,4 +94,4 @@ var Keyboard = Class.create( PluginBase, {
 });
 
 /* add the plugin to the plugins list */
-window.FP.push(Keyboard);
+FP.push(Keyboard);

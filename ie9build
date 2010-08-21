@@ -101,11 +101,17 @@ File.makedirs release_path + '/img'
 files_to_copy = {
   
   'index.ie9.html'            => 'index.html',
-  'ie9fix.css'                => 'ie9fix.css',  
+  # 'ie9fix.css'                => 'ie9fix.css',  
   'img/dir.gif'               => 'img/dir.gif',  
   'img/la.gif'                => 'img/la.gif',
   'img/la_h.gif'              => 'img/la_h.gif',  
   'img/txt.gif'               => 'img/txt.gif',
+  
+  
+  # 'img/dir.png'               => 'img/dir.png',  
+  # 'img/la.png'                => 'img/la.png',
+  # 'img/la_h.png'              => 'img/la_h.png',  
+  # 'img/txt.png'               => 'img/txt.png', 
   # 'javascripts/prototype.js'  => 'prototype.js',
   
   
@@ -139,7 +145,7 @@ js_files = [
   
   'javascripts/plugins/base.js',
   # 'javascripts/diff.js',
-  # 'javascripts/keyboard.js',
+  'javascripts/keyboard.js',
   
   # 'javascripts/plugins/resizeable_panel.js',  
   'javascripts/plugins/github_readme.js',  
@@ -167,10 +173,7 @@ css = minify(merge([
   # 'github_readme.css' 
   
   ]), 'css')
-# css.gsub! /\.img/,'./'
 
-# css.gsub!('background-color:', '$')
-# css.gsub!('background-color', '$BC')
 
 puts "  bundling..."
 # string2png js + "~10K~" + css, release_path + '/c.png'  # bundle both js + css into 1 image
@@ -179,7 +182,7 @@ string2pngs js + "~10K~" + css, release_path + '/c.png'
 
 files_to_minify = [ 
   { :files => [ 'javascripts/bootstrap.js'], :output => 'bootstrap.js', :type => 'js' },
-  { :files => [ 'ie9fix.css'], :output => 'ie9fix.css', :type => 'css' }
+  # { :files => [ 'ie9fix.css'], :output => 'ie9fix.css', :type => 'css' }
 ]
 files_to_minify.each do |group|
   puts "minify #{group[:output]}"
@@ -191,12 +194,14 @@ puts "------ Size Report ------"
 
 files_to_skip_counting = [ 
   'prototype.js',
-  'styles.css'
+  'styles.css',
+  'img'
 ]
 
 
 total_size = 0
-Dir.glob( [release_path + '/*' ]  ).each do |file|
+Dir.glob( [release_path + '/*', release_path + '/img/*' ]  ).each do |file|
+  # puts file
   next if files_to_skip_counting.include? File.basename(file)
   
   puts "#{"%-20.20s" % file} #{"%30s" % File.stat( file ).size}"

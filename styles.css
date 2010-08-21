@@ -37,7 +37,7 @@ height: 300px }
 .tree .ico { background-image: url('./img/dir.gif'); }
 .cur { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
 .cur a { color: white;}
-.blob { background-image: none !important;}
+.blob { background-image: none !important; }
 .files a { padding: 3px 15px }
 
 #f_c_w .p {padding: 10px}
@@ -52,7 +52,7 @@ height: 300px }
 /* commit entry */
 .ce { padding: 10px 0; border-bottom: 1px solid #CCC; }
 
-pre, #code, .meta, .diff { font:11px Monaco,monospace; margin: 0; }
+pre, #code, .meta, .diff { font:12px Monaco,monospace; margin: 0; }
 
 .meta, .diff thead th { background-color: #EEE; color:#333; overflow:hidden; padding:10px; border-bottom: 1px solid #CCC}
 .meta span { margin-left: 5px; padding-left: 9px;}
@@ -79,6 +79,6 @@ pre, #code, .meta, .diff { font:11px Monaco,monospace; margin: 0; }
 /* extension stuff */
 .resize { cursor: col-resize; float: left; background-color: #DCDCDC;border-right: 1px solid #CCC;}
 .hrz { cursor: row-resize !important; background-color: #DCDCDC; ;border-bottom: 1px solid #CCC;height: 3px; line-height: 3px; width: 99.9%}
-#bml_w { float: right; font-size: 11px;}
-.bml { border: 1px solid #CCC; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; font-weight: bold;}
+#bml_w { float: right; font-size: 11px; width: 300px;}
+.bml { border: 1px solid #CCC; padding: 1px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; font-weight: bold;}
 .bml:hover { background-color: white;}

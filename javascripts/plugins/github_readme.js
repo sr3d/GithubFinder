@@ -4,7 +4,7 @@ var Readme = Class.create( PluginBase, {
     
     this.f = f;
     this.readme = null;
-    this.addStylesheet();
+    // this.addStylesheet();
 
     var self      = this,
         old       = f._resizePanelsWrapper.bind(f);
@@ -30,13 +30,13 @@ var Readme = Class.create( PluginBase, {
     }; //.bind(f);
     
     
-    var oldBrowse = f.browse.bind(f);
+    var oB = f.browse.bind(f);
     f.browse = function() {
       /* reset the readme stuff */
       self.readme = null;
       if($('readme_wrapper')) $('readme_wrapper').remove();
       
-      oldBrowse();
+      oB();
     }
   }
   
@@ -60,13 +60,14 @@ var Readme = Class.create( PluginBase, {
   }
   
   /* add the link to the stylesheet */
-  ,addStylesheet: function() {
-    var css = document.createElement('link');
-    css.href = 'github_readme.css';
-    css.rel  = 'stylesheet';
-    css.type = 'text/css';
-    document.body.appendChild(css);
-  }  
+  // ,addStylesheet: function() {
+  //   var css = document.createElement('link');
+  //   css.href = 'github_readme.css';
+  //   css.rel  = 'stylesheet';
+  //   css.type = 'text/css';
+  //   document.body.appendChild(css);
+  // }
 });
 
+// if( !Prototype.Browser.IE )
 window.FP.push(Readme);
