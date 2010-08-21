@@ -17,7 +17,7 @@ var Readme = Class.create( PluginBase, {
       self.readme = false;
       var tree = this.ps[0].tree;
       for( var i = 0; i < tree.length; i++ ) {
-        if( 'readme readme.md readme.textile'.indexOf(tree[i].name.toLowerCase()) >= 0) {
+        if( 'readme readme.md readme.markdown readme.textile'.indexOf(tree[i].name.toLowerCase()) >= 0) {
           self.readme = tree[i].name;
           break;
         }
