@@ -147,7 +147,7 @@ window.F = Class.create({
       if( path[0] ) {
         u = this.u = path[0];
         r = this.r = path[1];
-        b = this.b = path[3];
+        b = this.b = path[3] || 'master';
         
       } else { /* default to app settings */
         u = this.u;
