@@ -37,9 +37,9 @@
     
 <script type="text/javascript">
 var run = function() { 
-  // proxy = 'http://alexle.net/experiments/githubfinder/proxy.php?url=';
   // GH.setProxy('http://alexle.net/experiments/githubfinder/proxy.php?url=')
-  GH.setProxy('./proxy.php?url=');
+  // GH.setProxy('./proxy.php?url=');
+  GH.setProxy('http://localhost:9393/?url=');  
   f = new F({ user_id: 'sr3d', repository: 'GithubFinder' });
   // f = new F({ user_id: 'rails', repository: 'rails' });
 };

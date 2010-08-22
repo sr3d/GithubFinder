@@ -22,7 +22,7 @@ var Diff = Class.create( PluginBase, {
         try{
           file1 = difflib.stringAsLines(file1);
           
-          if( file1.length > 300 
+          if( file1.length > 350 
               && !confirm("Diffing large file will take a long time\nDo you want to continue?")) { 
             return;
           }
