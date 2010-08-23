@@ -39,7 +39,7 @@
 var run = function() { 
   // GH.setProxy('http://alexle.net/experiments/githubfinder/proxy.php?url=')
   // GH.setProxy('./proxy.php?url=');
-  GH.setProxy('http://localhost:9393/?url=');  
+  GH.setProxy('http://ghfinder-proxy.heroku.com/?url=');  
   f = new F({ user_id: 'sr3d', repository: 'GithubFinder' });
   // f = new F({ user_id: 'rails', repository: 'rails' });
 };
@@ -49,6 +49,20 @@ run();
 //   run();
 // });  
 </script>
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-193384-10']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
 </body>
 </html>
 

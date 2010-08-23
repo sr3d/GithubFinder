@@ -53,10 +53,7 @@ window.F = Class.create({
   
   
   ,xU: function() {
-    var p = uP();
-    if( p["user_id"] ) this.u   = p["user_id"];
-    if( p["repo"] )    this.r   = p["repo"];
-    if( p["branch"] )  this.b   = p["branch"];
+
   }
   
   ,render: function() { 
@@ -136,36 +133,43 @@ window.F = Class.create({
   ,oR: function(repo) {
     this.reset()
     
-    var u,r,b = 'master';
+    var u,r,b;
     if( !repo ) {
-      
-      /* check referrer here ... */
-      var m         = (new RegExp("github.com\/(.+)","i")).exec(document.referrer),
-          path      = m ? m[1].split('/') : [];
-      
-      /* if user just come from a github repo ... */
-      if( path[0] ) {
-        u = this.u = path[0];
-        r = this.r = path[1];
-        b = this.b = path[3] || 'master';
+      /* check URL params */
+      var p = uP();
+      if( p["user_id"] && p["repo"] ) {
+        u = this.u   = p["user_id"];
+        r = this.r   = p["repo"]
+        b = this.b   = p["branch"] || 'master';
+      } else {
+        // debugger
+        /* if user just come from a github repo ... */
+        var m         = (new RegExp("^http://github.com/(.+)","i")).exec(document.referrer),
+            path      = m ? m[1].split('/') : [];
         
-      } else { /* default to app settings */
-        u = this.u;
-        r = this.r;
-        b = this.b;
+        if( path[0] && path[1] ) {
+          u = this.u = path[0];
+          r = this.r = path[1];
+          b = this.b = path[3] || 'master';
+        } else {   /* default to app settings */
+          u = this.u;
+          r = this.r;
+          b = this.b;
+        }
       }
-      
-    } else { /* User hits the "Go" button:  grabbing the user/repo */
+    } else {
+      /* User hits the "Go" button:  grabbing the user/repo */
       repo = repo.split('/');
       if( repo.length < 2 ) { alert('invalid repository!'); return; }
+      
       u = this.u    = repo[0];
       r = this.r    = repo[1];
-      b = this.b    = $('brs') ? $F('brs') : b;
+      b = this.b    = ($('brs') ? $F('brs') : b) || 'master';
     }
     
+ 
     $('r').value = u + '/' + r;
-    
-
+ 
     /* Load the master branch */
     GH.Commits.listBranch( u, r, b, { 
       onData: function(cs) {
@@ -203,6 +207,8 @@ window.F = Class.create({
   }
   
   ,browse: function() {
+    if( _gaq ) _gaq.push(["_trackEvent", "browse repo", "go", $F('r') ] );
+    
     $('i').innerHTML = '';
     this.oR( $F('r') || $('r').readAttribute('placeholder') );
   }
@@ -366,12 +372,11 @@ window.F = Class.create({
             csHTML = '<div>';
         // debugger
         var dl = function(a,b,l) {  // difflink a, b, label
-          return '<a href=javascript:void(0) onclick=f.diff(' + 
-              [ '"', a.id, '","', 
-                b.id, '","',
-                path, '"' 
-              ].join('') +
-            ')>' + l + '</a> ';      
+          // google event tracking to track the diff usage
+          var eventTracker = '_gaq.push(["_trackEvent", "commits log", "diff", "' + l + '"]);';
+          return '<a href=javascript:void(0) onclick=\'' +  eventTracker + 'f.diff(' + 
+              [ '"', a.id, '","', b.id, '","', path, '"' ].join('') +
+            ')\'>' + l + '</a> ';
         };
         
         /* to get an object at a commit:  need the commit id, then path
