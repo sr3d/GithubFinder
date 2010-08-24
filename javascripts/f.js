@@ -128,7 +128,7 @@ window.F = Class.create({
         '<b><a href=http://github.com/sr3d/GithubFinder>Fork</a></b> or visit <b><a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GitHub Finder</a></b> Page.',
         'Create a new <a href=http://github.com/sr3d/GithubFinder/issues target=_blank><b>issue</b></a> to request features.',
         '<br/>',
-        'Install Greasemonkey/Greasekit <a href="http://github.com/sr3d/GithubFinder/raw/master/javascripts/userscript.js" onclick="_gaq.push([\'_trackEvent\', \'footer\', \'install userscript\'])"><b>script</b></a>.',
+        'Install Greasemonkey/Greasekit <a href="http://sr3d.github.com/GithubFinder/userscript.user.js" onclick="_gaq.push([\'_trackEvent\', \'footer\', \'install userscript\'])"><b>script</b></a>.',
       '</div>' // # content
     ].join(' ');
   }
