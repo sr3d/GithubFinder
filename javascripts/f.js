@@ -124,9 +124,13 @@ window.F = Class.create({
         '<div class=clear></div>',
       '</div>',  // #f_c_w
       
-      '<div id=footer>(c) 2010 <b><a href=http://alexle.net >Alex Le</a></b>.  <b><a href=http://github.com/sr3d/GithubFinder>Fork</a></b> or visit <b><a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GitHub Finder</a></b> Page.  To request new features, please create a new <a href=http://github.com/sr3d/GithubFinder/issues target=_blank><b>issue</b></a>.',
+      '<div id=footer>(c) 2010 <b><a href=http://alexle.net >Alex Le</a></b>. ',
+        '<b><a href=http://github.com/sr3d/GithubFinder>Fork</a></b> or visit <b><a href=http://sr3d.github.com/GithubFinder/?utm_source=footer>GitHub Finder</a></b> Page.',
+        'Create a new <a href=http://github.com/sr3d/GithubFinder/issues target=_blank><b>issue</b></a> to request features.',
+        '<br/>',
+        'Install Greasemonkey/Greasekit <a href="http://github.com/sr3d/GithubFinder/raw/master/javascripts/userscript.js" onclick="_gaq.push([\'_trackEvent\', \'footer\', \'install userscript\'])"><b>script</b></a>.',
       '</div>' // # content
-    ].join('');
+    ].join(' ');
   }
 
   /* openRepo */
