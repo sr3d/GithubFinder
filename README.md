@@ -7,8 +7,10 @@ To see the finder in action, go to  <http://sr3d.github.com/GithubFinder>
 
 ## Features
 
-- Support Greasemonkey/Greaskit script:  <http://github.com/sr3d/raw/master/javascripts/userscript.js>.  After installing this script, a new button will appear on your Github repo page to let you quickly open the currently view repository in Github Finder.
-[<img src="http://cl.ly/5452119dcf43ad5bfc31/content" alt="Github File Greasemonkey Button" />](http://github.com/sr3d/raw/master/javascripts/userscript.js).  
+- Support Greasemonkey/Greaskit script:  <http://sr3d.github.com/GithubFinder/userscript.user.js>.  After installing this script, a new button will appear on your Github repo page to let you quickly open the currently view repository in Github Finder.
+
+[<img src="http://cl.ly/5452119dcf43ad5bfc31/content" alt="Github File Greasemonkey Button" />](http://sr3d.github.com/GithubFinder/userscript.user.js)
+
 - Bookmarklet:  If you don't have GreaseMonkey/Greasekit installed, you can drag the bookmarklet to your address bar.  The bookmarklet will open a new GHFinder window of the currently viewed repository.
 - Switch between repos and branches with ease.
 - Keyboard navigation support with arrow keys.
