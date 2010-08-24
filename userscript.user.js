@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Github Finder Greasemonkey Script
+// @name        Github Finder
 // @description Add an easy "Browse" button of current repository linking to GHFinder.
 // @include     https://github.com/*
 // @include     http://github.com/*
