@@ -16,6 +16,7 @@ var CH = Class.create( PluginBase, {
               ,'javascript':  [ /\.js$/i ]
               ,'python':      [ /\.py$/i ]
               ,'applescript': [ /\.applescript$/i ]
+              ,'yaml':        [ /\.yml$/i ]
           };
       
       
