@@ -26,9 +26,10 @@ window.P = Class.create({
     for( var i = 0; i < t.length; i++ ) {
       it = t[i];
       h += '<li class=' + it.type + '>' + 
-              '<span class=ico>' +
-                '<a href=# data-sha=' + it.sha + ' data-name="' + it.name + '">' + it.name + '</a>' +
-              '</span>' +
+                '<div class=ico>&nbsp;</div>'+
+                '<a href=# data-sha=' + it.sha + ' data-name="' + it.name + '">' + 
+                  it.name +
+                '</a>' +
             '</li>';
     }
     h += '</ul>';
