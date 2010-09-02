@@ -10,7 +10,7 @@ var CH = Class.create( PluginBase, {
     var getFiletype = function(filename,text) {
       var fileType,
           matchingRules = { 
-              'ruby':         [ /\.rb$/i, /\bRakefile\b/i, /\bGemfile\b/i, /\.gemspec\b/i, /\bconsole\b/i, /\.rake$/i ]
+              'ruby':         [ /\.rb$/i, /\.ru$/i, /\bRakefile\b/i, /\bGemfile\b/i, /\.gemspec\b/i, /\bconsole\b/i, /\.rake$/i ]
               ,'css':         [ /\.css/i ]
               ,'html':        [ /\.html?$/i, /\.aspx$/i, /\.php$/i ]
               ,'javascript':  [ /\.js$/i ]
