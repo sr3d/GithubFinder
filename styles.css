@@ -25,7 +25,7 @@ img { border: 0px}
 height: 300px }
 
 .files { padding: 0; margin: 0; }
-.files li { list-style:none outside none; border-bottom: 1px solid #CCC; padding: 6px; background-color: #F8F8F8; }
+.files li { list-style:none outside none; border-bottom: 1px solid #CCC; background-color: #F8F8F8; }
 #i_w { width: 20%; border-left: 1px solid #CCC; float: left; height: 300px; overflow-y: auto; }
 /*.padding { padding: 10px; }*/
 #i_w .commits { height: 200px; overflow: auto}
@@ -33,12 +33,12 @@ height: 300px }
 .t { padding: 10px; border-bottom: 1px solid #CCC; font-size: 14px; font-weight: bold} /* title */
 
 .tree { background: #F8F8F8 url('./img/la.gif') no-repeat 95% 50%; font-weight: bold; }
-.ico { margin: 1px; background:url('./img/txt.gif') no-repeat top left; padding: 3px 9px;float:left; }
+.ico { background:url('./img/txt.gif') no-repeat 3px 50%; display: block;}
 .tree .ico { background-image: url('./img/dir.gif'); }
 .cur { background: #3D8CFF url('./img/la_h.gif') no-repeat 95% 50% !important;}
 .cur a { color: white;}
 .blob { background-image: none !important; }
-.files a { padding: 3px 15px; display:block; }
+.files a { padding: 8px 8px 8px 23px; display:block; }
 
 #f_c_w .p {padding: 10px}
 #f_c { width: 80.85%; float: left; overflow: hidden; }

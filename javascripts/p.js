@@ -25,15 +25,16 @@ window.P = Class.create({
 
     for( var i = 0; i < t.length; i++ ) {
       it = t[i];
+
       h += '<li class=' + it.type + '>' + 
-                '<div class=ico>&nbsp;</div>'+
-                '<a href=# data-sha=' + it.sha + ' data-name="' + it.name + '">' + 
+              '<span class="ico">' +
+                '<a href="#" data-sha="' + it.sha + '" data-name="' + it.name + '">' + 
                   it.name +
-                '</a>' +
+                '</a>' +              
+              '</span>'+  
             '</li>';
     }
     h += '</ul>';
-
     return '<div id=p' + ix + ' data-index=' + ix +' class=panel style="height:' + bH +'px">' + h + '</div>';
   }
 
