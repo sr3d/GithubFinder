@@ -53,6 +53,7 @@ var ResizablePanel = Class.create( PluginBase, {
     window.P = Class.create( window.P, { 
       r: function( $super ) {
         $super();
+        
         var p = this.p = $('p' + this.index);
 
         /* set the width of the panel to the previously set width (if needed) */

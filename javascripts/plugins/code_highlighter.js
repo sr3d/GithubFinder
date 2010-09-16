@@ -3,7 +3,8 @@ var CH = Class.create( PluginBase, {
   initialize: function($super, f) {
     $super(f);
     
-    // this.addStylesheet();
+    // f.theme = 'Light';
+    f.theme = 'Dark';
 
     var hlt = CodeHighlighter;
     
@@ -45,7 +46,7 @@ var CH = Class.create( PluginBase, {
     f.previewTextFile = function( text, item ) { 
       old(text,item);
       var codeEl = $('code');
-      codeEl.className = ''; // clear previous syntax class
+      codeEl.className = f.theme; // clear previous syntax class
       codeEl.addClassName(getFiletype(item.name,text));
       
       hlt.init();

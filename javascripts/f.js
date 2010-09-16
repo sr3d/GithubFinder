@@ -14,7 +14,7 @@ window.F = Class.create({
     this.u    = options.user_id;
     this.r    = options.repository;
     this.b    = options.branch;
-    
+
     this.render();
     
     this.repo = null;
@@ -435,12 +435,16 @@ window.F = Class.create({
       // count actual loc
       sloc += text[i] ? 1 : 0;
     }
-
+    
     var html = [
       '<div class=meta>',
         '<span>' + it.mode + '</span>',
         '<span>' + text.length + ' lines (' + sloc +' sloc)</span>',
         '<span>' + it.size + ' bytes</span>',
+        '<span style="float:right">Theme: <select id="theme">',
+          '<option ' +  (f.theme == 'Light' ? 'selected' : '' ) + '>Light</option>',
+          '<option ' +  (f.theme == 'Dark'  ? 'selected' : '' ) + '>Dark</option>',
+        '</select></span>',
       '</div>',
 
       '<div id=f_c_s>',  // file content scroll
@@ -463,6 +467,12 @@ window.F = Class.create({
 
     $('diffoutput').hide();
     $('f').update( html.join('') ).show();
+    
+    /* HACK!! */
+    $('theme').observe('change', function() { 
+      window.f.theme = $F('theme');
+      $('code').removeClassName('Light').removeClassName('Dark').addClassName(window.f.theme);
+    });
   }
   
   ,diff:function(){ alert('Diff is disabled.'); }
