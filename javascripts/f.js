@@ -60,6 +60,12 @@ window.F = Class.create({
     $(document.body).insert(this.h());
     this.psW  = $('ps_w');
     this.bW = $('b_w');
+    
+    $('repo_form').observe('submit', function(e) { 
+      this.browse();
+      e.stop();
+      return false;
+    }.bind(this));
     // debugger
   }
     
@@ -72,9 +78,11 @@ window.F = Class.create({
             '<div id=url_w>',
               '<span class=big>Github Finder</span>',
               '<span>',
-                'Repo: http://github.com/<input type=text id=r /> ',
-                'Branch: <span id=brs_w></span>', // branches
-                '<input type=button id=go value=Go onclick=f.browse() />',
+                '<form id=repo_form style="display: inline-block;">',
+                  'Repo: http://github.com/<input type=text id=r /> ',
+                  'Branch: <span id=brs_w></span>', // branches
+                  '<input type=submit id=go value=Go  />',
+                '</form>',
               '</span>',
               '<span id=in style=display:none>Loading...</span>',
             '</div>',
@@ -215,6 +223,8 @@ window.F = Class.create({
     
     $('i').innerHTML = '';
     this.oR( $F('r') || $('r').readAttribute('placeholder') );
+    
+    return false;
   }
   /* render the status bar */
   ,renderRepoInfo: function() {
