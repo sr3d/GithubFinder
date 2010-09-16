@@ -18,6 +18,7 @@ var CH = Class.create( PluginBase, {
               ,'python':      [ /\.py$/i ]
               ,'applescript': [ /\.applescript$/i ]
               ,'yaml':        [ /\.yml$/i ]
+              ,'cpp':         [ /\.c$/i, /\.cpp$/i, /\.h$/i ]
           };
       
       
@@ -29,6 +30,8 @@ var CH = Class.create( PluginBase, {
           }
         }
       } );
+      
+      // debugger
       
       /* attempt to futher detect the fileType */
       if( !fileType ) {

@@ -23,13 +23,6 @@
 #code.Light .properties { color: #C4AD7A}
 #code.Light .selectors { color: #977042 }
 
-/* on white 
-#code.Light .comment { color : green; }
-#code.Light .string { color : teal; }
-#code.Light .keywords { color : navy; }
-#code.Light .global { color : blue; }
-#code.Light .brackets { color : navy; }
-#code.Light .symbol { font-weight: bold; }
-
-
-*/
+/* CPP */
+#code.Ligh .datatype { color: #006699; }
+#code.Dark .datatype { font-weight: bold;}
