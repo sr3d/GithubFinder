@@ -278,7 +278,7 @@ CodeHighlighter.addStyle("javascript",{
 	},
 	global : {
 		exp  : /\b(toString|valueOf|window|element|prototype|constructor|document|escape|unescape|parseInt|parseFloat|setTimeout|clearTimeout|setInterval|clearInterval|NaN|isNaN|Infinity|String|Numeric|Array)\b/
-	},
+	}
 	
 
 });
@@ -350,8 +350,49 @@ CodeHighlighter.addStyle("cpp",{
 	preprocessor : {
 		exp : /^ *#.*/gm
 	}
+});
 
+
+// http://www.undermyhat.org/blog/wp-content/uploads/2009/09/shBrushClojure.js
+CodeHighlighter.addStyle("clojure",{
+	comment : {
+		exp  : /;[^\]]+$/
+	},
+	string : {
+		exp  : /"[^"\\]*(\\.[^"\\]*)*"/m
+	},
+	functions : {
+		exp  : /\b(:arglists|:doc|:file|:line|:macro|:name|:ns|:private|:tag|:test|new|alias|alter|and|apply|assert|class|cond|conj|count|def|defmacro|defn|defstruct|deref|do|doall|dorun|doseq|dosync|eval|filter|finally|find|first|fn|gen-class|gensym|if|import|inc|keys|let|list|loop|map|ns|or|print|println|quote|rand|recur|reduce|ref|repeat|require|rest|send|seq|set|sort|str|struct|sync|take|test|throw|trampoline|try|type|use|var|vec|when|while)\b/gmi
+	},
 	
+	keyword : {
+		exp  : /\[|\]/g
+	},
 	
-	
+	symbols : {
+		exp  : /'[a-z][A-Za-z0-9_]*/g
+	},
+
+	keywords: {
+    exp: /:[a-z][A-Za-z0-9_]*/g	  
+	}
+});
+
+
+
+
+CodeHighlighter.addStyle("haskell",{
+	comment : {
+		exp  : /(\-\-.*$)|(\{\-[\s\S]*?\-\})/gm
+	},
+	keywords : {
+		exp  : /\b(as|case|of|class|data|datafamily|data instance|default|deriving|deriving instance|do|forall|foreign|hiding|if|then|else|import|infix|infixl|infixr|instance|let|in|mdo|module|newtype|proc|qualified|rec|type|type family|type instance|where)\b/
+	},
+	string : {
+		exp  : /'[^']*'|"[^"]*"/
+	},
+	/* not really symbol as in ruby, but resusable */
+	symbols: {
+	  exp: /\b(_*[A-Z_][\w]*)\b/g
+	}
 });
