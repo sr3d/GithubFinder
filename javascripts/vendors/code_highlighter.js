@@ -289,7 +289,7 @@ CodeHighlighter.addStyle("yaml", {
 	},
 	value : {
 		exp  : /@\w[\w\s]*/
-	},
+	}
 });
 
 
@@ -374,7 +374,7 @@ CodeHighlighter.addStyle("clojure",{
 	},
 
 	keywords: {
-    exp: /:[a-z][A-Za-z0-9_]*/g	  
+    exp: /(:[a-z][A-Za-z0-9_]*)/g	  
 	}
 });
 
@@ -390,9 +390,5 @@ CodeHighlighter.addStyle("haskell",{
 	},
 	string : {
 		exp  : /'[^']*'|"[^"]*"/
-	},
-	/* not really symbol as in ruby, but resusable */
-	symbols: {
-	  exp: /\b(_*[A-Z_][\w]*)\b/g
 	}
 });

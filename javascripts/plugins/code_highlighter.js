@@ -13,7 +13,7 @@ var CH = Class.create( PluginBase, {
           matchingRules = { 
               'ruby':         [ /\.rb$/i, /\.ru$/i, /\bRakefile\b/i, /\bGemfile\b/i, /\.gemspec\b/i, /\bconsole\b/i, /\.rake$/i ]
               ,'css':         [ /\.css/i ]
-              ,'html':        [ /\.html?$/i, /\.aspx$/i, /\.php$/i ]
+              ,'html':        [ /\.html?$/i, /\.aspx$/i, /\.php$/i, /\.erb$/i ]
               ,'javascript':  [ /\.js$/i ]
               ,'python':      [ /\.py$/i ]
               ,'applescript': [ /\.applescript$/i ]
