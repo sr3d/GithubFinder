@@ -152,7 +152,7 @@ window.GH = {
     loadBlobAtCommit: function( u, r, commitId, path, options ) {
       //http://github.com/:user_id/:repo/raw/:commit_id/:path
       // http://github.com/mojombo/grit/raw/c0f0b4f7a62d2e563b48d0dc5cd9eb3c21e3b4c2/lib/grit.rb
-      url = 'http://github.com/' + u + '/' + r + '/raw/' + commitId + path;
+      url = 'https://github.com/' + u + '/' + r + '/raw/' + commitId + path;
       new AR( GH.proxy + url, options );
     }
   }
