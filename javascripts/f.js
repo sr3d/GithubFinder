@@ -156,7 +156,7 @@ window.F = Class.create({
       } else {
         // debugger
         /* if user just come from a github repo ... */
-        var m         = (new RegExp("^http://github.com/(.+)","i")).exec(document.referrer),
+        var m         = (new RegExp("^https?://github.com/(.+)","i")).exec(document.referrer),
             path      = m ? m[1].split('/') : [];
         
         if( path[0] && path[1] ) {
