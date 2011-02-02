@@ -1,8 +1,15 @@
 /* Add a button to the github repo listing page */
 (function($) { 
-  var ghf   = 'http://sr3d.github.com/GithubFinder?utm_source=userscript'
+  var ghf   = 'http://sr3d.github.com/GithubFinder?utm_source=userscript',
+      m         = (new RegExp("github.com\/(.+)","i")).exec(window.location.href),
+      path      = m ? m[1].split('/') : [],
+      user      = path[0],
+      repo      = path[1],
+      branch    = path[3],  
       li    = $('ul.actions li:first')[0],
-      html  = '<li><a href="' + ghf +'" target=_blank class="minibutton"><span>Browse in GHFinder</span></a></li>';
+      html  = '<li><a href="' + ghf + 
+                        '&user_id=' + user + 
+                        '&repo=' + repo +'" target=_blank class="minibutton"><span>Browse in GHFinder</span></a></li>';
   if(li) {
     $(li).before(html);
   }
