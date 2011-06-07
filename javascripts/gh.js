@@ -3,7 +3,7 @@ window.GH = {
   // ,proxy: 'http://alexle.net/experiments/githubfinder/proxy.php?url='
   ,proxy: './proxy.php?url='
   // ,proxy: ''
-  ,api: 'http://github.com/api/v2/json'
+  ,api: 'https://github.com/api/v2/json'
   
   /* set the proxy.php url and switch to the correct AR (AjaxRequest) */
   ,setProxy: function(p) { 
@@ -152,7 +152,8 @@ window.GH = {
     loadBlobAtCommit: function( u, r, commitId, path, options ) {
       //http://github.com/:user_id/:repo/raw/:commit_id/:path
       // http://github.com/mojombo/grit/raw/c0f0b4f7a62d2e563b48d0dc5cd9eb3c21e3b4c2/lib/grit.rb
-      url = 'https://github.com/' + u + '/' + r + '/raw/' + commitId + path;
+      // https://raw.github.com/mojombo/grit/c0f0b4f7a62d2e563b48d0dc5cd9eb3c21e3b4c2/lib/grit.rb
+      url = 'https://raw.github.com/' + u + '/' + r + '/raw/' + commitId + path;
       new AR( GH.proxy + url, options );
     }
   }
