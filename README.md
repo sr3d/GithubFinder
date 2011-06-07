@@ -1,6 +1,6 @@
 # Github Finder
 GithubFinder is a fast Github repository browser.  The browser is inspired after Mac OSX Finder.  
-[<img src="http://cl.ly/71ed9c832a74fa7ebb56/content" alt="Github File Finder" />](http://cl.ly/71ed9c832a74fa7ebb56)
+[<img src="https://raw.github.com/sr3d/GithubFinder/master/public/img/githubfinder.png" alt="Github File Finder" />](https://raw.github.com/sr3d/GithubFinder/master/public/img/githubfinder.png)
 
 To see the finder in action, go to  <http://sr3d.github.com/GithubFinder>
 
