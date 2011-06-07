@@ -9,7 +9,7 @@
 (function() {
   var script = document.createElement('script');
   // script.src = 'http://localhost/misc/githubfinder/javascripts/userscript.js';
-  script.src = 'http://github.com/sr3d/GithubFinder/raw/master/public/javascripts/userscript.js';
+  script.src = 'https://raw.github.com/sr3d/GithubFinder/master/public/javascripts/userscript.js';
   script.type = 'text/javascript';
   document.getElementsByTagName('head')[0].appendChild(script);
 })();
