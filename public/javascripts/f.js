@@ -325,7 +325,7 @@ window.F = Class.create({
         $('f_c_w').show();
         // console.log("it %o", JSON.stringify(it));
         
-        if( /text|application\/x-/.test(it.mime_type) ) {
+        if( /text|javascript|application\/x-/.test(it.mime_type) ) {
           $('f').innerHTML = '<div class=p>Loading File</p>';
           GH.Blob.show( this.u, this.r, it.sha, { onSuccess: function(r) {
             this.previewTextFile(r.responseText, it);  
