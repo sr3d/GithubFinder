@@ -301,7 +301,6 @@ window.F = Class.create({
     if( posTop > p.scrollTop) {
       p.scrollTop = posTop ;
     }
-      
 
     /* current index */
     this.cI = it.index;
@@ -324,7 +323,9 @@ window.F = Class.create({
       } else {
         
         $('f_c_w').show();
-        if( /text/.test(it.mime_type) ) {
+        // console.log("it %o", JSON.stringify(it));
+        
+        if( /text|application\/x-/.test(it.mime_type) ) {
           $('f').innerHTML = '<div class=p>Loading File</p>';
           GH.Blob.show( this.u, this.r, it.sha, { onSuccess: function(r) {
             this.previewTextFile(r.responseText, it);  
